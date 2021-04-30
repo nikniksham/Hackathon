@@ -20,3 +20,9 @@
     -3px 0 1px #000,
     0 -3px 3px #000;
 }
+
+.main-block {
+    padding: 25px;
+    border-radius: 20px;
+    background: white;
+}

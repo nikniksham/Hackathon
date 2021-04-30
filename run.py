@@ -13,5 +13,11 @@ def website_main():
                            navigation=False)
 
 
+@app.route("/game/")
+def game_page():
+    return render_template('game.html', title='Здесь играть', style=url_for('static', filename='css/style.css'),
+                           navigation=False)
+
+
 if __name__ == '__main__':
     main(port=8000)
