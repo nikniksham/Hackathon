@@ -15,8 +15,7 @@ def website_main():
 
 @app.route("/game/")
 def game_page():
-    return render_template('game.html', title='Здесь играть', style=url_for('static', filename='css/style.css'),
-                           navigation=False)
+    return render_template('game.html', title='Здесь играть', style=url_for('static', filename='css/style.css'))
 
 
 if __name__ == '__main__':

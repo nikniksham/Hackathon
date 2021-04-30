@@ -7,5 +7,20 @@
         ЗДЕсь есть игра, но вы её почему то не видете)
     </p>
 
+    <div class="cont">
+        <div class="cont__wrap">
+            <div class="cont__cont">
+                <table class="game-board">
+                    {% for i in range(13) %}
+                    <tr>
+                        {% for j in range(13) %}
+                        <td class="point">Hello</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
