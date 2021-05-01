@@ -24,20 +24,13 @@ class Board {
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [-1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1],
                       [1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1]]
-        this.clearBoard = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
-        this.checkedMap = this.clearBoard
+        this.checkedMap = []
+        for(var i=0; i<13; i++) {
+            this.checkedMap[i] = [];
+            for(var j=0; j<13; j++) {
+                this.checkedMap[i][j] = 0;
+            }
+        }
     }
 
     add(x, y) {
@@ -50,7 +43,7 @@ class Board {
         console.log('make update')
         for (let i = 0; i < 13; i++) {
             for (let j = 0; j < 13; j++) {
-                console.log(this.board[i][j])
+                // console.log(this.board[i][j])
                 if (this.board[i][j] == -1) {
                     var cell = new Cell(offset + i * step, offset + j * step, -1)
                     cell.draw()
@@ -64,34 +57,47 @@ class Board {
     }
 
     checkCell(x, y) {
+        console.log("AT:"+x+":"+y)
+        console.log(this.board[x][y - 1])
+        var myColor = -1
         // проверяем дыхания
-        if (this.board[x + 1][y] == 0 || this.board[x - 1][y] == 0 || this.board[x][y + 1] == 0 || this.board[x][y - 1] == 0) {
+        if ((x < 12) && (this.board[x + 1][y] == 0)) {
+            return true
+        }
+        if ((x > 0) && (this.board[x - 1][y] == 0)) {
+            return true
+        }
+        if ((y < 12) && (this.board[x][y + 1] == 0)) {
+            return true
+        }
+        if ((y > 0) && (this.board[x][y - 1] == 0)) {
             return true
         }
 
-        // проверяем союзные соседние клетки
-        if (this.board[x + 1][y] == -1) {
-            if (this.checkedMap[x + 1][y] == 0) {
-                this.checked(x + 1, y)
-                return checkCell(x + 1, y)
+
+
+        if ((x < 12) && (this.board[x + 1][y] == myColor) && (this.checkedMap[x + 1][y] == 0)) {
+            this.checked(x + 1, y)
+            if (this.checkCell(x + 1, y)) {
+                return true
             }
         }
-        if (this.board[x - 1][y] == -1) {
-            if (this.checkedMap[x - 1][y] == 0) {
-                this.checked(x - 1, y)
-                return checkCell(x - 1, y)
+        if ((x > 0)  && (this.board[x - 1][y] == myColor) && (this.checkedMap[x - 1][y] == 0)) {
+            this.checked(x - 1, y)
+            if (this.checkCell(x - 1, y)) {
+                return true
             }
         }
-        if (this.board[x][y + 1] == -1) {
-            if (this.checkedMap[x][y + 1] == 0) {
-                this.checked(x, y + 1)
-                return checkCell(x, y + 1)
+        if ((y < 12) && (this.board[x][y + 1] == myColor) && (this.checkedMap[x][y + 1] == 0)) {
+            this.checked(x, y + 1)
+            if (this.checkCell(x, y + 1)) {
+                return true
             }
         }
-        if (this.board[x][y - 1] == -1) {
-            if (this.checkedMap[x][y - 1] == 0) {
-                this.checked(x, y - 1)
-                return checkCell(x, y - 1)
+        if ((y > 0)  && (this.board[x][y - 1] == myColor) && (this.checkedMap[x][y - 1] == 0)) {
+            this.checked(x, y - 1)
+            if (this.checkCell(x, y - 1)) {
+                return true
             }
         }
         return false
@@ -101,8 +107,15 @@ class Board {
         if (this.board[x][y] == 2) {
             return true
         }
-        if (this.board[x][y] == 0) {
-            this.checkedMap = this.clearBoard
+        if (this.board[x][y] == -1) {
+            console.log(this.clearBoard)
+            this.checkedMap = []
+            for(var i=0; i<13; i++) {
+                this.checkedMap[i] = [];
+                for(var j=0; j<13; j++) {
+                    this.checkedMap[i][j] = 0;
+                }
+            }
             this.checked(x, y)
             return this.checkCell(x, y)
         }
@@ -165,12 +178,12 @@ addEventListener('click', (event) => {
     x = Math.floor(x/step)
     y = Math.floor(y/step)
     console.log('tab At: ' + x + ':' + y)
+    board.board[x][y] = -1
     if (board.check(x, y)) {
-        console.log('add')
         board.add(x, y)
+        console.log('add')
         const selection = true;
         // $.get( "/getmethod/<javascript_data>" );
-
          var outputData = []
          for (var i = 0; i < 13; i++) {
             for (var j = 0; j < 13; j++) {
@@ -188,6 +201,7 @@ addEventListener('click', (event) => {
             console.log($.parseJSON(data))
         })
     } else {
+        board.board[x][y] = 0
         console.log('cant')
     }
 });
@@ -214,6 +228,45 @@ for (let i = 0; i < 13; i++) {
         } else {
             var cell = new Cell(offset + i * step, offset + j * step, -1)
             cell.draw()
+        }
+    }
+}
+return false
+
+if ((x + 1 < 13) && (this.board[x + 1][y] == 0) || (x - 1 > -1) && (this.board[x - 1][y] == 0) || (y + 1 < 13) && (this.board[x][y + 1] == 0) || (y - 1 > -1) && (this.board[x][y - 1] == 0)) {
+    return true
+}
+
+// проверяем союзные соседние клетки
+if (x + 1 < 13 && this.board[x + 1][y] == -1) {
+    if (this.checkedMap[x + 1][y] == 0) {
+        this.checked(x + 1, y)
+        if (this.checkCell(x + 1, y)) {
+            return true
+        }
+    }
+}
+if (x - 1 > -1 && this.board[x - 1][y] == -1) {
+    if (this.checkedMap[x - 1][y] == 0) {
+        this.checked(x - 1, y)
+        if (this.checkCell(x - 1, y)) {
+            return true
+        }
+    }
+}
+if (y + 1 < 13 && this.board[x][y + 1] == -1) {
+    if (this.checkedMap[x][y + 1] == 0) {
+        this.checked(x, y + 1)
+        if (this.checkCell(x, y + 1)) {
+            return true
+        }
+    }
+}
+if (y - 1 > -1 && this.board[x][y - 1] == -1) {
+    if (this.checkedMap[x][y - 1] == 0) {
+        this.checked(x, y - 1)
+        if (this.checkCell(x, y - 1)) {
+            return true
         }
     }
 }
