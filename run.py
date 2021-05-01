@@ -1,8 +1,8 @@
 import json
 from flask import Flask, render_template, url_for, request
 from work_with_api import Api
-from flask_socketio import SocketIO, emit
-import os
+# from flask_socketio import SocketIO, emit
+# import os
 
 app = Flask(__name__)
 api = Api()
