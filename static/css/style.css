@@ -37,3 +37,46 @@ div.center-head {
     display: flex;
     align: center;
 }
+
+.wrapper {
+  margin: 0 auto;
+}
+
+.game-board {
+    width: 100%;
+    height: 100%;
+}
+
+.cont {
+    width: 50%;
+}
+
+.cont__wrap {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; // пропорции блока определяются здесь
+}
+
+.cont__cont {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("/static/img/board.png") no-repeat;
+    background-size: 100% 100%;
+}
+
+.point {
+    visibility:hidden;
+}
+
+.point:hover {
+    visibility: visible;
+}
+
+.screen {
+    width: 100%
+    height: 100%;
+}

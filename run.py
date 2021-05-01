@@ -1,5 +1,8 @@
 from flask import Flask, render_template, url_for
 from work_with_api import Api
+from flask_socketio import SocketIO, emit
+import os
+
 app = Flask(__name__)
 api = Api()
 email = "nikniksham@gmail.com"
@@ -9,6 +12,9 @@ print("success" if api.login_user(email, password) else "error")
 print("success" if api.update_user_info() else "error")
 print("success" if api.create_game_with_bot() else "error")
 print("success" if api.game_info(api.game_code) else "error")
+
+app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+socketio = SocketIO(app)
 
 
 def main(port=8000):
@@ -23,6 +29,15 @@ def website_main():
 
 @app.route("/game/")
 def game_page():
+    return render_template('game.html', title='Здесь играть', style=url_for('static', filename='css/style.css'))
+
+
+@socketio.on("i speak")
+def vote(ponimanie):
+    print(ponimanie)
+    if ponimanie:
+        print("Меня поняли!")
+    emit("я живой", {"result": True}, broadcast=True)
     api.create_game_with_bot()
     api.check_active_game()
     return render_template('game.html', title='Здесь играть', style=url_for('static', filename='css/style.css'),
