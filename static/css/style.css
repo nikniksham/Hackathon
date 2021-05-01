@@ -12,17 +12,28 @@
 }
 
 .site-name {
-    padding: 10px;
-    font-size: 30px;
+    padding: 8px;
+    font-size: 24px;
     color: white;
     text-shadow: 3px 0 3px #000,
     0 3px 3px #000,
     -3px 0 1px #000,
     0 -3px 3px #000;
+    padding-left: 16px;
+}
+
+.img-set {
+    padding: 8px;
+    padding-right: 16px;
 }
 
 .main-block {
     padding: 25px;
     border-radius: 20px;
     background: white;
+}
+
+div.center-head {
+    display: flex;
+    align: center;
 }
