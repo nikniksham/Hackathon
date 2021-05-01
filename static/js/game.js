@@ -16,14 +16,28 @@ class Board {
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 1, 0, -1, 1, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [-1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1],
                       [1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1]]
+        this.clearBoard = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+        this.checkedMap = this.clearBoard
     }
 
     add(x, y) {
@@ -45,6 +59,56 @@ class Board {
             }
         }
         console.log('end of update')
+    }
+
+    checkCell(x, y) {
+        // проверяем дыхания
+        if (this.board[x + 1][y] == 0 || this.board[x - 1][y] == 0 || this.board[x][y + 1] == 0 || this.board[x][y - 1] == 0) {
+            return true
+        }
+
+        // проверяем союзные соседние клетки
+        if (this.board[x + 1][y] == -1) {
+            if (this.checkedMap[x + 1][y] == 0) {
+                this.checked(x + 1, y)
+                return checkCell(x + 1, y)
+            }
+        }
+        if (this.board[x - 1][y] == -1) {
+            if (this.checkedMap[x - 1][y] == 0) {
+                this.checked(x - 1, y)
+                return checkCell(x - 1, y)
+            }
+        }
+        if (this.board[x][y + 1] == -1) {
+            if (this.checkedMap[x][y + 1] == 0) {
+                this.checked(x, y + 1)
+                return checkCell(x, y + 1)
+            }
+        }
+        if (this.board[x][y - 1] == -1) {
+            if (this.checkedMap[x][y - 1] == 0) {
+                this.checked(x, y - 1)
+                return checkCell(x, y - 1)
+            }
+        }
+        return false
+    }
+
+    check(x, y) {
+        if (this.board[x][y] == 2) {
+            return true
+        }
+        if (this.board[x][y] == 0) {
+            this.checkedMap = this.clearBoard
+            this.checked(x, y)
+            return this.checkCell(x, y)
+        }
+        return false
+    }
+
+    checked(x, y) {
+        this.checkedMap[x][y] = 1
     }
 }
 
@@ -75,10 +139,15 @@ class Cell {
 addEventListener('click', (event) => {
     x = event.clientX - offset + r
     y = event.clientY - offset + r
-    x = x/step
-    y = y/step
-    board.add(Math.floor(x), Math.floor(y))
+    x = Math.floor(x/step)
+    y = Math.floor(y/step)
     console.log('tab At: ' + x + ':' + y)
+    if (board.check(x, y)) {
+        console.log('add')
+        board.add(x, y)
+    } else {
+        console.log('cant')
+    }
 })
 
 const board = new Board()
@@ -102,4 +171,5 @@ for (let i = 0; i < 13; i++) {
         }
     }
 }
+return false
 */
