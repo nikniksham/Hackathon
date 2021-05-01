@@ -136,24 +136,36 @@ class Cell {
     }
 }
 
-addEventListener('click', (event) => {
-    x = event.clientX - offset + r
-    y = event.clientY - offset + r
-    x = Math.floor(x/step)
-    y = Math.floor(y/step)
-    console.log('tab At: ' + x + ':' + y)
-    if (board.check(x, y)) {
-        console.log('add')
-        board.add(x, y)
-    } else {
-        console.log('cant')
-    }
-})
 
 const board = new Board()
 board.update()
 
+var socket = io.connect('http://127.0.0.1:8000');
+
+socket.on('connect', () => {
+    addEventListener('click', (event) => {
+        x = event.clientX - offset + r
+        y = event.clientY - offset + r
+        x = Math.floor(x/step)
+        y = Math.floor(y/step)
+        console.log('tab At: ' + x + ':' + y)
+        if (board.check(x, y)) {
+            console.log('add')
+            board.add(x, y)
+            const selection = true;
+            socket.emit('i speak', {'selection': selection});
+        } else {
+            console.log('cant')
+        }
+    });
+});
 /*
+socket.on('я живой', data => {
+    const li = document.createElement('li');
+    li.innerHTML = `Vote recorded: ${data.selection}`;
+    document.querySelector('#votes').append(li);
+});
+
 for (let i = 0; i < 13; i++) {
     for (let j = 0; j < 13; j++) {
         if ()
