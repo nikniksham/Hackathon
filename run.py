@@ -1,7 +1,7 @@
 import json
 from flask import Flask, render_template, url_for, request
 from work_with_api import Api
-import time
+
 
 app = Flask(__name__)
 api = Api()
@@ -28,7 +28,6 @@ def get_post_javascript_data():
     board = []
     try:
         req = json.loads(request.form['canvas_data'])
-        time.sleep(1)
         for _ in range(13):
             board.append(req[:13])
             req = req[13:]
