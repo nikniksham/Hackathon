@@ -46,9 +46,11 @@ class Board {
     }
 
     update() {
+        c.clearRect(0, 0, canvas.width, canvas.height);
         console.log('make update')
         for (let i = 0; i < 13; i++) {
             for (let j = 0; j < 13; j++) {
+                console.log(this.board[i][j])
                 if (this.board[i][j] == -1) {
                     var cell = new Cell(offset + i * step, offset + j * step, -1)
                     cell.draw()
@@ -110,6 +112,23 @@ class Board {
     checked(x, y) {
         this.checkedMap[x][y] = 1
     }
+
+    loadBoard(board) {
+        // console.log("PRINAL")
+        board = board.split(';')
+        var res = []
+        for (var i = 0; i < 169; i++) {
+            res.push(parseInt(board[i]))
+        }
+        // console.log("OBRABOTAL")
+        // console.log("NE OTDAL")
+        for (var i = 0; i < 13; i++) {
+            for (var j = 0; j < 13; j++) {
+                this.board[j][i] = res[i * 13 + j]
+            }
+        }
+        this.update()
+    }
 }
 
 class Cell {
@@ -132,7 +151,7 @@ class Cell {
         c.arc(this.x, this.y, r*0.95, 0, Math.PI * 2, false)
         c.fillStyle = this.color
         c.fill()
-        console.log("fill: " + this.color)
+        // console.log("fill: " + this.color)
     }
 }
 
@@ -161,7 +180,8 @@ addEventListener('click', (event) => {
          $.post( "/a/", {
             canvas_data: JSON.stringify(outputData)
          }, function(err, req, resp){
-            console.log(resp);
+            board.loadBoard(resp.responseText)
+            console.log('Loaded');
          });
 
         $.get("/getpythondata", function(data) {

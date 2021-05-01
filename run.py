@@ -14,6 +14,23 @@ print("success" if api.create_game_with_bot() else "error")
 print("success" if api.game_info(api.game_code) else "error")
 
 
+def upload(req):
+    board = []
+    req = json.loads(req)
+    for _ in range(13):
+        board.append(req[:13])
+        req = req[13:]
+    return board
+
+
+def dump(board):
+    res = ""
+    for i in range(13):
+        for j in range(13):
+            res += str(board[i][j]) + ";"
+    return res
+
+
 def main(port=8000):
     app.run(port=port)
 
@@ -25,24 +42,19 @@ def get_javascript_data(jsdata):
 
 @app.route('/a/', methods=["POST"])
 def get_post_javascript_data():
-    board = []
-    try:
-        req = json.loads(request.form['canvas_data'])
-        for _ in range(13):
-            board.append(req[:13])
-            req = req[13:]
-    except Exception:
-        print("ERROR read data")
+    board = upload(request.form['canvas_data'])
     # jsdata = request.form['javascript_data']
     # print(json.loads(jsdata)[0])
     # return json.loads(jsdata)[0]
     print(*board, sep='\n')
-    return "HELLO"
+    # test changes
+    # board[0][0] = 0
+    return dump(board)
 
 
 @app.route('/getpythondata')
 def get_python_data():
-    return json.dumps("попка")
+    return json.dumps("СВАБОДУ ПАПУГАЯМ!!")
 
 
 @app.route("/")
