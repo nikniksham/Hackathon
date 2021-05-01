@@ -9,6 +9,45 @@ const step = (size - 2 * offset) / 12.5
 canvas.width = size
 canvas.height = size
 
+class Board {
+    constructor () {
+        this.board = [[1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1],
+                      [-1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [-1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1],
+                      [1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1]]
+    }
+
+    add(x, y) {
+        this.board[x][y] = -1
+        this.update()
+    }
+
+    update() {
+        console.log('make update')
+        for (let i = 0; i < 13; i++) {
+            for (let j = 0; j < 13; j++) {
+                if (this.board[i][j] == -1) {
+                    var cell = new Cell(offset + i * step, offset + j * step, -1)
+                    cell.draw()
+                } else if (this.board[i][j] == 1) {
+                    var cell = new Cell(offset + i * step, offset + j * step, 1)
+                    cell.draw()
+                }
+            }
+        }
+        console.log('end of update')
+    }
+}
+
 class Cell {
     constructor (x, y, player){
         this.x = x
@@ -33,11 +72,29 @@ class Cell {
     }
 }
 
+addEventListener('click', (event) => {
+    x = event.clientX - offset + r
+    y = event.clientY - offset + r
+    x = x/step
+    y = y/step
+    board.add(Math.floor(x), Math.floor(y))
+    console.log('tab At: ' + x + ':' + y)
+})
 
-for (let i = 0; i < 13; i++) { // выведет 0, затем 1, затем 2
-    for (let j = 0; j < 13; j++) { // выведет 0, затем 1, затем 2
-        if ((i + j) % 2 == 0) {
+const board = new Board()
+board.update()
+
+/*
+for (let i = 0; i < 13; i++) {
+    for (let j = 0; j < 13; j++) {
+        if ()
+
+
+        if ((i * j) % 12 == 0) {
             var cell = new Cell(offset + i * step, offset + j * step, 1)
+            cell.draw()
+        } else if ((i + j) % 4 == 4) {
+            var cell = new Cell(offset + i * step, offset + j * step, -1)
             cell.draw()
         } else {
             var cell = new Cell(offset + i * step, offset + j * step, -1)
@@ -45,3 +102,4 @@ for (let i = 0; i < 13; i++) { // выведет 0, затем 1, затем 2
         }
     }
 }
+*/
