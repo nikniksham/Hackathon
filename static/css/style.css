@@ -37,7 +37,8 @@
 }
 
 .cont {
-    width: 50%;
+    margin: auto;
+    width: 100%;
 }
 
 .cont__wrap {
@@ -79,4 +80,44 @@
 .screen {
     width: 100%
     height: 100%;
+}
+
+.game_window {
+    width: 100vw;
+    height: 100vh;
+}
+
+.game_context_block {
+    height: 100%;
+    display: flex;
+}
+.game_block_row {
+    height: 100%;
+}
+
+.game_right_menu {
+    width: 100%;
+    margin: auto;
+    background: url("/static/img/right-block.svg") no-repeat;
+    background-size: 100% 100%;
+}
+
+.game_left_block {
+    height: 100%;
+    display: flex;
+    padding-left: 30px;
+}
+
+.players_wrap {
+    margin: 0 auto;
+    height: 120px;
+}
+
+.player_block {
+    float: left;
+    line-height: 120px;
+}
+
+.player_block img {
+    height: 120px;
 }

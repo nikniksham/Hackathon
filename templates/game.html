@@ -12,10 +12,31 @@
     <script src=/static/js/jquery.min.js></script>
 </head>
 <body>
-    <div class="cont">
-        <div class="cont__wrap">
-            <div class="cont__cont">
-                <canvas class="screen"></canvas>
+    <div class="game_window">
+        <div class="row game_block_row">
+            <div class="col-6 game_left_block">
+                <div class="cont">
+                    <div class="cont__wrap">
+                        <div class="cont__cont">
+                            <canvas class="screen"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 game_context_block">
+                <div class="game_right_menu">
+                    <div class="players_wrap">
+                        <div class="player_block">
+                            <p>player 1</p>
+                        </div>
+                        <div class="player_block">
+                            <img src="/static/img/vs.svg">
+                        </div>
+                        <div class="player_block">
+                            <p>player 2</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
