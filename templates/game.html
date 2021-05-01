@@ -12,9 +12,14 @@
     <script src=/static/js/jquery.min.js></script>
 </head>
 <body>
+    <img class="up_left_image"    src="/static/img/angle.svg">
+    <img class="up_right_image"   src="/static/img/angle.svg">
+    <img class="down_up_image"    src="/static/img/angle.svg">
+    <img class="down_right_image" src="/static/img/angle.svg">
     <div class="game_window">
         <div class="row game_block_row">
-            <div class="col-6 game_left_block">
+            <div class="col-6 game_left_block justify-content-center">
+                <div></div>
                 <div class="cont">
                     <div class="cont__wrap">
                         <div class="cont__cont">
@@ -22,19 +27,33 @@
                         </div>
                     </div>
                 </div>
+                <div class="navbar justify-content-center">
+                    <button class="game_button">Пас</button>
+                    <button class="game_button">Сдаться!</button>
+                </div>
             </div>
             <div class="col-6 game_context_block">
                 <div class="game_right_menu">
-                    <div class="players_wrap">
+                    <div class="navbar navbar-light justify-content-center">
                         <div class="player_block">
                             <p>player 1</p>
+                            <img class="player_block_image" src="/static/img/NonePlayer.png">
                         </div>
                         <div class="player_block">
                             <img src="/static/img/vs.svg">
                         </div>
                         <div class="player_block">
+                            <img class="player_block_image" src="/static/img/NonePlayer.png">
                             <p>player 2</p>
                         </div>
+                    </div>
+                    <div class="navbar justify-content-center info_block">
+                        <p>Мне тут сказали что ты тупик. Но  я, великий вождь,  смогу тебе помочь! Я готов рассказать 4 лучших хода, но это будет стоить тебе 4 миска рис.</p>
+                        <img src="/static/img/dragon.svg">
+                    </div>
+                    <div class="navbar justify-content-center">
+                        <button class="game_button">Подскажи!</button>
+                        <button class="game_button">Не хочу</button>
                     </div>
                 </div>
             </div>

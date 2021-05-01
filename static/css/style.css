@@ -1,3 +1,8 @@
+html {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
 .first-block {
     width: 100vw;
     height: 100vh;
@@ -37,7 +42,6 @@
 }
 
 .cont {
-    margin: auto;
     width: 100%;
 }
 
@@ -95,29 +99,98 @@
     height: 100%;
 }
 
+
+.game_left_block {
+    height: 100%;
+    display: flex;
+    padding-left: 90px;
+    flex-direction: column;
+    padding-bottom: 40px;
+    padding-top: 90px;
+}
+
 .game_right_menu {
     width: 100%;
+    padding-top: 20px;
+    padding-bottom: 70px;
     margin: auto;
     background: url("/static/img/right-block.svg") no-repeat;
     background-size: 100% 100%;
 }
 
-.game_left_block {
-    height: 100%;
-    display: flex;
-    padding-left: 30px;
-}
-
 .players_wrap {
     margin: 0 auto;
-    height: 120px;
+    height: 100px;
 }
 
 .player_block {
+    display: inline;
     float: left;
-    line-height: 120px;
+    line-height: 100px;
+}
+
+.player_block p {
+    display: inline-block;
+    margin: 0px;
 }
 
 .player_block img {
-    height: 120px;
+    height: 110px;
+}
+
+img.player_block_image {
+    border-radius: 35px;
+    height: 70px;
+}
+
+.info_block {
+    padding-left:  110px;
+    padding-right: 110px;
+}
+
+.info_block p {
+    margin-right: 10px;
+    width: 60%;
+    border: 2px solid red;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.game_button {
+    border: 3px solid red;
+    border-radius: 10px;
+    background: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.up_left_image {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+.up_right_image {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    transform: rotate(90deg);
+}
+
+.down_up_image {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    transform: rotate(270deg);
+}
+
+.down_right_image {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    transform: rotate(180deg);
 }
