@@ -1,4 +1,5 @@
-from flask import Flask, render_template, url_for
+import json
+from flask import Flask, render_template, url_for, request
 from work_with_api import Api
 from flask_socketio import SocketIO, emit
 import os
@@ -13,12 +14,26 @@ print("success" if api.update_user_info() else "error")
 print("success" if api.create_game_with_bot() else "error")
 print("success" if api.game_info(api.game_code) else "error")
 
-app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
-socketio = SocketIO(app)
-
 
 def main(port=8000):
     app.run(port=port)
+
+
+@app.route('/getmethod/<jsdata>')
+def get_javascript_data(jsdata):
+    return json.loads(jsdata)[0]
+
+
+@app.route('/postmethod', methods=['POST'])
+def get_post_javascript_data():
+    jsdata = request.form['javascript_data']
+    print(json.loads(jsdata)[0])
+    return json.loads(jsdata)[0]
+
+
+@app.route('/getpythondata')
+def get_python_data():
+    return json.dumps("попка")
 
 
 @app.route("/")
@@ -32,7 +47,7 @@ def game_page():
     return render_template('game.html', title='Здесь играть', style=url_for('static', filename='css/style.css'))
 
 
-@socketio.on("i speak")
+"""@socketio.on("i speak")
 def vote(ponimanie):
     print(ponimanie)
     if ponimanie:
@@ -42,7 +57,7 @@ def vote(ponimanie):
     api.check_active_game()
     return render_template('game.html', title='Здесь играть', style=url_for('static', filename='css/style.css'),
                            navigation=False, user=api)
-
+"""
 
 if __name__ == '__main__':
     main(port=8000)
