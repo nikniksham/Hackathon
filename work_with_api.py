@@ -5,7 +5,7 @@ class Api:
     def __init__(self):
         self.token = None  # token пользователя
         self.email = None  # email пользователя
-        self.log = True  # Логирование программы
+        self.log = False  # Логирование программы
         self.game_code = None  # Код текущей игры пользователя
         self.user_info = None  # Информация о пользователе
         self.link = "https://go-backend-denis.ambersoft.llc/"  # Ссылка на сайт

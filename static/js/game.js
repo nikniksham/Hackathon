@@ -152,10 +152,17 @@ addEventListener('click', (event) => {
         const selection = true;
         // $.get( "/getmethod/<javascript_data>" );
 
-        $.post( "/postmethod", {
-            console.log("меня вызвали")
-            javascript_data: board.board
-        });
+         var outputData = []
+         for (var i = 0; i < 13; i++) {
+            for (var j = 0; j < 13; j++) {
+                outputData.push(board.board[j][i]);
+            }
+         }
+         $.post( "/a/", {
+            canvas_data: JSON.stringify(outputData)
+         }, function(err, req, resp){
+            console.log(resp);
+         });
 
         $.get("/getpythondata", function(data) {
             console.log($.parseJSON(data))

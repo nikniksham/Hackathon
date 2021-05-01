@@ -1,8 +1,7 @@
 import json
 from flask import Flask, render_template, url_for, request
 from work_with_api import Api
-from flask_socketio import SocketIO, emit
-import os
+import time
 
 app = Flask(__name__)
 api = Api()
@@ -24,11 +23,22 @@ def get_javascript_data(jsdata):
     return json.loads(jsdata)[0]
 
 
-@app.route('/postmethod', methods=['POST'])
+@app.route('/a/', methods=["POST"])
 def get_post_javascript_data():
-    jsdata = request.form['javascript_data']
-    print(json.loads(jsdata)[0])
-    return json.loads(jsdata)[0]
+    board = []
+    try:
+        req = json.loads(request.form['canvas_data'])
+        time.sleep(1)
+        for _ in range(13):
+            board.append(req[:13])
+            req = req[13:]
+    except Exception:
+        print("ERROR read data")
+    # jsdata = request.form['javascript_data']
+    # print(json.loads(jsdata)[0])
+    # return json.loads(jsdata)[0]
+    print(*board, sep='\n')
+    return "HELLO"
 
 
 @app.route('/getpythondata')
