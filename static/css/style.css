@@ -1,3 +1,12 @@
+html {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
 .first-block {
     width: 100vw;
     height: 100vh;
@@ -37,7 +46,7 @@
 }
 
 .cont {
-    width: 50%;
+    width: 100%;
 }
 
 .cont__wrap {
@@ -79,4 +88,128 @@
 .screen {
     width: 100%
     height: 100%;
+}
+
+.game_window {
+    width: 100vw;
+    height: 100vh;
+}
+
+.game_context_block {
+    height: 100%;
+    display: flex;
+}
+.game_block_row {
+    height: 100%;
+}
+
+
+.game_left_block {
+    height: 100%;
+    display: flex;
+    padding-left: 90px;
+    flex-direction: column;
+    padding-bottom: 40px;
+    padding-top: 90px;
+}
+
+.game_right_menu {
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 70px;
+    margin: auto;
+    background: url("/static/img/right-block.svg") no-repeat;
+    background-size: 100% 100%;
+}
+
+.players_wrap {
+    margin: 0 auto;
+    height: 100px;
+}
+
+.player_block {
+    display: inline;
+    float: left;
+    line-height: 100px;
+}
+
+.player_block p {
+    display: inline-block;
+    font-size: 24px;
+    margin: 0px;
+}
+
+.player_block img {
+    height: 110px;
+}
+
+img.player_block_image {
+    border-radius: 35px;
+    height: 70px;
+}
+
+.info_block {
+    padding-left:  110px;
+    padding-right: 110px;
+}
+
+.info_block p {
+    margin-right: 10px;
+    width: 60%;
+    border: 2px solid red;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.game_button {
+    border: 3px solid red;
+    border-radius: 10px;
+    background: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.game_button:hover {
+    outline: none;
+    background: #ff9447;
+}
+
+.game_button:click {
+    outline: none;
+}
+
+.game_button:active {
+    outline: none;
+    box-shadow: 0 0 0 4px #f5c07f;
+}
+
+.up_left_image {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+.up_right_image {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    transform: rotate(90deg);
+}
+
+.down_up_image {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    transform: rotate(270deg);
+}
+
+.down_right_image {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    transform: rotate(180deg);
 }

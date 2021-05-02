@@ -13,6 +13,8 @@ const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
 user_data = ""
+const startY = $(canvas).offset().top
+const startX = $(canvas).offset().left
 size = document.querySelector('.cont__cont').offsetWidth
 const offset = size * 0.095
 const r = size * (1 - 2 * 0.09) * (1/(13 * 2.2))
@@ -178,8 +180,7 @@ class Board {
     check(x, y) {
         if (this.board[x][y] == 2) {
             return true
-        }
-        if (this.board[x][y] == -1) {
+        } else if (this.board[x][y] == -1) {
             console.log(this.clearBoard)
             this.checkedMap = []
             for(var i=0; i<13; i++) {
@@ -245,12 +246,14 @@ const board = new Board()
 board.update()
 
 addEventListener('click', (event) => {
-    x = event.clientX - offset + r
-    y = event.clientY - offset + r
+    x = event.clientX - offset + r - startX
+    y = event.clientY - offset + r - startY
     x = Math.floor(x/step)
     y = Math.floor(y/step)
-    console.log('tab At: ' + x + ':' + y)
-    board.board[x][y] = -1
+    console.log('tab At: ' + x + ':' + y+'\n'+board.board[x][y])
+    if (board.board[x][y] == 0) {
+        board.board[x][y] = -1
+    }
     if (board.check(x, y)) {
         board.add(x, y)
         console.log('add')
@@ -272,7 +275,7 @@ addEventListener('click', (event) => {
         $.get("/getpythondata", function(data) {
             console.log($.parseJSON(data))
         })
-    } else {
+    } else if (board.board[x][y] == -1) {
         board.board[x][y] = 0
         console.log('cant')
     }
