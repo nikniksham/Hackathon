@@ -1,6 +1,7 @@
 import json
 from flask import Flask, render_template, url_for, request
 from work_with_api import Api
+from check_field import *
 
 
 api = Api()
@@ -31,6 +32,14 @@ def main(port=8000):
     app.run(port=port)
 
 
+@app.route('/check_matrix/', methods=["POST"])
+def check_matrix_func():
+    board = upload(request.form['canvas_data'])
+    tips = check_matrix(board)
+    print(json.dumps(tips))
+    return json.dumps(tips)
+
+
 @app.route('/getmethod/<jsdata>')
 def get_javascript_data(jsdata):
     return json.loads(jsdata)[0]
@@ -42,7 +51,7 @@ def get_post_javascript_data():
     # jsdata = request.form['javascript_data']
     # print(json.loads(jsdata)[0])
     # return json.loads(jsdata)[0]
-    print(*board, sep='\n')
+    # print(*board, sep='\n')
     # test changes
     # board[0][0] = 0
     return dump(board)

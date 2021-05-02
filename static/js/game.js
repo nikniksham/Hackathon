@@ -14,6 +14,7 @@ const c = canvas.getContext('2d')
 var user_token
 var game_id
 
+tips = {}
 user_data = ""
 const startY = $(canvas).offset().top
 const startX = $(canvas).offset().left
@@ -284,6 +285,13 @@ addEventListener('click', (event) => {
                 outputData.push(board.board[j][i]);
             }
          }
+         $.post( "/check_matrix/", {
+            canvas_data: JSON.stringify(outputData)
+         }, function(err, req, resp){
+            // board.loadBoard(resp.responseText)
+            tips = ($.parseJSON(resp.responseText))
+            console.log(tips);
+         });
          $.post( "/a/", {
             canvas_data: JSON.stringify(outputData)
          }, function(err, req, resp){
