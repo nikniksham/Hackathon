@@ -1,13 +1,85 @@
+/* console.log("start")
+
+console.log("import websocket")
+export const client = new WebSocket('ws://172.104.137.176:41239');
+
+console.log("connect with server")
+client.send(JSON.stringify([5, 'go/game']))
+console.log("follow on the topic")
+*/
+
 console.log("Hello world")
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
+user_data = ""
 size = document.querySelector('.cont__cont').offsetWidth
 const offset = size * 0.095
 const r = size * (1 - 2 * 0.09) * (1/(13 * 2.2))
 const step = (size - 2 * offset) / 12.5
 canvas.width = size
 canvas.height = size
+
+function login_user() {
+    console.log("1")
+    $.get("/getlogindata", function(data) {
+        user_data = $.parseJSON(data)
+        console.log(user_data)
+    })
+}
+
+
+function auth_client() {
+    client.send(JSON.stringify([
+    7,
+    "go/game",
+    {
+        command: "auth",
+        token: user_data.token,
+        game_id: user_data.game_code
+    }
+    ]));
+}
+
+
+function move_to(coord) {
+    client.send(JSON.stringify([
+          7,
+          "go/game",
+          {
+            command: "move",
+            token: user_data.token,
+            place: coord.toString().toLowerCase(),
+            game_id: game_id
+          }
+          ]));
+}
+
+function send_pass() {
+    client.send(JSON.stringify([
+          7,
+          "go/game",
+          {
+            command: "pass",
+            token: user_data.token,
+            game_id: user_data.game_code
+          }
+          ]));
+}
+
+function send_resign() {
+    client.send(JSON.stringify([
+          7,
+          "go/game",
+          {
+            command: "resign",
+            token: user_data.token,
+            game_id: user_data.game_code
+          }
+          ]));
+}
+
+document.addEventListener("DOMContentLoaded", login_user);
 
 class Board {
     constructor () {

@@ -3,15 +3,11 @@ from flask import Flask, render_template, url_for, request
 from work_with_api import Api
 
 
-app = Flask(__name__)
 api = Api()
+app = Flask(__name__)
 email = "nikniksham@gmail.com"
 password = "gohackaton"
 nickname = "nikolausus"
-print("success" if api.login_user(email, password) else "error")
-print("success" if api.update_user_info() else "error")
-print("success" if api.create_game_with_bot() else "error")
-print("success" if api.game_info(api.game_code) else "error")
 
 
 def upload(req):
@@ -50,6 +46,15 @@ def get_post_javascript_data():
     # test changes
     # board[0][0] = 0
     return dump(board)
+
+
+@app.route('/getlogindata')
+def get_python_data_2():
+    print("success" if api.login_user(email, password) else "error")
+    print("success" if api.update_user_info() else "error")
+    print("success" if api.create_game_with_bot() else "error")
+    print("success" if api.game_info(api.game_code) else "error")
+    return json.dumps(api.get_json())
 
 
 @app.route('/getpythondata')

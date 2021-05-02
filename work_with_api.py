@@ -8,11 +8,21 @@ class Api:
         self.token = None  # token пользователя
         self.email = None  # email пользователя
         self.log = False  # Логирование программы
+        self.nickname = None  # Nickname пользователя
         self.game_code = None  # Код текущей игры пользователя
         self.user_info = None  # Информация о пользователе
         self.link = "https://go-backend-denis.ambersoft.llc/"  # Ссылка на сайт
         self.img_profile = None
         self.centaur_token = "Kf8darEBRsoJEiw0"
+
+    def get_json(self):
+        json_user = {
+            "token": self.token,
+            "nickname": self.nickname,
+            "img_profile": self.img_profile,
+            "game_code": self.game_code
+        }
+        return json_user
 
     def output(self, text):
         if self.log:
@@ -99,6 +109,7 @@ class Api:
                 result = True
                 self.img_profile = json_about_user.json()["user"]["avatar"]
                 self.user_info = json_about_user.json()
+                self.nickname = json_about_user.json()["user"]["nickname"]
                 self.output(self.user_info)
             else:
                 self.output(f"json_about_user выдал ошибку: {json_about_user.status_code}")
