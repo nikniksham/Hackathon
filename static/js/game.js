@@ -41,6 +41,7 @@ function login_user() {
 
 
 function auth_client() {
+    console.log("Авторизация пользователя")
     client.send(JSON.stringify([
     7,
     "go/game",
@@ -92,10 +93,26 @@ function send_resign() {
 
 let client = new WebSocket("ws://172.104.137.176:41239");
 console.log("connect with server")
+
 client.onopen = function(e) {
   client.send(JSON.stringify([5, 'go/game']));
   console.log("follow on the topic")
   auth_client()
+};
+
+client.onmessage = function(event) {
+  console.log("Полученны данные")
+  console.log($.parseJSON(event.data))
+};
+
+client.onclose = function(e) {
+  console.log("Соединение прерванно")
+  console.log(e)
+};
+
+client.onerror = function(error) {
+  console.log("Получили ошибку")
+  console.log(error)
 };
 
 
