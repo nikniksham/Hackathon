@@ -1,7 +1,8 @@
 console.log("Hello world")
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
-
+const startY = $(canvas).offset().top
+const startX = $(canvas).offset().left
 size = document.querySelector('.cont__cont').offsetWidth
 const offset = size * 0.095
 const r = size * (1 - 2 * 0.09) * (1/(13 * 2.2))
@@ -173,8 +174,8 @@ const board = new Board()
 board.update()
 
 addEventListener('click', (event) => {
-    x = event.clientX - offset + r
-    y = event.clientY - offset + r
+    x = event.clientX - offset + r - startX
+    y = event.clientY - offset + r - startY
     x = Math.floor(x/step)
     y = Math.floor(y/step)
     console.log('tab At: ' + x + ':' + y)
