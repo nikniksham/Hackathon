@@ -65,21 +65,22 @@ def check_contact(x, y, c, cells, di, matrix):
 
 def check_matrix(matrix):
     tips = {"you": [], "enemy": [], "stairs": []}
+    know_cells.clear()
     for y in range(len(matrix)):
         for x in range(len(matrix[0])):
-            if matrix[y][x] == -1 and [x, y] not in know_cells:
+            if matrix[y][x] == 1 and [x, y] not in know_cells:
                 di = {"d": 0, "m": 0, "s": [], "e": []}
                 cells = []
-                check_cell(x, y, -1, cells, di, matrix)
+                check_cell(x, y, 1, cells, di, matrix)
                 for cell in cells:
                     if cell not in know_cells:
                         know_cells.append(cell)
                 if di["d"] == 1:
                     warning(di, cells, tips, matrix)
-            if matrix[y][x] == 1 and [x, y] not in know_cells:
+            if matrix[y][x] == -1 and [x, y] not in know_cells:
                 di = {"d": 0, "m": 0, "s": [], "e": []}
                 cells = []
-                check_cell(x, y, 1, cells, di, matrix)
+                check_cell(x, y, -1, cells, di, matrix)
                 for cell in cells:
                     if cell not in know_cells:
                         know_cells.append(cell)

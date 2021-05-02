@@ -15,6 +15,7 @@ const c = canvas.getContext('2d')
 var user_token
 var game_id
 var outputData
+var abc = "abcdefghjklmn"
 tips = {}
 user_data = ""
 const startY = $(canvas).offset().top
@@ -141,23 +142,23 @@ button_help.onclick = function help() {
     }, function(err, req, resp) {
         // board.loadBoard(resp.responseText)
         tips = resp.responseText
+        console.log(tips)
         var dragon_info = document.getElementById('dragon_info');
         var text = ""
-        if (tips["you"] && tips["you"].size() > 0) {text += "Твои камни под угрозой, обрати внимание на клетки ->"
-            for (var i = 0; i < tips["you"].size(); ++i) {text += tips["you"][i]}
+        if (tips["enemy"] && tips["enemy"].size() > 0) {text += "Твои камни под угрозой, обрати внимание на клетки ->"
+            for (var i = 0; i < tips["enemy"].size(); ++i) {text += abc[tips["enemy"][i][0]] + (tips["enemy"][i][1] + 1).toString()}
         }
-        if (tips["enemy"] && tips["enemy"].size() > 0) {
+        if (tips["you"] && tips["you"].size() > 0) {
             text += "Ты можешь захватить вражеские камни, обрати внимание на клетки ->"
-            for (var i = 0; i < tips["enemy"].size(); ++i) {text += tips["enemy"][i]}
+            for (var i = 0; i < tips["you"].size(); ++i) {text += abc[tips["you"][i][0]] + (tips["you"][i][1] + 1).toString()}
         }
         if (tips["stairs"] && tips["stairs"].size() > 0) {
             text += "Ты попал в ситуацию 'лестница', не стоит ходить на клетки ->"
-            for (var i = 0; i < tips["stairs"].size(); ++i) {text += tips["stairs"][i]}
+            for (var i = 0; i < tips["stairs"].size(); ++i) {text += abc[tips["stairs"][i][0]] + (tips["stairs"][i][1] + 1).toString()}
         }
-        if (tips["you"] || tips["enemy"] || tips["stairs"]) {
+        if (text != "") {
             dragon_info.textContent = text
         } else {
-            dragon_info.textContent = "На данный момент тебе помощь не требуется"
         }
     });
 }
@@ -457,42 +458,43 @@ addEventListener('click', (event) => {
     x = Math.floor(x/step)
     y = Math.floor(y/step)
     // console.log('tab At: ' + x + ':' + y+'\n'+board.board[x][y])
-    if (board.board[x][y] == 0) {
-        board.board[x][y] = -1
-    }
-    if (board.check(x, y)) {
-        board.add(x, y)
-        var abc = "abcdefghjklmn"
-        console.log("AT:"+abc[x] + (y + 1).toString())
-        const selection = true;
-        // $.get( "/getmethod/<javascript_data>" );
-         outputData = []
-         for (var i = 0; i < 13; i++) {
-            for (var j = 0; j < 13; j++) {
-                outputData.push(board.board[j][i]);
-            }
-         }
-         $.post( "/a/", {
-            canvas_data: JSON.stringify(outputData)
-         }, function(err, req, resp){
-            board.loadBoard(resp.responseText)
-            console.log('LOADED FROM PYTHON');
-         });
-         client.send(JSON.stringify([
-            7,// 7 - статус: отправка сообщения
-            "go/game", // в какой топик отправляется сообщение
-            {
-                command: "move", // команда на отправку хода
-                token: user_data.token,  // токен игрока
-                place: (abc[x] + (y + 1).toString()).toString().toLowerCase(),  // место куда сделать ход, формат: d13
-                game_id: game_id // номер игры
-            }
-          ]));
-        $.get("/getpythondata", function(data) {
-            console.log($.parseJSON(data))
-        })
-    } else if (board.board[x][y] == -1) {
-        board.board[x][y] = 0
+    if ((x > -1) && (x < 13) && (y > -1) && (y < 13)) {
+        if (board.board[x][y] == 0) {
+            board.board[x][y] = -1
+        }
+        if (board.check(x, y)) {
+            board.add(x, y)
+            console.log("AT:"+abc[x] + (y + 1).toString())
+            const selection = true;
+            // $.get( "/getmethod/<javascript_data>" );
+             outputData = []
+             for (var i = 0; i < 13; i++) {
+                for (var j = 0; j < 13; j++) {
+                    outputData.push(board.board[j][i]);
+                }
+             }
+             $.post( "/a/", {
+                canvas_data: JSON.stringify(outputData)
+             }, function(err, req, resp){
+                board.loadBoard(resp.responseText)
+                console.log('LOADED FROM PYTHON');
+             });
+             client.send(JSON.stringify([
+                7,// 7 - статус: отправка сообщения
+                "go/game", // в какой топик отправляется сообщение
+                {
+                    command: "move", // команда на отправку хода
+                    token: user_data.token,  // токен игрока
+                    place: (abc[x] + (y + 1).toString()).toString().toLowerCase(),  // место куда сделать ход, формат: d13
+                    game_id: game_id // номер игры
+                }
+              ]));
+            $.get("/getpythondata", function(data) {
+                console.log($.parseJSON(data))
+            })
+        } else if (board.board[x][y] == -1) {
+            board.board[x][y] = 0
+        }
     }
 });
 
