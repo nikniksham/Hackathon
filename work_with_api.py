@@ -7,7 +7,7 @@ class Api:
     def __init__(self):
         self.token = None  # token пользователя
         self.email = None  # email пользователя
-        self.log = False  # Логирование программы
+        self.log = True  # Логирование программы
         self.nickname = None  # Nickname пользователя
         self.game_code = None  # Код текущей игры пользователя
         self.user_info = None  # Информация о пользователе
@@ -335,8 +335,6 @@ class Api:
             else:
                 self.output(f"json_heatmap_best_enemy_move_zone выдал ошибку: {json_heatmap_best_enemy_move_zone.status_code}")
         return result
-
-
 
 
 # Работа с API

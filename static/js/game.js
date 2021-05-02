@@ -295,6 +295,16 @@ class Cell {
 const board = new Board()
 board.update()
 
+function heat_map() {
+    $.post( "/call_func/", {
+         canvas_data: JSON.stringify({"func": "get_heatmap", "params": ""})
+    }, function(err, req, resp){
+        // board.loadBoard(resp.responseText)
+        heat_map = ($.parseJSON(resp.responseText))
+        console.log(heat_map);
+    });
+}
+
 addEventListener('click', (event) => {
     x = event.clientX - offset + r - startX
     y = event.clientY - offset + r - startY
