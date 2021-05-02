@@ -3,6 +3,10 @@ html {
     overflow-y: hidden;
 }
 
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
 .first-block {
     width: 100vw;
     height: 100vh;
@@ -131,6 +135,7 @@ html {
 
 .player_block p {
     display: inline-block;
+    font-size: 24px;
     margin: 0px;
 }
 
