@@ -7,7 +7,10 @@ console.log("connect with server")
 client.send(JSON.stringify([5, 'go/game']))
 console.log("follow on the topic")
 */
-console.log("Hello world")
+let client
+client = new WebSocket("ws://172.104.137.176:41239");
+console.log("CONNECT TO SERVER")
+
 
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
@@ -26,22 +29,25 @@ canvas.width = size
 canvas.height = size
 
 function heat_map() {
+    console.log("LOAD HEAT_MAP")
     $.post( "/call_func/", {
          canvas_data: JSON.stringify({func: "get_heatmap",
                                       params: ""})
     }, function(err, req, resp){
         // board.loadBoard(resp.responseText)
         tmp_map = $.parseJSON(resp.responseText)
-        console.log("HEY")
         var tmp = new TempMap(tmp_map)
     });
 }
 
+function wait() {
+    if (user_data == "") {wait}
+    else {auth_client()}
+}
 function login_user() {
-    console.log("1")
     $.get("/getlogindata", function(data) {
         user_data = $.parseJSON(data)
-        console.log(user_data)
+        console.log("LOGIN TO PYTHON", user_data)
         var img = document.querySelector('.player_img')
         img.src = user_data.img_profile
         var nickname = document.querySelector('.player_nick')
@@ -49,11 +55,12 @@ function login_user() {
         user_token = user_data.token
         game_id = user_data.game_code
     })
+    wait()
 }
 
 
 function auth_client() {
-    console.log("Авторизация пользователя")
+    console.log("AUTH")
     client.send(JSON.stringify([
     7,
     "go/game",
@@ -67,6 +74,7 @@ function auth_client() {
 
 
 function move_to(coord) {
+    console.log("MOVE")
     client.send(JSON.stringify([
           7,
           "go/game",
@@ -80,6 +88,7 @@ function move_to(coord) {
 }
 
 function send_pass() {
+    console.log("PASS")
     client.send(JSON.stringify([
           7,
           "go/game",
@@ -88,10 +97,14 @@ function send_pass() {
             token: user_data.token,
             game_id: user_data.game_code
           }
-          ]));
+    ]));
 }
 
+var button_pass = document.getElementById('pass');
+button_pass.onclick = send_pass
+
 function send_resign() {
+    console.log("RESIGN")
     client.send(JSON.stringify([
           7,
           "go/game",
@@ -100,39 +113,20 @@ function send_resign() {
             token: user_data.token,
             game_id: user_data.game_code
           }
-          ]));
+    ]));
 }
 
-let client = new WebSocket("ws://172.104.137.176:41239");
-console.log("connect with server")
-
-client.onopen = function(e) {
-  client.send(JSON.stringify([5, 'go/game']))
-  console.log("follow on the topic")
-  auth_client()
-};
+var button_resign = document.getElementById('resign');
+button_resign.onclick = send_resign
 
 client.onmessage = function(event) {
-    console.log("Полученны данные")
+    console.log("MESSAGE")
     var data = $.parseJSON(event.data)
-    console.log(event.userActivation)
     console.log(data)
     if (!event.userActivation) {
-        await sleep(2000)
-
-        $.get("/getlogindata", function(data) {
-            console.log("try to connect")
-            user_data = $.parseJSON(data)
-            var img = document.querySelector('.player_img')
-            img.src = user_data.img_profile
-            var nickname = document.querySelector('.player_nick')
-            nickname.textContent = user_data.nickname
-            user_token = user_data.token
-            game_id = user_data.game_code
-        })
-    }
-    if (data.payload.type == 'currentMap') {
-        console.log("loading map")
+        console.log("ERROR Упс, что то пошло не так")
+    } else if (data.payload.type == 'currentMap' || data.payload.type == "newTurn") {
+        console.log("UPDATE MAP")
         c.clearRect(0, 0, canvas.width, canvas.height);
         board.board = data.payload.currentMap
         board.update()
@@ -140,17 +134,19 @@ client.onmessage = function(event) {
 };
 
 client.onclose = function(e) {
-  console.log("Соединение прерванно")
-  console.log(e)
+  console.log("CONNECTION LOST", e)
 };
 
 client.onerror = function(error) {
-  console.log("Получили ошибку")
-  console.log(error)
+  console.log("CONNECTION ERROR", error)
 };
 
+client.onopen = function(e) {
+    login_user()
+    client.send(JSON.stringify([5, 'go/game']))
+    console.log("CONNECT TO GAME")
+};
 
-document.addEventListener("DOMContentLoaded", login_user);
 
 class TempMap {
     constructor(map) {
@@ -166,7 +162,7 @@ class TempMap {
 
 var button_map = document.getElementById('temp_map');
 button_map.onclick = function(e) {
-    console.log("loading map")
+    console.log("LOAD TEMP_MAP")
     c.clearRect(0, 0, canvas.width, canvas.height);
     heat_map()
     board.update()
@@ -197,13 +193,13 @@ class Board {
     }
 
     add(x, y) {
-        this.board[x][y] = -1
+        this.board[x][y] = 1
         c.clearRect(0, 0, canvas.width, canvas.height);
         this.update()
     }
 
     update() {
-        console.log('make update')
+        console.log('UPDATE MAP')
         for (let i = 0; i < 13; i++) {
             for (let j = 0; j < 13; j++) {
                 // console.log(this.board[i][j])
@@ -216,13 +212,10 @@ class Board {
                 }
             }
         }
-        console.log('end of update')
     }
 
     checkCell(x, y) {
-        console.log("AT:"+x+":"+y)
-        console.log(this.board[x][y - 1])
-        var myColor = -1
+        var myColor = 1
         // проверяем дыхания
         if ((x < 12) && (this.board[x + 1][y] == 0)) {
             return true
@@ -270,7 +263,6 @@ class Board {
         if (this.board[x][y] == 2) {
             return true
         } else if (this.board[x][y] == -1) {
-            console.log(this.clearBoard)
             this.checkedMap = []
             for(var i=0; i<13; i++) {
                 this.checkedMap[i] = [];
@@ -289,14 +281,11 @@ class Board {
     }
 
     loadBoard(board) {
-        // console.log("PRINAL")
         board = board.split(';')
         var res = []
         for (var i = 0; i < 169; i++) {
             res.push(parseInt(board[i]))
         }
-        // console.log("OBRABOTAL")
-        // console.log("NE OTDAL")
         for (var i = 0; i < 13; i++) {
             for (var j = 0; j < 13; j++) {
                 this.board[j][i] = res[i * 13 + j]
@@ -342,7 +331,6 @@ class Cell {
         c.arc(this.x, this.y, r*0.95, 0, Math.PI * 2, false)
         c.fillStyle = this.color
         c.fill()
-        // console.log("fill: " + this.color)
     }
 }
 
@@ -355,13 +343,13 @@ addEventListener('click', (event) => {
     y = event.clientY - offset + r - startY
     x = Math.floor(x/step)
     y = Math.floor(y/step)
-    console.log('tab At: ' + x + ':' + y+'\n'+board.board[x][y])
     if (board.board[x][y] == 0) {
         board.board[x][y] = -1
     }
     if (board.check(x, y)) {
         board.add(x, y)
-        console.log('add')
+        var abc = "abcdefghjklmn"
+        console.log("AT:"+abc[x] + (y + 1).toString())
         const selection = true;
         // $.get( "/getmethod/<javascript_data>" );
          var outputData = []
@@ -381,15 +369,23 @@ addEventListener('click', (event) => {
             canvas_data: JSON.stringify(outputData)
          }, function(err, req, resp){
             board.loadBoard(resp.responseText)
-            console.log('Loaded');
+            console.log('LOADED FROM PYTHON');
          });
-
+         client.send(JSON.stringify([
+            7,// 7 - статус: отправка сообщения
+            "go/game", // в какой топик отправляется сообщение
+            {
+                command: "move", // команда на отправку хода
+                token: user_data.token,  // токен игрока
+                place: (abc[x] + (y + 1).toString()).toString().toLowerCase(),  // место куда сделать ход, формат: d13
+                game_id: game_id // номер игры
+            }
+          ]));
         $.get("/getpythondata", function(data) {
             console.log($.parseJSON(data))
         })
     } else if (board.board[x][y] == -1) {
         board.board[x][y] = 0
-        console.log('cant')
     }
 });
 
