@@ -126,7 +126,9 @@ function move_to(coord) {
           ]));
 }
 
-function send_pass() {
+var button_pass = document.getElementById('pass');
+button_pass.onclick = function send_pass() {
+    console.log("pass")
     client.send(JSON.stringify([
           7,
           "go/game",
@@ -138,7 +140,9 @@ function send_pass() {
           ]));
 }
 
-function send_resign() {
+var button_resign = document.getElementById('resign');
+button_resign.onclick = function send_resign() {
+    console.log("resign")
     client.send(JSON.stringify([
           7,
           "go/game",
@@ -163,6 +167,20 @@ client.onmessage = function(event) {
   console.log("Полученны данные")
   data = $.parseJSON(event.data)
   console.log(data)
+  if (data.payload.type == 'currentMap' || data.payload.type == "newTurn") {
+        console.log("UPDATE MAP")
+        if (data.payload.turn == 'black') {
+            var info = document.getElementById('info').textContent = "Ход чёрного";
+        } else {
+            var info = document.getElementById('info').textContent = "Ход белого";
+        }
+      c.clearRect(0, 0, canvas.width, canvas.height);
+      board.board = data.payload.currentMap
+      board.update()
+  } else if (data.payload.type == "endGame") {
+        var info = document.getElementById('info').textContent = "Игра завершениа";
+
+  }
 };
 
 client.onclose = function(e) {
