@@ -107,8 +107,7 @@ class Board {
     check(x, y) {
         if (this.board[x][y] == 2) {
             return true
-        }
-        if (this.board[x][y] == -1) {
+        } else if (this.board[x][y] == -1) {
             console.log(this.clearBoard)
             this.checkedMap = []
             for(var i=0; i<13; i++) {
@@ -178,8 +177,10 @@ addEventListener('click', (event) => {
     y = event.clientY - offset + r - startY
     x = Math.floor(x/step)
     y = Math.floor(y/step)
-    console.log('tab At: ' + x + ':' + y)
-    board.board[x][y] = -1
+    console.log('tab At: ' + x + ':' + y+'\n'+board.board[x][y])
+    if (board.board[x][y] == 0) {
+        board.board[x][y] = -1
+    }
     if (board.check(x, y)) {
         board.add(x, y)
         console.log('add')
@@ -201,7 +202,7 @@ addEventListener('click', (event) => {
         $.get("/getpythondata", function(data) {
             console.log($.parseJSON(data))
         })
-    } else {
+    } else if (board.board[x][y] == -1) {
         board.board[x][y] = 0
         console.log('cant')
     }
