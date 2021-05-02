@@ -25,6 +25,18 @@ const step = (size - 2 * offset) / 12.5
 canvas.width = size
 canvas.height = size
 
+function heat_map() {
+    $.post( "/call_func/", {
+         canvas_data: JSON.stringify({func: "get_heatmap",
+                                      params: ""})
+    }, function(err, req, resp){
+        // board.loadBoard(resp.responseText)
+        tmp_map = $.parseJSON(resp.responseText)
+        console.log("HEY")
+        var tmp = new TempMap(tmp_map)
+    });
+}
+
 function login_user() {
     console.log("1")
     $.get("/getlogindata", function(data) {
@@ -114,9 +126,11 @@ class TempMap {
 }
 
 var button_map = document.getElementById('temp_map');
-button_map.onclick = function() {
+button_map.onclick = function(e) {
+    console.log("loading map")
     c.clearRect(0, 0, canvas.width, canvas.height);
-    var tmp = TempMap()
+    heat_map()
+    board.update()
 }
 
 class Board {
@@ -124,15 +138,15 @@ class Board {
         this.board = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-                      [0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 1, -1, 0, -1, 0, 0, 0, 0, 0, -1, 0],
-                      [0, 0, 1, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 1, 1, -1, 0, 0, -1, 0, 0, 1, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
         this.checkedMap = []
         for(var i=0; i<13; i++) {
@@ -145,6 +159,7 @@ class Board {
 
     add(x, y) {
         this.board[x][y] = -1
+        c.clearRect(0, 0, canvas.width, canvas.height);
         this.update()
     }
 
@@ -248,11 +263,12 @@ class Board {
                 this.board[j][i] = res[i * 13 + j]
             }
         }
+        c.clearRect(0, 0, canvas.width, canvas.height);
         this.update()
     }
 }
 
-class TempCell() {
+class TempCell {
     constructor (x, y, temp) {
         this.x = x
         this.y = y
@@ -261,8 +277,8 @@ class TempCell() {
 
     draw () {
         c.beginPath()
-        c.arc(this.x, this.y, r * temp, 0, Math.PI * 2, false)
-        c.fillStyle = rgba(255, 0, 0, 0.5)
+        c.arc(this.x, this.y, 1.7 * r * this.temp, 0, Math.PI * 2, false)
+        c.fillStyle = "rgba(255, 0, 0, 0.5)"
         c.fill()
     }
 }
@@ -294,16 +310,6 @@ class Cell {
 
 const board = new Board()
 board.update()
-
-function heat_map() {
-    $.post( "/call_func/", {
-         canvas_data: JSON.stringify({"func": "get_heatmap", "params": ""})
-    }, function(err, req, resp){
-        // board.loadBoard(resp.responseText)
-        heat_map = ($.parseJSON(resp.responseText))
-        console.log(heat_map);
-    });
-}
 
 addEventListener('click', (event) => {
     x = event.clientX - offset + r - startX

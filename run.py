@@ -54,9 +54,10 @@ def check_matrix_func():
 
 
 @app.route('/call_func/', methods=["POST"])
-def check_matrix_func():
-    params = json.loads(request.form)
+def call_matrix_func():
+    params = json.loads(request.form['canvas_data'])
     res = None
+    print(params)
     if params["func"] == "get_heatmap":
         res = api_func[params["func"]]()
     return json.dumps(res)
