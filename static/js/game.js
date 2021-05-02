@@ -7,10 +7,12 @@ console.log("connect with server")
 client.send(JSON.stringify([5, 'go/game']))
 console.log("follow on the topic")
 */
-
 console.log("Hello world")
+
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
+var user_token
+var game_id
 
 tips = {}
 user_data = ""
@@ -28,6 +30,12 @@ function login_user() {
     $.get("/getlogindata", function(data) {
         user_data = $.parseJSON(data)
         console.log(user_data)
+        var img = document.querySelector('.player_img')
+        img.src = user_data.img_profile
+        var nickname = document.querySelector('.player_nick')
+        nickname.textContent = user_data.nickname
+        user_token = user_data.token
+        game_id = user_data.game_code
     })
 }
 
@@ -81,6 +89,17 @@ function send_resign() {
           }
           ]));
 }
+
+let client = new WebSocket("ws://172.104.137.176:41239");
+console.log("connect with server")
+client.onopen = function(e) {
+  alert("[open] Соединение установлено");
+  alert("Отправляем данные на сервер");
+  client.send(JSON.stringify([5, 'go/game']));
+  console.log("follow on the topic")
+  auth_client()
+};
+
 
 document.addEventListener("DOMContentLoaded", login_user);
 

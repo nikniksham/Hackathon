@@ -96,6 +96,8 @@ body {
 }
 
 .game_context_block {
+    padding-left: 2%;
+    padding-right: 7%;
     height: 100%;
     display: flex;
 }
@@ -118,7 +120,7 @@ body {
     padding-top: 20px;
     padding-bottom: 70px;
     margin: auto;
-    background: url("/static/img/right-block.svg") no-repeat;
+    background: url("/static/img/right_block.png") no-repeat;
     background-size: 100% 100%;
 }
 
@@ -146,11 +148,6 @@ body {
 img.player_block_image {
     border-radius: 35px;
     height: 70px;
-}
-
-.info_block {
-    padding-left:  110px;
-    padding-right: 110px;
 }
 
 .info_block p {
@@ -191,6 +188,7 @@ img.player_block_image {
     position: absolute;
     left: 10px;
     top: 10px;
+    height: 10%;
 }
 
 .up_right_image {
@@ -198,6 +196,7 @@ img.player_block_image {
     right: 10px;
     top: 10px;
     transform: rotate(90deg);
+    height: 10%;
 }
 
 .down_up_image {
@@ -205,6 +204,7 @@ img.player_block_image {
     left: 10px;
     bottom: 10px;
     transform: rotate(270deg);
+    height: 10%;
 }
 
 .down_right_image {
@@ -212,4 +212,5 @@ img.player_block_image {
     right: 10px;
     bottom: 10px;
     transform: rotate(180deg);
+    height: 10%;
 }
