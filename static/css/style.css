@@ -168,6 +168,20 @@ img.player_block_image {
     margin-right: 10px;
 }
 
+.game_button:hover {
+    outline: none;
+    background: #ff9447;
+}
+
+.game_button:click {
+    outline: none;
+}
+
+.game_button:active {
+    outline: none;
+    box-shadow: 0 0 0 4px #f5c07f;
+}
+
 .up_left_image {
     position: absolute;
     left: 10px;
