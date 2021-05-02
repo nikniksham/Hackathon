@@ -12,6 +12,7 @@ console.log("Hello world")
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
+tips = {}
 user_data = ""
 const startY = $(canvas).offset().top
 const startX = $(canvas).offset().left
@@ -86,7 +87,7 @@ document.addEventListener("DOMContentLoaded", login_user);
 class Board {
     constructor () {
         this.board = [[1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1],
-                      [-1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1],
+                      [-1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -265,6 +266,13 @@ addEventListener('click', (event) => {
                 outputData.push(board.board[j][i]);
             }
          }
+         $.post( "/check_matrix/", {
+            canvas_data: JSON.stringify(outputData)
+         }, function(err, req, resp){
+            // board.loadBoard(resp.responseText)
+            tips = ($.parseJSON(resp.responseText))
+            console.log(tips);
+         });
          $.post( "/a/", {
             canvas_data: JSON.stringify(outputData)
          }, function(err, req, resp){

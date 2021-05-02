@@ -1,59 +1,92 @@
-matrix = [[1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
-          [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1],
-          [0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 1, -1, 1, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 1, -1, 1, 1, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-          [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
-          [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1]]
+mat = [[1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1],
+       [-1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1],
+       [0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0],
+       [0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0],
+       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0],
+       [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0],
+       [0, 0, 0, 0, 0, 0, 1, 1, -1, 1, 0, 0, 0],
+       [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+       [-1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1],
+       [1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1]]
+know_cells = []
+letters = "abcdefghjklmn"
 
 
-contacts = {"d": 0, "m": 0, "s": [], "e": []}
-white_cell = []
-black_cell = []
-
-
-def warning():
+def warning(contacts, team_cells, tips, matrix):
     for elem in contacts["s"]:
         if elem not in contacts["e"]:
-            print(f"WARNING!!!!!!! ТЕБЯ СЕЙЧАС СОЖРУТ ТУТ ---> {elem}")
+            print(f"WARNING!!!!!!! ТЕБЯ СЕЙЧАС СОЖРУТ ТУТ ---> {letters[elem[0]]}{13 - elem[1]}{elem}")
+            tips["enemy"].append(elem)
             if contacts["m"] >= 7:
-                print("Это похоже на лестницу, не советую там играть")
+                cont = {"d": 0, "m": 0, "s": [], "e": []}
+                check_contact(elem[0], elem[1], -1, team_cells, cont, matrix)
+                if cont["d"] <= 2:
+                    tips["stairs"].append(elem)
+                    print(
+                        f'CAUTION!!!!!!! ТУТ ТАК НАЗЫВАЕМАЯ "ЛЕСТНИЦА", НЕ СОВЕТУЮ ИГРАТЬ ТУТ ---> {letters[elem[0]]}{13 - elem[1]}')
             break
 
 
-def check_cell(x, y, c, cells):
+def success(contacts, tips):
+    for elem in contacts["s"]:
+        if elem not in contacts["e"]:
+            tips["you"].append(elem)
+            print(f"SUCCESS!!!!!! ТЫ МОЖЕШЬ СОЖРАТЬ ЧЕЛОВЕКА ТУТ ---> {letters[elem[0]]}{13 - elem[1]}")
+
+
+def check_cell(x, y, c, cells, di, matrix):
     if matrix[y][x] == c and [x, y] not in cells:
-        return check_contact(x, y, c, cells)
-    if [x, y] not in contacts["s"] and [x, y] not in cells:
-        contacts["s"].append([x, y])
-        contacts["m"] += 1
+        return check_contact(x, y, c, cells, di, matrix)
+    if [x, y] not in di["s"] and [x, y] not in cells:
+        di["s"].append([x, y])
+        di["m"] += 1
     if matrix[y][x] == 0:
-        contacts["d"] += 1
-    if matrix[y][x] == c * -1:
-        if [x, y] not in contacts["e"]:
-            contacts["e"].append([x, y])
+        di["d"] += 1
+    if matrix[y][x] == -c:
+        if [x, y] not in di["e"]:
+            di["e"].append([x, y])
         return False
 
 
-def check_contact(x, y, c, cells):
+def check_contact(x, y, c, cells, di, matrix):
     cells.append([x, y])
     if x > 0:
-        check_cell(x - 1, y, c, cells)
-    if x < 13:
-        check_cell(x + 1, y, c, cells)
+        check_cell(x - 1, y, c, cells, di, matrix)
+    if x < 12:
+        check_cell(x + 1, y, c, cells, di, matrix)
     if y > 0:
-        check_cell(x, y - 1, c, cells)
-    if y < 13:
-        check_cell(x, y + 1, c, cells)
+        check_cell(x, y - 1, c, cells, di, matrix)
+    if y < 12:
+        check_cell(x, y + 1, c, cells, di, matrix)
 
 
-check_contact(6, 6, -1, white_cell)
-print(white_cell, contacts)
-if contacts["d"] == 1:
-    warning()
+def check_matrix(matrix):
+    tips = {"you": [], "enemy": [], "stairs": []}
+    for y in range(len(matrix)):
+        for x in range(len(matrix[0])):
+            if matrix[y][x] == -1 and [x, y] not in know_cells:
+                di = {"d": 0, "m": 0, "s": [], "e": []}
+                cells = []
+                check_cell(x, y, -1, cells, di, matrix)
+                for cell in cells:
+                    if cell not in know_cells:
+                        know_cells.append(cell)
+                if di["d"] == 1:
+                    warning(di, cells, tips, matrix)
+            if matrix[y][x] == 1 and [x, y] not in know_cells:
+                di = {"d": 0, "m": 0, "s": [], "e": []}
+                cells = []
+                check_cell(x, y, 1, cells, di, matrix)
+                for cell in cells:
+                    if cell not in know_cells:
+                        know_cells.append(cell)
+                if di["d"] == 1:
+                    success(di, tips)
+    return tips
+
+
+if __name__ == '__main__':
+    print(check_matrix(mat))
