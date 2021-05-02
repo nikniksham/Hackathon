@@ -9,6 +9,19 @@ app = Flask(__name__)
 email = "nikniksham@gmail.com"
 password = "gohackaton"
 nickname = "nikolausus"
+api_func = {
+    "get_best_move": api.get_best_move,
+    "get_best_move_enemy": api.get_best_move_enemy,
+    "get_future_moves": api.get_future_moves,
+    "show_best_move": api.show_best_move,
+    "show_best_move_enemy": api.show_best_move_enemy,
+    "get_superiority": api.get_superiority,
+    "get_heatmap": api.get_heatmap,
+    "get_heatmap_quarter": api.get_heatmap_quarter,
+    "get_heatmap_two_quarter": api.get_heatmap_two_quarter,
+    "get_best_move_zone": api.get_best_move_zone,
+    "get_heatmap_best_enemy_move_zone": api.get_heatmap_best_enemy_move_zone
+}
 
 
 def upload(req):
@@ -38,6 +51,15 @@ def check_matrix_func():
     tips = check_matrix(board)
     print(json.dumps(tips))
     return json.dumps(tips)
+
+
+@app.route('/call_func/', methods=["POST"])
+def check_matrix_func():
+    params = json.loads(request.form)
+    res = None
+    if params["func"] == "get_heatmap":
+        res = api_func[params["func"]]()
+    return json.dumps(res)
 
 
 @app.route('/getmethod/<jsdata>')

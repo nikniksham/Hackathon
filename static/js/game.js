@@ -93,8 +93,6 @@ function send_resign() {
 let client = new WebSocket("ws://172.104.137.176:41239");
 console.log("connect with server")
 client.onopen = function(e) {
-  alert("[open] Соединение установлено");
-  alert("Отправляем данные на сервер");
   client.send(JSON.stringify([5, 'go/game']));
   console.log("follow on the topic")
   auth_client()
@@ -264,6 +262,17 @@ class Cell {
 
 const board = new Board()
 board.update()
+
+function heat_map() {
+    $.post( "/call_func/", {
+         canvas_data: JSON.stringify({"func": "get_heatmap", "params": ""})
+    }, function(err, req, resp){
+        // board.loadBoard(resp.responseText)
+        heat_map = ($.parseJSON(resp.responseText))
+        console.log(heat_map);
+    });
+}
+
 
 addEventListener('click', (event) => {
     x = event.clientX - offset + r - startX
