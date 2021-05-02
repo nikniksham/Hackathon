@@ -7,16 +7,12 @@ console.log("connect with server")
 client.send(JSON.stringify([5, 'go/game']))
 console.log("follow on the topic")
 */
-let client
-client = new WebSocket("ws://172.104.137.176:41239");
-console.log("CONNECT TO SERVER")
 
 
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 var user_token
 var game_id
-
 tips = {}
 user_data = ""
 const startY = $(canvas).offset().top
@@ -39,7 +35,7 @@ function heat_map() {
         var tmp = new TempMap(tmp_map)
     });
 }
-
+/*
 function get_best_move() {
     $.post( "/call_func/", {
          canvas_data: JSON.stringify({func: "get_best_move",
@@ -86,7 +82,7 @@ function get_superiority() {
         superiority = $.parseJSON(resp.responseText)
         console.log(superiority)
     });
-}
+} */
 
 function login_user() {
     console.log("1")
@@ -100,7 +96,7 @@ function login_user() {
         user_token = user_data.token
         game_id = user_data.game_code
     })
-}
+    setTimeout(auth_client, 5000);}
 
 
 function auth_client() {
@@ -160,12 +156,13 @@ console.log("connect with server")
 client.onopen = function(e) {
   client.send(JSON.stringify([5, 'go/game']))
   console.log("follow on the topic")
-  auth_client()
+  // auth_client()
 };
 
 client.onmessage = function(event) {
   console.log("Полученны данные")
-  console.log($.parseJSON(event.data))
+  data = $.parseJSON(event.data)
+  console.log(data)
 };
 
 client.onclose = function(e) {
@@ -199,6 +196,7 @@ button_map.onclick = function(e) {
     board.update()
 }
 
+/*
 var button_best_move = document.getElementById('get_best_move');
 button_best_move.onclick = function(e) {
     console.log("loading best_move")
@@ -222,7 +220,7 @@ button_map.onclick = function(e) {
     console.log("loading superiority")
     get_superiority()
     board.update()
-}
+} */
  //  get_superiority()
 class Board {
     constructor () {
