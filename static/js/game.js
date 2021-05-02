@@ -113,8 +113,30 @@ client.onopen = function(e) {
 };
 
 client.onmessage = function(event) {
-  console.log("Полученны данные")
-  console.log($.parseJSON(event.data))
+    console.log("Полученны данные")
+    var data = $.parseJSON(event.data)
+    console.log(event.userActivation)
+    console.log(data)
+    if (!event.userActivation) {
+        await sleep(2000)
+
+        $.get("/getlogindata", function(data) {
+            console.log("try to connect")
+            user_data = $.parseJSON(data)
+            var img = document.querySelector('.player_img')
+            img.src = user_data.img_profile
+            var nickname = document.querySelector('.player_nick')
+            nickname.textContent = user_data.nickname
+            user_token = user_data.token
+            game_id = user_data.game_code
+        })
+    }
+    if (data.payload.type == 'currentMap') {
+        console.log("loading map")
+        c.clearRect(0, 0, canvas.width, canvas.height);
+        board.board = data.payload.currentMap
+        board.update()
+    }
 };
 
 client.onclose = function(e) {
@@ -159,7 +181,7 @@ class Board {
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
