@@ -7,7 +7,7 @@ class Api:
     def __init__(self):
         self.token = None  # token пользователя
         self.email = None  # email пользователя
-        self.log = True  # Логирование программы
+        self.log = False  # Логирование программы
         self.nickname = None  # Nickname пользователя
         self.game_code = None  # Код текущей игры пользователя
         self.user_info = None  # Информация о пользователе
@@ -247,7 +247,7 @@ class Api:
             }
             json_superiority = requests.get(f"{self.link}hints/superiority", params=params_superiority)
             if json_superiority.status_code == 200:
-                result = json_superiority.json()
+                result = json_superiority.json()["hint"]
                 self.output(json_superiority.json())
             else:
                 self.output(f"json_superiority выдал ошибку: {json_superiority.status_code}")
@@ -358,6 +358,9 @@ if __name__ == '__main__':
     # Запрос информации об игре
     print("success" if api.game_info(api.game_code) else "error")
 
+    # Показать вревосходящего по очнам игрока
+    print(api.get_superiority())
+
     # Запрос лучшего возможного хода
     print(api.get_best_move())
     
@@ -368,13 +371,10 @@ if __name__ == '__main__':
     print(api.get_future_moves(5))
 
     # Запрос самого лучшего хода из выбранных
-
     print(api.show_best_move(["d12", "a1", "c6"]))
+
     # Запрос самого лучшего из выбранных ходов противника (с учётом своего будущего)
     print(api.show_best_move_enemy("b2", ["d12", "a1", "c6"]))
-
-    # Показать вревосходящего по очнам игрока
-    print(api.get_superiority())
 
     # Запрос heatmap
     print(api.get_heatmap())

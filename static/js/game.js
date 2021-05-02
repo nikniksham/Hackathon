@@ -29,25 +29,70 @@ canvas.width = size
 canvas.height = size
 
 function heat_map() {
-    console.log("LOAD HEAT_MAP")
     $.post( "/call_func/", {
          canvas_data: JSON.stringify({func: "get_heatmap",
                                       params: ""})
     }, function(err, req, resp){
         // board.loadBoard(resp.responseText)
         tmp_map = $.parseJSON(resp.responseText)
+        console.log("get_heatmap")
         var tmp = new TempMap(tmp_map)
     });
 }
 
-function wait() {
-    if (user_data == "") {wait}
-    else {auth_client()}
+function get_best_move() {
+    $.post( "/call_func/", {
+         canvas_data: JSON.stringify({func: "get_best_move",
+                                      params: ""})
+    }, function(err, req, resp){
+        // board.loadBoard(resp.responseText)
+        ans = $.parseJSON(resp.responseText)
+        best_x = ans[0]
+        best_y = ans[1]
+        console.log(ans)
+    });
 }
+
+function get_best_move_enemy() {
+    $.post( "/call_func/", {
+         canvas_data: JSON.stringify({func: "get_best_move_enemy",
+                                      params: ""})
+    }, function(err, req, resp){
+        // board.loadBoard(resp.responseText)
+        ans = $.parseJSON(resp.responseText)
+        best_enemy_x = ans[0]
+        best_enemy_y = ans[1]
+        console.log(ans)
+    });
+}
+
+function get_best_move_zone() {
+    $.post( "/call_func/", {
+         canvas_data: JSON.stringify({func: "get_best_move_zone",
+                                      params: ""})
+    }, function(err, req, resp){
+        // board.loadBoard(resp.responseText)
+        best_move_zone = $.parseJSON(resp.responseText)
+        console.log(best_move_zone)
+    });
+}
+
+function get_superiority() {
+    $.post( "/call_func/", {
+         canvas_data: JSON.stringify({func: "get_superiority",
+                                      params: ""})
+    }, function(err, req, resp){
+        // board.loadBoard(resp.responseText)
+        superiority = $.parseJSON(resp.responseText)
+        console.log(superiority)
+    });
+}
+
 function login_user() {
+    console.log("1")
     $.get("/getlogindata", function(data) {
         user_data = $.parseJSON(data)
-        console.log("LOGIN TO PYTHON", user_data)
+        console.log(user_data)
         var img = document.querySelector('.player_img')
         img.src = user_data.img_profile
         var nickname = document.querySelector('.player_nick')
@@ -55,12 +100,11 @@ function login_user() {
         user_token = user_data.token
         game_id = user_data.game_code
     })
-    wait()
 }
 
 
 function auth_client() {
-    console.log("AUTH")
+    console.log("Авторизация пользователя")
     client.send(JSON.stringify([
     7,
     "go/game",
@@ -74,7 +118,6 @@ function auth_client() {
 
 
 function move_to(coord) {
-    console.log("MOVE")
     client.send(JSON.stringify([
           7,
           "go/game",
@@ -88,7 +131,6 @@ function move_to(coord) {
 }
 
 function send_pass() {
-    console.log("PASS")
     client.send(JSON.stringify([
           7,
           "go/game",
@@ -97,14 +139,10 @@ function send_pass() {
             token: user_data.token,
             game_id: user_data.game_code
           }
-    ]));
+          ]));
 }
 
-var button_pass = document.getElementById('pass');
-button_pass.onclick = send_pass
-
 function send_resign() {
-    console.log("RESIGN")
     client.send(JSON.stringify([
           7,
           "go/game",
@@ -113,24 +151,21 @@ function send_resign() {
             token: user_data.token,
             game_id: user_data.game_code
           }
-    ]));
+          ]));
 }
 
-var button_resign = document.getElementById('resign');
-button_resign.onclick = send_resign
+let client = new WebSocket("ws://172.104.137.176:41239");
+console.log("connect with server")
+
+client.onopen = function(e) {
+  client.send(JSON.stringify([5, 'go/game']))
+  console.log("follow on the topic")
+  auth_client()
+};
 
 client.onmessage = function(event) {
-    console.log("MESSAGE")
-    var data = $.parseJSON(event.data)
-    console.log(data)
-    if (!event.userActivation) {
-        console.log("ERROR Упс, что то пошло не так")
-    } else if (data.payload.type == 'currentMap' || data.payload.type == "newTurn") {
-        console.log("UPDATE MAP")
-        c.clearRect(0, 0, canvas.width, canvas.height);
-        board.board = data.payload.currentMap
-        board.update()
-    }
+  console.log("Полученны данные")
+  console.log($.parseJSON(event.data))
 };
 
 client.onclose = function(e) {
@@ -141,12 +176,8 @@ client.onerror = function(error) {
   console.log("CONNECTION ERROR", error)
 };
 
-client.onopen = function(e) {
-    login_user()
-    client.send(JSON.stringify([5, 'go/game']))
-    console.log("CONNECT TO GAME")
-};
 
+document.addEventListener("DOMContentLoaded", login_user);
 
 class TempMap {
     constructor(map) {
@@ -168,6 +199,31 @@ button_map.onclick = function(e) {
     board.update()
 }
 
+var button_best_move = document.getElementById('get_best_move');
+button_best_move.onclick = function(e) {
+    console.log("loading best_move")
+    get_best_move()
+}
+
+var button_best_move_enemy = document.getElementById('get_best_move_enemy');
+button_map.onclick = function(e) {
+    console.log("loading best_move_enemy")
+    get_best_move_enemy()
+}
+
+var button_best_move_zone = document.getElementById('get_best_move_zone');
+button_map.onclick = function(e) {
+    console.log("loading best_move_zone")
+    get_best_move_zone()
+}
+
+var button_superiority = document.getElementById('get_superiority');
+button_map.onclick = function(e) {
+    console.log("loading superiority")
+    get_superiority()
+    board.update()
+}
+ //  get_superiority()
 class Board {
     constructor () {
         this.board = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -212,6 +268,7 @@ class Board {
                 }
             }
         }
+        console.log('end of update')
     }
 
     checkCell(x, y) {
@@ -331,6 +388,7 @@ class Cell {
         c.arc(this.x, this.y, r*0.95, 0, Math.PI * 2, false)
         c.fillStyle = this.color
         c.fill()
+        // console.log("fill: " + this.color)
     }
 }
 
@@ -343,6 +401,7 @@ addEventListener('click', (event) => {
     y = event.clientY - offset + r - startY
     x = Math.floor(x/step)
     y = Math.floor(y/step)
+    console.log('tab At: ' + x + ':' + y+'\n'+board.board[x][y])
     if (board.board[x][y] == 0) {
         board.board[x][y] = -1
     }
