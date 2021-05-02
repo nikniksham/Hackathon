@@ -14,6 +14,7 @@ const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 var user_token
 var game_id
+var outputData
 tips = {}
 user_data = ""
 const startY = $(canvas).offset().top
@@ -124,7 +125,41 @@ function move_to(coord) {
             place: coord.toString().toLowerCase(),
             game_id: game_id
           }
-          ]));
+     ]));
+}
+
+var button_help = document.getElementById('help');
+button_help.onclick = function help() {
+     outputData = []
+     for (var i = 0; i < 13; i++) {
+        for (var j = 0; j < 13; j++) {
+            outputData.push(board.board[j][i]);
+        }
+     }
+    $.post( "/check_matrix/", {
+        canvas_data: JSON.stringify(outputData)
+    }, function(err, req, resp) {
+        // board.loadBoard(resp.responseText)
+        tips = resp.responseText
+        var dragon_info = document.getElementById('dragon_info');
+        var text = ""
+        if (tips["you"] && tips["you"].size() > 0) {text += "Твои камни под угрозой, обрати внимание на клетки ->"
+            for (var i = 0; i < tips["you"].size(); ++i) {text += tips["you"][i]}
+        }
+        if (tips["enemy"] && tips["enemy"].size() > 0) {
+            text += "Ты можешь захватить вражеские камни, обрати внимание на клетки ->"
+            for (var i = 0; i < tips["enemy"].size(); ++i) {text += tips["enemy"][i]}
+        }
+        if (tips["stairs"] && tips["stairs"].size() > 0) {
+            text += "Ты попал в ситуацию 'лестница', не стоит ходить на клетки ->"
+            for (var i = 0; i < tips["stairs"].size(); ++i) {text += tips["stairs"][i]}
+        }
+        if (tips["you"] || tips["enemy"] || tips["stairs"]) {
+            dragon_info.textContent = text
+        } else {
+            dragon_info.textContent = "На данный момент тебе помощь не требуется"
+        }
+    });
 }
 
 var button_pass = document.getElementById('pass');
@@ -421,7 +456,7 @@ addEventListener('click', (event) => {
     y = event.clientY - offset + r - startY
     x = Math.floor(x/step)
     y = Math.floor(y/step)
-    console.log('tab At: ' + x + ':' + y+'\n'+board.board[x][y])
+    // console.log('tab At: ' + x + ':' + y+'\n'+board.board[x][y])
     if (board.board[x][y] == 0) {
         board.board[x][y] = -1
     }
@@ -431,19 +466,12 @@ addEventListener('click', (event) => {
         console.log("AT:"+abc[x] + (y + 1).toString())
         const selection = true;
         // $.get( "/getmethod/<javascript_data>" );
-         var outputData = []
+         outputData = []
          for (var i = 0; i < 13; i++) {
             for (var j = 0; j < 13; j++) {
                 outputData.push(board.board[j][i]);
             }
          }
-         $.post( "/check_matrix/", {
-            canvas_data: JSON.stringify(outputData)
-         }, function(err, req, resp){
-            // board.loadBoard(resp.responseText)
-            tips = ($.parseJSON(resp.responseText))
-            console.log(tips);
-         });
          $.post( "/a/", {
             canvas_data: JSON.stringify(outputData)
          }, function(err, req, resp){
