@@ -9,6 +9,7 @@ console.log("follow on the topic")
 */
 
 
+score = 0
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 var user_token
@@ -208,10 +209,13 @@ class TempMap {
 
 var button_map = document.getElementById('temp_map');
 button_map.onclick = function(e) {
+    score -= 3
     console.log("LOAD TEMP_MAP")
     c.clearRect(0, 0, canvas.width, canvas.height);
     heat_map()
     board.update()
+    var dragon_info = document.getElementById('dragon_info');
+    dragon_info.textContent = "Удачной игры, юный последователь дракона. У тебя использовано очков: " + score + '.'
 }
 
 /*
@@ -249,7 +253,7 @@ class Board {
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                      [0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
