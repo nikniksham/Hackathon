@@ -32,8 +32,56 @@ function heat_map() {
     }, function(err, req, resp){
         // board.loadBoard(resp.responseText)
         tmp_map = $.parseJSON(resp.responseText)
-        console.log("HEY")
+        console.log("get_heatmap")
         var tmp = new TempMap(tmp_map)
+    });
+}
+
+function get_best_move() {
+    $.post( "/call_func/", {
+         canvas_data: JSON.stringify({func: "get_best_move",
+                                      params: ""})
+    }, function(err, req, resp){
+        // board.loadBoard(resp.responseText)
+        ans = $.parseJSON(resp.responseText)
+        best_x = ans[0]
+        best_y = ans[1]
+        console.log(ans)
+    });
+}
+
+function get_best_move_enemy() {
+    $.post( "/call_func/", {
+         canvas_data: JSON.stringify({func: "get_best_move_enemy",
+                                      params: ""})
+    }, function(err, req, resp){
+        // board.loadBoard(resp.responseText)
+        ans = $.parseJSON(resp.responseText)
+        best_enemy_x = ans[0]
+        best_enemy_y = ans[1]
+        console.log(ans)
+    });
+}
+
+function get_best_move_zone() {
+    $.post( "/call_func/", {
+         canvas_data: JSON.stringify({func: "get_best_move_zone",
+                                      params: ""})
+    }, function(err, req, resp){
+        // board.loadBoard(resp.responseText)
+        best_move_zone = $.parseJSON(resp.responseText)
+        console.log(best_move_zone)
+    });
+}
+
+function get_superiority() {
+    $.post( "/call_func/", {
+         canvas_data: JSON.stringify({func: "get_superiority",
+                                      params: ""})
+    }, function(err, req, resp){
+        // board.loadBoard(resp.responseText)
+        superiority = $.parseJSON(resp.responseText)
+        console.log(superiority)
     });
 }
 
@@ -150,6 +198,31 @@ button_map.onclick = function(e) {
     board.update()
 }
 
+var button_best_move = document.getElementById('get_best_move');
+button_best_move.onclick = function(e) {
+    console.log("loading best_move")
+    get_best_move()
+}
+
+var button_best_move_enemy = document.getElementById('get_best_move_enemy');
+button_map.onclick = function(e) {
+    console.log("loading best_move_enemy")
+    get_best_move_enemy()
+}
+
+var button_best_move_zone = document.getElementById('get_best_move_zone');
+button_map.onclick = function(e) {
+    console.log("loading best_move_zone")
+    get_best_move_zone()
+}
+
+var button_superiority = document.getElementById('get_superiority');
+button_map.onclick = function(e) {
+    console.log("loading superiority")
+    get_superiority()
+    board.update()
+}
+ //  get_superiority()
 class Board {
     constructor () {
         this.board = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

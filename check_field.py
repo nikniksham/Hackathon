@@ -18,7 +18,7 @@ letters = "abcdefghjklmn"
 def warning(contacts, team_cells, tips, matrix):
     for elem in contacts["s"]:
         if elem not in contacts["e"]:
-            print(f"WARNING!!!!!!! ТЕБЯ СЕЙЧАС СОЖРУТ ТУТ ---> {letters[elem[0]]}{13 - elem[1]}{elem}")
+            print(f"WARNING! Обрати внимание на ---> {letters[elem[0]]}{13 - elem[1]}{elem}")
             tips["enemy"].append(elem)
             if contacts["m"] >= 7:
                 cont = {"d": 0, "m": 0, "s": [], "e": []}
@@ -26,7 +26,7 @@ def warning(contacts, team_cells, tips, matrix):
                 if cont["d"] <= 2:
                     tips["stairs"].append(elem)
                     print(
-                        f'CAUTION!!!!!!! ТУТ ТАК НАЗЫВАЕМАЯ "ЛЕСТНИЦА", НЕ СОВЕТУЮ ИГРАТЬ ТУТ ---> {letters[elem[0]]}{13 - elem[1]}')
+                        f'CAUTION! Не советую играть в лестницу ---> {letters[elem[0]]}{13 - elem[1]}')
             break
 
 
@@ -34,7 +34,7 @@ def success(contacts, tips):
     for elem in contacts["s"]:
         if elem not in contacts["e"]:
             tips["you"].append(elem)
-            print(f"SUCCESS!!!!!! ТЫ МОЖЕШЬ СОЖРАТЬ ЧЕЛОВЕКА ТУТ ---> {letters[elem[0]]}{13 - elem[1]}")
+            print(f"SUCCESS! Обрати внимание на ---> {letters[elem[0]]}{13 - elem[1]}")
 
 
 def check_cell(x, y, c, cells, di, matrix):
