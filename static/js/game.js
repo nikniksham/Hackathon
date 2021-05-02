@@ -27,6 +27,10 @@ function login_user() {
     $.get("/getlogindata", function(data) {
         user_data = $.parseJSON(data)
         console.log(user_data)
+        var img = document.querySelector('.player_img')
+        img.src = user_data.img_profile
+        var nickname = document.querySelector('.player_nick')
+        nickname.textContent = user_data.nickname
     })
 }
 
