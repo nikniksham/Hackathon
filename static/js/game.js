@@ -95,7 +95,7 @@ let client = new WebSocket("ws://172.104.137.176:41239");
 console.log("connect with server")
 
 client.onopen = function(e) {
-  client.send(JSON.stringify([5, 'go/game']));
+  client.send(JSON.stringify([5, 'go/game']))
   console.log("follow on the topic")
   auth_client()
 };
@@ -117,6 +117,24 @@ client.onerror = function(error) {
 
 
 document.addEventListener("DOMContentLoaded", login_user);
+
+class TempMap {
+    constructor(map) {
+        this.map = map
+        for (var i = 0; i < 13; i++) {
+            for (var j = 0; j < 13; j++) {
+                var cell = new TempCell(offset + i * step, offset + j * step, this.map[i][j])
+                cell.draw()
+            }
+        }
+    }
+}
+
+var button_map = document.getElementById('temp_map');
+button_map.onclick = function() {
+    c.clearRect(0, 0, canvas.width, canvas.height);
+    var tmp = TempMap()
+}
 
 class Board {
     constructor () {
@@ -148,7 +166,6 @@ class Board {
     }
 
     update() {
-        c.clearRect(0, 0, canvas.width, canvas.height);
         console.log('make update')
         for (let i = 0; i < 13; i++) {
             for (let j = 0; j < 13; j++) {
@@ -252,6 +269,21 @@ class Board {
     }
 }
 
+class TempCell() {
+    constructor (x, y, temp) {
+        this.x = x
+        this.y = y
+        this.temp = temp
+    }
+
+    draw () {
+        c.beginPath()
+        c.arc(this.x, this.y, r * temp, 0, Math.PI * 2, false)
+        c.fillStyle = rgba(255, 0, 0, 0.5)
+        c.fill()
+    }
+}
+
 class Cell {
     constructor (x, y, player){
         this.x = x
@@ -289,7 +321,6 @@ function heat_map() {
         console.log(heat_map);
     });
 }
-
 
 addEventListener('click', (event) => {
     x = event.clientX - offset + r - startX
