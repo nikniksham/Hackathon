@@ -99,7 +99,7 @@ function login_user() {
         user_token = user_data.token
         game_id = user_data.game_code
     })
-    setTimeout(auth_client, 5000);}
+}
 
 
 function auth_client() {
@@ -197,27 +197,29 @@ console.log("connect with server")
 client.onopen = function(e) {
   client.send(JSON.stringify([5, 'go/game']))
   console.log("follow on the topic")
-  // auth_client()
+  setTimeout(auth_client, 5000);
 };
 
 client.onmessage = function(event) {
   console.log("Полученны данные")
   data = $.parseJSON(event.data)
   console.log(data)
-  if (data.payload.type == 'currentMap' || data.payload.type == "newTurn") {
-        console.log("UPDATE MAP")
-        if (data.payload.turn == 'black') {
-            var info = document.getElementById('info').textContent = "Ход чёрного";
-        } else {
-            var info = document.getElementById('info').textContent = "Ход белого";
-        }
-      c.clearRect(0, 0, canvas.width, canvas.height);
-      board.board = data.payload.currentMap
-      board.update()
-  } else if (data.payload.type == "endGame") {
-        var info = document.getElementById('info').textContent = "Игра завершениа";
-
+  try {
+      if (data.payload.type == 'currentMap' || data.payload.type == "newTurn") {
+            console.log("UPDATE MAP")
+            if (data.payload.turn == 'black') {
+                var info = document.getElementById('info').textContent = "Ход чёрного";
+            } else {
+                var info = document.getElementById('info').textContent = "Ход белого";
+            }
+          c.clearRect(0, 0, canvas.width, canvas.height);
+          board.board = data.payload.currentMap
+          board.update()
+      } else if (data.payload.type == "endGame") {
+            var info = document.getElementById('info').textContent = "Игра завершениа";
+      }
   }
+  catch {console.log("Неправильный тип данных")}
 };
 
 client.onclose = function(e) {
