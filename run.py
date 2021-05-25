@@ -106,7 +106,7 @@ def website_main():
         return render_template('main.html', title='Главная страница', style=url_for('static', filename='css/style.css'),
                                navigation=False, user=api)
     else:
-        return redirect("start")
+        return redirect("/start/")
 
 
 @app.route('/login/', methods=['post', 'get'])
@@ -124,7 +124,7 @@ def login():
 def start():
     if api.token is not None:
         return redirect("/")
-    return render_template('register.html', style=url_for('static', filename='css/style.css'))
+    return redirect("/login/")
 
 
 @app.route('/register/', methods=['post', 'get'])
