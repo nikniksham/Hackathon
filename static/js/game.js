@@ -1,14 +1,3 @@
-/* console.log("start")
-
-console.log("import websocket")
-export const client = new WebSocket('ws://172.104.137.176:41239');
-
-console.log("connect with server")
-client.send(JSON.stringify([5, 'go/game']))
-console.log("follow on the topic")
-*/
-
-
 score = 0
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
@@ -40,54 +29,6 @@ function heat_map() {
         var tmp = new TempMap(tmp_map)
     });
 }
-/*
-function get_best_move() {
-    $.post( "/call_func/", {
-         canvas_data: JSON.stringify({func: "get_best_move",
-                                      params: ""})
-    }, function(err, req, resp){
-        // board.loadBoard(resp.responseText)
-        ans = $.parseJSON(resp.responseText)
-        best_x = ans[0]
-        best_y = ans[1]
-        console.log(ans)
-    });
-}
-
-function get_best_move_enemy() {
-    $.post( "/call_func/", {
-         canvas_data: JSON.stringify({func: "get_best_move_enemy",
-                                      params: ""})
-    }, function(err, req, resp){
-        // board.loadBoard(resp.responseText)
-        ans = $.parseJSON(resp.responseText)
-        best_enemy_x = ans[0]
-        best_enemy_y = ans[1]
-        console.log(ans)
-    });
-}
-
-function get_best_move_zone() {
-    $.post( "/call_func/", {
-         canvas_data: JSON.stringify({func: "get_best_move_zone",
-                                      params: ""})
-    }, function(err, req, resp){
-        // board.loadBoard(resp.responseText)
-        best_move_zone = $.parseJSON(resp.responseText)
-        console.log(best_move_zone)
-    });
-}
-
-function get_superiority() {
-    $.post( "/call_func/", {
-         canvas_data: JSON.stringify({func: "get_superiority",
-                                      params: ""})
-    }, function(err, req, resp){
-        // board.loadBoard(resp.responseText)
-        superiority = $.parseJSON(resp.responseText)
-        console.log(superiority)
-    });
-} */
 
 function login_user() {
     console.log("1")
@@ -264,32 +205,6 @@ button_map.onclick = function(e) {
     dragon_info.textContent = "Удачной игры, юный последователь дракона. У тебя использовано очков: " + score + '.'
 }
 
-/*
-var button_best_move = document.getElementById('get_best_move');
-button_best_move.onclick = function(e) {
-    console.log("loading best_move")
-    get_best_move()
-}
-
-var button_best_move_enemy = document.getElementById('get_best_move_enemy');
-button_map.onclick = function(e) {
-    console.log("loading best_move_enemy")
-    get_best_move_enemy()
-}
-
-var button_best_move_zone = document.getElementById('get_best_move_zone');
-button_map.onclick = function(e) {
-    console.log("loading best_move_zone")
-    get_best_move_zone()
-}
-
-var button_superiority = document.getElementById('get_superiority');
-button_map.onclick = function(e) {
-    console.log("loading superiority")
-    get_superiority()
-    board.update()
-} */
- //  get_superiority()
 class Board {
     constructor () {
         this.board = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -508,70 +423,3 @@ addEventListener('click', (event) => {
         }
     }
 });
-
-
-/*
-socket.on('я живой', data => {
-    const li = document.createElement('li');
-    li.innerHTML = `Vote recorded: ${data.selection}`;
-    document.querySelector('#votes').append(li);
-});
-
-for (let i = 0; i < 13; i++) {
-    for (let j = 0; j < 13; j++) {
-        if ()
-
-
-        if ((i * j) % 12 == 0) {
-            var cell = new Cell(offset + i * step, offset + j * step, 1)
-            cell.draw()
-        } else if ((i + j) % 4 == 4) {
-            var cell = new Cell(offset + i * step, offset + j * step, -1)
-            cell.draw()
-        } else {
-            var cell = new Cell(offset + i * step, offset + j * step, -1)
-            cell.draw()
-        }
-    }
-}
-return false
-
-if ((x + 1 < 13) && (this.board[x + 1][y] == 0) || (x - 1 > -1) && (this.board[x - 1][y] == 0) || (y + 1 < 13) && (this.board[x][y + 1] == 0) || (y - 1 > -1) && (this.board[x][y - 1] == 0)) {
-    return true
-}
-
-// проверяем союзные соседние клетки
-if (x + 1 < 13 && this.board[x + 1][y] == -1) {
-    if (this.checkedMap[x + 1][y] == 0) {
-        this.checked(x + 1, y)
-        if (this.checkCell(x + 1, y)) {
-            return true
-        }
-    }
-}
-if (x - 1 > -1 && this.board[x - 1][y] == -1) {
-    if (this.checkedMap[x - 1][y] == 0) {
-        this.checked(x - 1, y)
-        if (this.checkCell(x - 1, y)) {
-            return true
-        }
-    }
-}
-if (y + 1 < 13 && this.board[x][y + 1] == -1) {
-    if (this.checkedMap[x][y + 1] == 0) {
-        this.checked(x, y + 1)
-        if (this.checkCell(x, y + 1)) {
-            return true
-        }
-    }
-}
-if (y - 1 > -1 && this.board[x][y - 1] == -1) {
-    if (this.checkedMap[x][y - 1] == 0) {
-        this.checked(x, y - 1)
-        if (this.checkCell(x, y - 1)) {
-            return true
-        }
-    }
-}
-return false
-*/
