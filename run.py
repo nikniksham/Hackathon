@@ -102,8 +102,11 @@ def get_python_data():
 
 @app.route("/")
 def website_main():
-    return render_template('main.html', title='Главная страница', style=url_for('static', filename='css/style.css'),
-                           navigation=False, user=api)
+    if api.token is not None:
+        return render_template('main.html', title='Главная страница', style=url_for('static', filename='css/style.css'),
+                               navigation=False, user=api)
+    else:
+        return redirect("/start/")
 
 
 @app.route('/login/', methods=['post', 'get'])
@@ -111,10 +114,17 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         if api.login_user(form.email.data, form.password.data):
-            return redirect('/game/')
+            return redirect('/')
         else:
             return render_template('login.html', form=form, success=False, style=url_for('static', filename='css/style.css'))
     return render_template('login.html', form=form, style=url_for('static', filename='css/style.css'))
+
+
+@app.route('/start/', methods=['post', 'get'])
+def start():
+    if api.token is not None:
+        return redirect("/")
+    return redirect("/login/")
 
 
 @app.route('/register/', methods=['post', 'get'])
@@ -122,7 +132,7 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         if api.register_user(form.email.data, form.nickname.data):
-            return redirect('/game/')
+            return redirect('/')
         else:
             return render_template('register.html', form=form, success=False, style=url_for('static', filename='css/style.css'))
     return render_template('register.html', form=form, style=url_for('static', filename='css/style.css'))
@@ -146,6 +156,5 @@ def vote(ponimanie):
 """
 
 if __name__ == '__main__':
-    print("http://127.0.0.1:8000/login/")
-    print("http://127.0.0.1:8000/register/")
+    print("http://127.0.0.1:8000/start/")
     main(port=8000)

@@ -99,22 +99,32 @@ button_help.onclick = function help() {
         canvas_data: JSON.stringify(outputData)
     }, function(err, req, resp) {
         // board.loadBoard(resp.responseText)
-        tips = resp.responseText
+        tips = $.parseJSON(resp.responseText)
         console.log(tips)
         var dragon_info = document.getElementById('dragon_info');
-        var text = ""
-        if (tips["enemy"] && tips["enemy"].size() > 0) {text += "Твои камни под угрозой, обрати внимание на клетки ->"
-            for (var i = 0; i < tips["enemy"].size(); ++i) {text += abc[tips["enemy"][i][0]] + (tips["enemy"][i][1] + 1).toString()}
+        if (tips.enemy.length > 0 || tips.you.length > 0 || tips.stairs.length > 0) {
+            var text = ""
+            if (tips.enemy.length > 0) {
+                if (text != " ") {text += "\n"}
+                text += "Твои камни под угрозой, обрати внимание на клетки -> "
+                for (var i = 0; i < tips.enemy.length; ++i) {text += abc[tips.enemy[i][0]] + (13 - tips.enemy[i][1]).toString()}
+            }
+            if (tips.you.length > 0) {
+                if (text != " ") {text += "\n"}
+                text += "Ты можешь захватить вражеские камни, обрати внимание на клетки -> "
+                for (var i = 0; i < tips.you.length; ++i) {text += abc[tips.you[i][0]] + (13 - tips.you[i][1]).toString()}
+            }
+            if (tips.stairs.length > 0) {
+                if (text != " ") {text += "\n"}
+                text += "Ты попал в ситуацию 'лестница', не стоит ходить на клетки -> "
+                for (var i = 0; i < tips.stairs.length; ++i) {text += abc[tips.stairs[i][0]] + (13 - tips.stairs[i][1]).toString()}
+            }
+        } else {
+            var text = "В данный момент тебе подскзка не нужна"
         }
-        if (tips["you"] && tips["you"].size() > 0) {
-            text += "Ты можешь захватить вражеские камни, обрати внимание на клетки ->"
-            for (var i = 0; i < tips["you"].size(); ++i) {text += abc[tips["you"][i][0]] + (tips["you"][i][1] + 1).toString()}
-        }
-        if (tips["stairs"] && tips["stairs"].size() > 0) {
-            text += "Ты попал в ситуацию 'лестница', не стоит ходить на клетки ->"
-            for (var i = 0; i < tips["stairs"].size(); ++i) {text += abc[tips["stairs"][i][0]] + (tips["stairs"][i][1] + 1).toString()}
-        }
+        console.log(text)
         if (text != "") {
+            console.log(text)
             dragon_info.textContent = text
         } else {
         }
