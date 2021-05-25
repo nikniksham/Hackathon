@@ -158,9 +158,11 @@ def login():
 
 @app.route('/start/', methods=['post', 'get'])
 def start():
+    """
     if api.token is not None:
         return redirect("/")
-    return redirect("/login/")
+    """
+    return render_template('start.html', title="логин или регитсрация", style=url_for('static', filename='css/style.css'))
 
 
 @app.route('/register/', methods=['post', 'get'])
