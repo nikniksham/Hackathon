@@ -231,7 +231,8 @@ button_map.onclick = function(e) {
 
 class Board {
     constructor (color) {
-        set_color(color)
+        this.my_color = color
+        this.my_num = (color=="black"?-1:1)
         this.board = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
