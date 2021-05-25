@@ -142,7 +142,7 @@ def get_python_data():
 
 @app.route("/")
 def website_main():
-    if api.token is not None:
+    if api.check_user():
         return render_template('main.html', title='Главная страница', style=url_for('static', filename='css/style.css'),
                                user=api)
     else:
@@ -157,14 +157,16 @@ def logout():
 
 @app.route('/login/', methods=['post', 'get'])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        if api.login_user(form.email.data, form.password.data):
-            return redirect('/')
-        else:
-            return render_template('login.html', form=form, success=False,
-                                   style=url_for('static', filename='css/style.css'))
-    return render_template('login.html', form=form, style=url_for('static', filename='css/style.css'))
+    if not api.check_user():
+        form = LoginForm()
+        if form.validate_on_submit():
+            if api.login_user(form.email.data, form.password.data):
+                return redirect('/')
+            else:
+                return render_template('login.html', form=form, success=False,
+                                       style=url_for('static', filename='css/style.css'))
+        return render_template('login.html', form=form, style=url_for('static', filename='css/style.css'))
+    return redirect("/")
 
 
 @app.route('/start/', methods=['post', 'get'])
