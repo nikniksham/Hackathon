@@ -218,3 +218,17 @@ img.player_block_image {
     transform: rotate(180deg);
     height: 10%;
 }
+
+.aligner {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    overflow: auto;
+}
+
+.meni-reg-log {
+    margin: auto;
+}
