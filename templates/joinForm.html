@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+
+{% for category, message in get_flashed_messages(with_categories=true) %}
+<spam class="{{ category }}">{{ message }}</spam>
+{% endfor %}
+
+<form action="" method="post">
+    {{ form.csrf_token }}
+    <p>
+        {{ form.game_code.label() }}
+        {{ form.game_code() }}
+        {% if form.game_code.errors %}
+        {% for error in form.game_code.errors %}
+        {{ error }}
+        {% endfor %}
+        {% endif %}
+    </p>
+    <p>
+        {{ form.submit() }}
+    </p>
+</form>
+
+</body>
+</html>

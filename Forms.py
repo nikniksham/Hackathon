@@ -14,3 +14,7 @@ class RegisterForm(FlaskForm):
     nickname = StringField("Nickname", validators=[DataRequired()])
     submit = SubmitField("Submit", validators=None)
 
+
+class JoinForm(FlaskForm):
+    game_code = StringField("Game Code", validators=[DataRequired()])
+    submit = SubmitField("Submit", validators=None)
