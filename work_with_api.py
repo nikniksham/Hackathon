@@ -13,6 +13,7 @@ class Api:
         self.user_info = None  # Информация о пользователе
         self.link = "https://go-backend-denis.ambersoft.llc/"  # Ссылка на сайт
         self.img_profile = None
+        self.language = "ru"
         self.centaur_token = "Kf8darEBRsoJEiw0"
 
     def get_json(self):
@@ -23,6 +24,9 @@ class Api:
             "game_code": self.game_code
         }
         return json_user
+
+    def change_language(self, new_language):
+        self.language = new_language
 
     def output(self, text):
         if self.log:
