@@ -47,7 +47,7 @@ function heat_map() {
 
 function login_user() {
     console.log("1")
-    $.get("/getlogindata", function(data) {
+    $.get("/getLoginData", function(data) {
         user_data = $.parseJSON(data)
         console.log(user_data)
         var img = document.querySelector('.player_img')
