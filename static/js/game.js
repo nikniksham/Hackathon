@@ -383,9 +383,12 @@ class Board {
     }
 
     check(x, y) {
+        console.log(this.board[x][y])
         if (this.board[x][y] == 2) {
+            console.log(11)
             return true
         } else if (this.board[x][y] == -1) {
+            console.log(22)
             this.checkedMap = []
             for(var i=0; i<13; i++) {
                 this.checkedMap[i] = [];
@@ -472,42 +475,35 @@ addEventListener('click', (event) => {
     if (my_color == color_move) {
         if ((x > -1) && (x < 13) && (y > -1) && (y < 13)) {
             if (board.board[x][y] == 0) {
+                console.log("1")
                 board.board[x][y] = -1
-                move_color = "white"
-            }
-            if (board.check(x, y)) {
-                move_color = "white"
-                board.add(x, y)
-                console.log("AT:"+abc[x] + (y + 1).toString())
-                const selection = true;
-                // $.get( "/getmethod/<javascript_data>" );
-                 outputData = []
-                 for (var i = 0; i < 13; i++) {
-                    for (var j = 0; j < 13; j++) {
-                        outputData.push(board.board[j][i]);
-                    }
-                 }
-                 $.post( "/a/", {
-                    canvas_data: JSON.stringify(outputData)
-                 }, function(err, req, resp){
-                    board.loadBoard(resp.responseText)
-                    console.log('LOADED FROM PYTHON');
-                 });
-                 client.send(JSON.stringify([
-                    7,// 7 - статус: отправка сообщения
-                    "go/game", // в какой топик отправляется сообщение
-                    {
-                        command: "move", // команда на отправку хода
-                        token: user_data.token,  // токен игрока
-                        place: (abc[x] + (y + 1).toString()).toString().toLowerCase(),  // место куда сделать ход, формат: d13
-                        game_id: game_id // номер игры
-                    }
-                  ]));
-                $.get("/getpythondata", function(data) {
-                    console.log($.parseJSON(data))
-                })
-            } else if (board.board[x][y] == -1) {
-                board.board[x][y] = 0
+                if (board.check(x, y)) {
+                    console.log("2")
+                    move_color = "white"
+                    board.add(x, y)
+                    console.log("AT:"+abc[x] + (y + 1).toString())
+                    const selection = true;
+                    // $.get( "/getmethod/<javascript_data>" );
+                     outputData = []
+                     for (var i = 0; i < 13; i++) {
+                        for (var j = 0; j < 13; j++) {
+                            outputData.push(board.board[j][i]);
+                        }
+                     }
+                     client.send(JSON.stringify([
+                        7,// 7 - статус: отправка сообщения
+                        "go/game", // в какой топик отправляется сообщение
+                        {
+                            command: "move", // команда на отправку хода
+                            token: user_data.token,  // токен игрока
+                            place: (abc[x] + (y + 1).toString()).toString().toLowerCase(),  // место куда сделать ход, формат: d13
+                            game_id: game_id // номер игры
+                        }
+                      ]));
+                    $.get("/getpythondata", function(data) {
+                        console.log($.parseJSON(data))
+                    })
+                }
             }
         }
     }
