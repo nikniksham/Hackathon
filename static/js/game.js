@@ -197,7 +197,7 @@ console.log("connect with server")
 client.onopen = function(e) {
   client.send(JSON.stringify([5, 'go/game']))
   console.log("follow on the topic")
-  setTimeout(auth_client, 5000);
+  setTimeout(auth_client, 3000);
 };
 
 client.onmessage = function(event) {

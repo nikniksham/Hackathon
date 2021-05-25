@@ -2,7 +2,7 @@ import json
 from flask import Flask, render_template, url_for, request, flash
 from werkzeug.utils import redirect
 
-from Forms import LoginForm
+from Forms import LoginForm, RegisterForm
 from work_with_api import Api
 from check_field import *
 
@@ -84,7 +84,7 @@ def get_post_javascript_data():
 
 @app.route('/getlogindata')
 def get_python_data_2():
-    # ("success" if api.login_user(email, password) else "error")
+    print("success" if api.login_user(email, password) else "error")
     print("success" if api.update_user_info() else "error")
     print("success" if api.create_game_with_bot() else "error")
     print("success" if api.game_info(api.game_code) else "error")
@@ -105,16 +105,23 @@ def website_main():
 @app.route('/login/', methods=['post', 'get'])
 def login():
     form = LoginForm()
-    print(form.validate_on_submit())
     if form.validate_on_submit():
-        print(form.email.data, " ", form.password.data)
         if api.login_user(form.email.data, form.password.data):
-            print(12345678)
             return redirect('/game/')
         else:
-            print(987654)
-            return redirect(url_for('login'))
-    return render_template('login.html', form=form)
+            return render_template('login.html', form=form, success=False, style=url_for('static', filename='css/style.css'))
+    return render_template('login.html', form=form, style=url_for('static', filename='css/style.css'))
+
+
+@app.route('/register/', methods=['post', 'get'])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        if api.register_user(form.email.data, form.nickname.data):
+            return redirect('/game/')
+        else:
+            return render_template('register.html', form=form, success=False, style=url_for('static', filename='css/style.css'))
+    return render_template('register.html', form=form, style=url_for('static', filename='css/style.css'))
 
 
 @app.route("/game/")
@@ -136,4 +143,5 @@ def vote(ponimanie):
 
 if __name__ == '__main__':
     print("http://127.0.0.1:8000/login/")
+    print("http://127.0.0.1:8000/register/")
     main(port=8000)
