@@ -1,17 +1,27 @@
-{% extends "base.html" %}
-
-
-{% block content %}
-<div>
-    <p class="diary-text">
-        Однажды в pycharm родился необычный малыш<br>
-        - Я родился<br>
-        И случилось так, что он попал на в git репозиторий, <br>
-        где нашёл много новых программистов<br>
-        - Привет<br>
-        А вот что произошло дальше, мы сейчас и накодим...<br><br><br>
-        А ВОТ И <a href="/game/">ПРОДОЛЖЕНИЕ</a>
-    </p>
-
-</div>
-{% endblock %}
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href={{style}}>
+    <title>{{title}}</title>
+</head>
+<body>
+    <img class="up_left_image"    src="/static/img/angle.png">
+    <img class="up_right_image"   src="/static/img/angle.png">
+    <img class="down_up_image"    src="/static/img/angle.png">
+    <img class="down_right_image" src="/static/img/angle.png">
+    <div class="aligner">
+        <div class="meni-reg-log">
+            <a href="/createGameWithBot"><button class="game_button">Создать игру с ботом</button></a>
+            <a href="/createGameWithRandom"><button class="game_button">Создать игру со случайным игроком</button></a>
+            <a href="/closedGame/"><button class="game_button">Закрытая игра</button></a>
+            <a href="/logout/"><button class="game_button">Выйти</button></a>
+        </div>
+    </div>
+</body>
+</html>

@@ -13,3 +13,4 @@ class RegisterForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired()])
     nickname = StringField("Nickname", validators=[DataRequired()])
     submit = SubmitField("Submit", validators=None)
+

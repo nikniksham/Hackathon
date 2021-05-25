@@ -6,7 +6,6 @@ from Forms import LoginForm, RegisterForm
 from work_with_api import Api
 from check_field import *
 
-
 api = Api()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '84da5b8a39a6d06bf8bc7a60cedcac83'
@@ -83,13 +82,14 @@ def get_post_javascript_data():
     di = {"d": 0, "m": 0, "s": [], "e": []}
     check_contact(data["x"], data["y"], -1 if data["color"] == "white" else 1, [], di, data["map"])
     print(di)
-    return json.dumps({"answer":  di["d"] > 0})
+    return json.dumps({"answer": di["d"] > 0})
 
 
 @app.route('/getLoginData')
 def get_login_data():
     if not api.check_user():
         print("success" if api.login_user(email, password) else "error")
+    api.update_user_info()
     return json.dumps(api.get_json())
 
 
@@ -102,26 +102,25 @@ def update_user_info():
 @app.route('/createGameWithBot')
 def create_game_with_bot():
     print("success" if api.create_game_with_bot() else "error")
-    return json.dumps(api.get_json())
+    return redirect("/game/")
 
 
 @app.route('/createGameByCode')
 def create_game_by_code():
     print("success" if api.create_game_by_code() else "error")
-    return json.dumps(api.get_json())
+    return redirect("/game/")
 
 
 @app.route('/createGameWithRandom')
 def create_game_with_random():
     print("success" if api.create_game_with_random() else "error")
-    return json.dumps(api.get_json())
+    return redirect("/game/")
 
 
-@app.route('/joinGameViaCode', methods=["POST"])
-def join_game_via_code():
-    params = json.loads(request.form['game_data'])
-    print("success" if api.join_game(params["game_code"]) else "error")
-    return json.dumps(api.get_json())
+@app.route('/joinGameViaCode/<string:game_code>/', methods=["GET", "POST"])
+def join_game_via_code(game_code):
+    print("success" if api.join_game(game_code) else "error")
+    return redirect("/game/")
 
 
 @app.route('/getGameInfo', methods=["POST"])
@@ -129,6 +128,11 @@ def get_game_info():
     params = json.loads(request.form['game_data'])
     print("success" if api.game_info(params["game_code"]) else "error")
     return json.dumps(api.get_json())
+
+
+@app.route('/closedGame/')
+def closed_game():
+    return json.dumps("СВАБОДУ ПАПУГАЯМ!!")
 
 
 @app.route('/getpythondata/')
@@ -140,9 +144,15 @@ def get_python_data():
 def website_main():
     if api.token is not None:
         return render_template('main.html', title='Главная страница', style=url_for('static', filename='css/style.css'),
-                               navigation=False, user=api)
+                               user=api)
     else:
         return redirect("/start/")
+
+
+@app.route("/logout/")
+def logout():
+    api.logout()
+    return redirect("/")
 
 
 @app.route('/login/', methods=['post', 'get'])
@@ -152,7 +162,8 @@ def login():
         if api.login_user(form.email.data, form.password.data):
             return redirect('/')
         else:
-            return render_template('login.html', form=form, success=False, style=url_for('static', filename='css/style.css'))
+            return render_template('login.html', form=form, success=False,
+                                   style=url_for('static', filename='css/style.css'))
     return render_template('login.html', form=form, style=url_for('static', filename='css/style.css'))
 
 
@@ -162,7 +173,8 @@ def start():
     if api.token is not None:
         return redirect("/")
     """
-    return render_template('start.html', title="логин или регитсрация", style=url_for('static', filename='css/style.css'))
+    return render_template('start.html', title="логин или регитсрация",
+                           style=url_for('static', filename='css/style.css'))
 
 
 @app.route('/register/', methods=['post', 'get'])
@@ -172,7 +184,8 @@ def register():
         if api.register_user(form.email.data, form.nickname.data):
             return redirect('/')
         else:
-            return render_template('register.html', form=form, success=False, style=url_for('static', filename='css/style.css'))
+            return render_template('register.html', form=form, success=False,
+                                   style=url_for('static', filename='css/style.css'))
     return render_template('register.html', form=form, style=url_for('static', filename='css/style.css'))
 
 
