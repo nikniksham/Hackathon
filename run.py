@@ -2,7 +2,7 @@ import json
 from flask import Flask, render_template, url_for, request, flash
 from werkzeug.utils import redirect
 
-from Forms import LoginForm, RegisterForm
+from Forms import LoginForm, RegisterForm, JoinForm
 from work_with_api import Api
 from check_field import *
 
@@ -108,7 +108,7 @@ def create_game_with_bot():
 @app.route('/createGameByCode/')
 def create_game_by_code():
     print("success" if api.create_game_by_code() else "error")
-    return redirect("/game/")
+    return redirect("/closedGame2/")
 
 
 @app.route('/createGameWithRandom/')
@@ -130,9 +130,15 @@ def get_game_info():
     return json.dumps(api.get_json())
 
 
+@app.route('/closedGame2/')
+def closed_game2():
+    return render_template('closedGame2.html', title='Закрытая игра', style=url_for('static', filename='css/style.css'),
+                           user=api)
+
+
 @app.route('/closedGame/')
 def closed_game():
-    return json.dumps("СВАБОДУ ПАПУГАЯМ!!")
+    return render_template('closedGame.html', title='Закрытая игра', style=url_for('static', filename='css/style.css'))
 
 
 @app.route('/getpythondata/')
@@ -147,6 +153,15 @@ def website_main():
                                user=api)
     else:
         return redirect("/start/")
+
+
+@app.route('/joinGame/', methods=['post', 'get'])
+def join_game():
+    form = JoinForm()
+    if form.validate_on_submit():
+        if api.join_game(form.game_code.data):
+            return redirect('/game/')
+    return render_template('joinForm.html', form=form, style=url_for('static', filename='css/style.css'))
 
 
 @app.route("/logout/")

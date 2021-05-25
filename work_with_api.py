@@ -57,6 +57,7 @@ class Api:
     def check_active_game(self):
         result = False
         if self.check_user():
+            self.update_user_info()
             json_active_games = requests.get(f"{self.link}game/current", params={"token": self.get_token()})
             if json_active_games.status_code == 200 and json_active_games.json()["gameId"] is not None:
                 result = True
@@ -137,14 +138,13 @@ class Api:
     def create_game_by_code(self):
         result = False
         if self.check_user():
-            if not self.check_active_game():
-                json_create_game_by_code = requests.post(f"{self.link}game/create/code", params={"token": self.get_token()})
-                if json_create_game_by_code.status_code == 200:
-                    result = True
-                    self.game_code = json_create_game_by_code.json()["gameId"]
-                    self.output(json_create_game_by_code.json())
-                else:
-                    self.output(f"json_create_game_by_code выдал ошибку: {json_create_game_by_code.status_code}")
+            json_create_game_by_code = requests.post(f"{self.link}game/create/code", params={"token": self.get_token()})
+            if json_create_game_by_code.status_code == 200:
+                result = True
+                self.game_code = json_create_game_by_code.json()["gameId"]
+                self.output(json_create_game_by_code.json())
+            else:
+                self.output(f"json_create_game_by_code выдал ошибку: {json_create_game_by_code.status_code}")
         return result
 
     def create_game_with_random(self):
