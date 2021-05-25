@@ -88,12 +88,6 @@ function move_to(coord) {
 var button_help = document.getElementById('help');
 button_help.onclick = function help() {
     console.log("USE OUR TIPS")
-     outputData = []
-     for (var i = 0; i < 13; i++) {
-        for (var j = 0; j < 13; j++) {
-            outputData.push(board.board[j][i]);
-        }
-     }
     $.post( "/check_matrix/", {
         canvas_data: JSON.stringify(outputData)
     }, function(err, req, resp) {
@@ -168,16 +162,16 @@ client.onmessage = function(event) {
   console.log("GET DATA")
   console.log(data)
   try {
-      if (data.payload.type == "userConnected") {
-            my_color = (data.payload.player=="b"?"black":"white")
-            board.my_color = (data.payload.player=="b"?"black":"white")
-            color_move = data.payload.turn
-            var img = document.querySelector('.player2_img')
-            img.src = data.payload.opponent.avatar
-            var nickname = document.querySelector('.player2_nik')
-            nickname.textContent = data.payload.opponent.nickname
-      }
       if (data.payload.type == 'currentMap' || data.payload.type == "newTurn") {
+            if (data.payload.type == 'currentMap') {
+                my_color = (data.payload.player=="b"?"black":"white")
+                board.set_color(data.payload.player=="b"?"black":"white")
+                color_move = data.payload.turn
+                var img = document.querySelector('.player2_img')
+                img.src = data.payload.opponent.avatar
+                var nickname = document.querySelector('.player2_nik')
+                nickname.textContent = data.payload.opponent.nickname
+            }
             if (data.payload.turn == 'black') {
                 var info = document.getElementById('info').textContent = "Ход чёрного";
                 color_move = "black"
@@ -186,7 +180,13 @@ client.onmessage = function(event) {
                 color_move = "white"
             }
           c.clearRect(0, 0, canvas.width, canvas.height);
-          board.board = data.payload.currentMap
+          console.log("fasdfa")
+          for (var y = 0; y < 13; y++) {
+                for (var x = 0; x < 13; x++) {
+                    board.board[y][12 - x] = data.payload.currentMap[y][x]
+                }
+          }
+          console.log(board.board)
           board.update()
       } else if (data.payload.type == "endGame") {
             var info = document.getElementById('info').textContent = "Игра завершениа";
@@ -261,14 +261,14 @@ class Board {
     }
 
     add(x, y) {
-        this.board[x][y] = this.my_num
+        this.board[y][x] = this.my_num
         c.clearRect(0, 0, canvas.width, canvas.height);
         this.update()
     }
 
     update() {
-        for (let i = 12; i > -1; i--) {
-            for (let j = 13; j > -1; j--) {
+        for (let i = 0; i < 13; i++) {
+            for (let j = 0; j < 13; j++) {
                 if (this.board[i][j] == -1) {
                     var cell = new Cell(offset + i * step, offset + j * step, -1)
                     cell.draw()
@@ -328,19 +328,13 @@ function set_cell() {
         move_color = (my_color=="white"?"black":"white")
         board.add(x, y)
         const selection = true;
-        outputData = []
-        for (var i = 0; i < 13; i++) {
-            for (var j = 0; j < 13; j++) {
-                outputData.push(board.board[j][i]);
-            }
-        }
         client.send(JSON.stringify([
             7,// 7 - статус: отправка сообщения
             "go/game", // в какой топик отправляется сообщение
             {
                 command: "move", // команда на отправку хода
                 token: user_data.token,  // токен игрока
-                place: (abc[x] + (y + 1).toString()).toString().toLowerCase(),  // место куда сделать ход, формат: d13
+                place: (abc[12 - y] + (x).toString()).toString().toLowerCase(),  // место куда сделать ход, формат: d13
                 game_id: game_id // номер игры
             }
         ]));
@@ -356,8 +350,9 @@ addEventListener('click', (event) => {
     y = Math.floor(y/step)
     if (my_color == color_move) {
         if ((x > -1) && (x < 13) && (y > -1) && (y < 13)) {
-            if (board.board[x][y] == 0) {
-                board.board[x][y] = -1
+            if (board.board[y][x] == 0) {
+                console.log(x + " " + y)
+                board.board[y][x] = -1
                 can_atacovat = false
                 can_move(x, y)
                 setTimeout(set_cell, 750)
