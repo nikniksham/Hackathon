@@ -117,9 +117,9 @@ def create_game_with_random():
     return redirect("/game/")
 
 
-@app.route('/joinGameViaCode/<string:game_code>/', methods=["GET", "POST"])
-def join_game_via_code(game_code):
-    print("success" if api.join_game(game_code) else "error")
+@app.route('/joinGameViaCode/', methods=["GET", "POST"])
+def join_game_via_code():
+    print("success" if api.join_game("LYXX") else "error")
     return redirect("/game/")
 
 
