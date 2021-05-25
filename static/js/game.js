@@ -16,6 +16,8 @@ var user_token
 var game_id
 var outputData
 var abc = "abcdefghjklmn"
+var my_color = "black"
+var color_move = "black"
 tips = {}
 user_data = ""
 const startY = $(canvas).offset().top
@@ -206,11 +208,17 @@ client.onmessage = function(event) {
   console.log(data)
   try {
       if (data.payload.type == 'currentMap' || data.payload.type == "newTurn") {
+            if (data.payload.type == 'currentMap') {
+                my_color = (data.payload.player=="b"?"black":"white")
+                color_move = data.payload.turn
+            }
             console.log("UPDATE MAP")
             if (data.payload.turn == 'black') {
                 var info = document.getElementById('info').textContent = "Ход чёрного";
+                color_move = "black"
             } else {
                 var info = document.getElementById('info').textContent = "Ход белого";
+                color_move = "white"
             }
           c.clearRect(0, 0, canvas.width, canvas.height);
           board.board = data.payload.currentMap
@@ -460,42 +468,47 @@ addEventListener('click', (event) => {
     x = Math.floor(x/step)
     y = Math.floor(y/step)
     // console.log('tab At: ' + x + ':' + y+'\n'+board.board[x][y])
-    if ((x > -1) && (x < 13) && (y > -1) && (y < 13)) {
-        if (board.board[x][y] == 0) {
-            board.board[x][y] = -1
-        }
-        if (board.check(x, y)) {
-            board.add(x, y)
-            console.log("AT:"+abc[x] + (y + 1).toString())
-            const selection = true;
-            // $.get( "/getmethod/<javascript_data>" );
-             outputData = []
-             for (var i = 0; i < 13; i++) {
-                for (var j = 0; j < 13; j++) {
-                    outputData.push(board.board[j][i]);
-                }
-             }
-             $.post( "/a/", {
-                canvas_data: JSON.stringify(outputData)
-             }, function(err, req, resp){
-                board.loadBoard(resp.responseText)
-                console.log('LOADED FROM PYTHON');
-             });
-             client.send(JSON.stringify([
-                7,// 7 - статус: отправка сообщения
-                "go/game", // в какой топик отправляется сообщение
-                {
-                    command: "move", // команда на отправку хода
-                    token: user_data.token,  // токен игрока
-                    place: (abc[x] + (y + 1).toString()).toString().toLowerCase(),  // место куда сделать ход, формат: d13
-                    game_id: game_id // номер игры
-                }
-              ]));
-            $.get("/getpythondata", function(data) {
-                console.log($.parseJSON(data))
-            })
-        } else if (board.board[x][y] == -1) {
-            board.board[x][y] = 0
+    console.log(my_color +" "+ color_move)
+    if (my_color == color_move) {
+        if ((x > -1) && (x < 13) && (y > -1) && (y < 13)) {
+            if (board.board[x][y] == 0) {
+                board.board[x][y] = -1
+                move_color = "white"
+            }
+            if (board.check(x, y)) {
+                move_color = "white"
+                board.add(x, y)
+                console.log("AT:"+abc[x] + (y + 1).toString())
+                const selection = true;
+                // $.get( "/getmethod/<javascript_data>" );
+                 outputData = []
+                 for (var i = 0; i < 13; i++) {
+                    for (var j = 0; j < 13; j++) {
+                        outputData.push(board.board[j][i]);
+                    }
+                 }
+                 $.post( "/a/", {
+                    canvas_data: JSON.stringify(outputData)
+                 }, function(err, req, resp){
+                    board.loadBoard(resp.responseText)
+                    console.log('LOADED FROM PYTHON');
+                 });
+                 client.send(JSON.stringify([
+                    7,// 7 - статус: отправка сообщения
+                    "go/game", // в какой топик отправляется сообщение
+                    {
+                        command: "move", // команда на отправку хода
+                        token: user_data.token,  // токен игрока
+                        place: (abc[x] + (y + 1).toString()).toString().toLowerCase(),  // место куда сделать ход, формат: d13
+                        game_id: game_id // номер игры
+                    }
+                  ]));
+                $.get("/getpythondata", function(data) {
+                    console.log($.parseJSON(data))
+                })
+            } else if (board.board[x][y] == -1) {
+                board.board[x][y] = 0
+            }
         }
     }
 });
