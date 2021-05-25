@@ -27,32 +27,29 @@ function can_move(x, y) {
             y: x,
             color: my_color
          })}, function(err, req, resp){
-            // board.loadBoard(resp.responseText)
             can_atacovat = $.parseJSON(resp.responseText).answer
-            console.log("ПРИНЯЛ" + can_atacovat)
     });
 }
 
 function heat_map() {
+    console.log("GET HEAT MAP")
     $.post( "/call_func/", {
          canvas_data: JSON.stringify({func: "get_heatmap",
                                       params: ""})
     }, function(err, req, resp){
-        // board.loadBoard(resp.responseText)
         tmp_map = $.parseJSON(resp.responseText)
-        console.log("get_heatmap")
         var tmp = new TempMap(tmp_map)
     });
 }
 
 function login_user() {
-    console.log("1")
+    console.log("LOGIN USER")
     $.get("/getLoginData", function(data) {
         user_data = $.parseJSON(data)
         console.log(user_data)
-        var img = document.querySelector('.player_img')
+        var img = document.querySelector('.player1_img')
         img.src = user_data.img_profile
-        var nickname = document.querySelector('.player_nick')
+        var nickname = document.querySelector('.player1_nik')
         nickname.textContent = user_data.nickname
         user_token = user_data.token
         game_id = user_data.game_code
@@ -61,7 +58,7 @@ function login_user() {
 
 
 function auth_client() {
-    console.log("Авторизация пользователя")
+    console.log("AUTH PLAYER")
     client.send(JSON.stringify([
     7,
     "go/game",
@@ -75,6 +72,7 @@ function auth_client() {
 
 
 function move_to(coord) {
+    console.log("MOVE " + coord.toString().toLowerCase())
     client.send(JSON.stringify([
           7,
           "go/game",
@@ -89,6 +87,7 @@ function move_to(coord) {
 
 var button_help = document.getElementById('help');
 button_help.onclick = function help() {
+    console.log("USE OUR TIPS")
      outputData = []
      for (var i = 0; i < 13; i++) {
         for (var j = 0; j < 13; j++) {
@@ -98,9 +97,7 @@ button_help.onclick = function help() {
     $.post( "/check_matrix/", {
         canvas_data: JSON.stringify(outputData)
     }, function(err, req, resp) {
-        // board.loadBoard(resp.responseText)
         tips = $.parseJSON(resp.responseText)
-        console.log(tips)
         var dragon_info = document.getElementById('dragon_info');
         if (tips.enemy.length > 0 || tips.you.length > 0 || tips.stairs.length > 0) {
             var text = ""
@@ -122,9 +119,7 @@ button_help.onclick = function help() {
         } else {
             var text = "В данный момент тебе подскзка не нужна"
         }
-        console.log(text)
         if (text != "") {
-            console.log(text)
             dragon_info.textContent = text
         } else {
         }
@@ -133,7 +128,7 @@ button_help.onclick = function help() {
 
 var button_pass = document.getElementById('pass');
 button_pass.onclick = function send_pass() {
-    console.log("pass")
+    console.log("PASS")
     client.send(JSON.stringify([
           7,
           "go/game",
@@ -147,7 +142,7 @@ button_pass.onclick = function send_pass() {
 
 var button_resign = document.getElementById('resign');
 button_resign.onclick = function send_resign() {
-    console.log("resign")
+    console.log("RESIGN")
     client.send(JSON.stringify([
           7,
           "go/game",
@@ -169,16 +164,20 @@ client.onopen = function(e) {
 };
 
 client.onmessage = function(event) {
-  console.log("Полученны данные")
   data = $.parseJSON(event.data)
+  console.log("GET DATA")
   console.log(data)
   try {
       if (data.payload.type == 'currentMap' || data.payload.type == "newTurn") {
             if (data.payload.type == 'currentMap') {
                 my_color = (data.payload.player=="b"?"black":"white")
+                board.my_color = (data.payload.player=="b"?"black":"white")
                 color_move = data.payload.turn
+                var img = document.querySelector('.player2_img')
+                img.src = data.payload.opponent.avatar
+                var nickname = document.querySelector('.player2_nik')
+                nickname.textContent = data.payload.opponent.nickname
             }
-            console.log("UPDATE MAP")
             if (data.payload.turn == 'black') {
                 var info = document.getElementById('info').textContent = "Ход чёрного";
                 color_move = "black"
@@ -193,7 +192,7 @@ client.onmessage = function(event) {
             var info = document.getElementById('info').textContent = "Игра завершениа";
       }
   }
-  catch {console.log("Неправильный тип данных")}
+  catch {console.log("ERROR ON READ MESSAGE")}
 };
 
 client.onclose = function(e) {
@@ -210,7 +209,7 @@ document.addEventListener("DOMContentLoaded", login_user);
 class TempMap {
     constructor(map) {
         this.map = map
-        for (var i = 0; i < 13; i++) {
+        for (var i = 13; i > -1; i--) {
             for (var j = 0; j < 13; j++) {
                 var cell = new TempCell(offset + i * step, offset + j * step, this.map[i][j])
                 cell.draw()
@@ -231,7 +230,8 @@ button_map.onclick = function(e) {
 }
 
 class Board {
-    constructor () {
+    constructor (color) {
+        set_color(color)
         this.board = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -254,17 +254,20 @@ class Board {
         }
     }
 
+    set_color(color) {
+        this.my_color = color
+        this.my_num = (color=="black"?-1:1)
+    }
+
     add(x, y) {
-        this.board[x][y] = 1
+        this.board[x][y] = my_num
         c.clearRect(0, 0, canvas.width, canvas.height);
         this.update()
     }
 
     update() {
-        console.log('UPDATE MAP')
-        for (let i = 0; i < 13; i++) {
+        for (let i = 12; i > -1; i--) {
             for (let j = 0; j < 13; j++) {
-                // console.log(this.board[i][j])
                 if (this.board[i][j] == -1) {
                     var cell = new Cell(offset + i * step, offset + j * step, -1)
                     cell.draw()
@@ -274,22 +277,6 @@ class Board {
                 }
             }
         }
-        console.log('end of update')
-    }
-
-    loadBoard(board) {
-        board = board.split(';')
-        var res = []
-        for (var i = 0; i < 169; i++) {
-            res.push(parseInt(board[i]))
-        }
-        for (var i = 0; i < 13; i++) {
-            for (var j = 0; j < 13; j++) {
-                this.board[j][i] = res[i * 13 + j]
-            }
-        }
-        c.clearRect(0, 0, canvas.width, canvas.height);
-        this.update()
     }
 }
 
@@ -328,30 +315,25 @@ class Cell {
         c.arc(this.x, this.y, r*0.95, 0, Math.PI * 2, false)
         c.fillStyle = this.color
         c.fill()
-        // console.log("fill: " + this.color)
     }
 }
 
 
-const board = new Board()
+var board = new Board("black")
 board.update()
 
-function amm() {
-    console.log("ЭЭЭЭИ "+ can_atacovat)
+function set_cell() {
     if (can_atacovat) {
-        console.log("2")
-        move_color = "white"
+        move_color = (my_color=="white"?"black":"white")
         board.add(x, y)
-        console.log("AT:"+abc[x] + (y + 1).toString())
         const selection = true;
-        // $.get( "/getmethod/<javascript_data>" );
-         outputData = []
-         for (var i = 0; i < 13; i++) {
+        outputData = []
+        for (var i = 0; i < 13; i++) {
             for (var j = 0; j < 13; j++) {
                 outputData.push(board.board[j][i]);
             }
-         }
-         client.send(JSON.stringify([
+        }
+        client.send(JSON.stringify([
             7,// 7 - статус: отправка сообщения
             "go/game", // в какой топик отправляется сообщение
             {
@@ -360,10 +342,9 @@ function amm() {
                 place: (abc[x] + (y + 1).toString()).toString().toLowerCase(),  // место куда сделать ход, формат: d13
                 game_id: game_id // номер игры
             }
-          ]));
-        $.get("/getpythondata", function(data) {
-            console.log($.parseJSON(data))
-        })
+        ]));
+    } else {
+        console.log("CANT MAKE THIS MOVE")
     }
 }
 
@@ -372,16 +353,13 @@ addEventListener('click', (event) => {
     y = event.clientY - offset + r - startY
     x = Math.floor(x/step)
     y = Math.floor(y/step)
-    // console.log('tab At: ' + x + ':' + y+'\n'+board.board[x][y])
-    console.log(my_color +" "+ color_move)
     if (my_color == color_move) {
         if ((x > -1) && (x < 13) && (y > -1) && (y < 13)) {
             if (board.board[x][y] == 0) {
-                console.log("1")
                 board.board[x][y] = -1
                 can_atacovat = false
                 can_move(x, y)
-                setTimeout(amm, 500)
+                setTimeout(amm, 750)
             }
         }
     }
