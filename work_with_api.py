@@ -79,6 +79,7 @@ class Api:
             json_register_user = requests.post(f"{self.link}user/register", params=params_register)
             if json_register_user.status_code == 200:
                 result = True
+                print(json_register_user.json()["token"])
                 self.token = json_register_user.json()["token"]
                 self.email = email
                 self.output(json_register_user.json())
@@ -111,6 +112,7 @@ class Api:
             json_about_user = requests.get(f"{self.link}user/profile", params={"token": self.get_token()})
             if json_about_user.status_code == 200:
                 result = True
+                print(json_about_user.json())
                 self.check_active_game()
                 self.img_profile = json_about_user.json()["user"]["avatar"]
                 self.user_info = json_about_user.json()
