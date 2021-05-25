@@ -183,6 +183,10 @@ img.player_block_image {
     outline: none;
 }
 
+.game_button:disable {
+    border-color: #ff6161;
+}
+
 .game_button:active {
     outline: none;
     box-shadow: 0 0 0 4px #f5c07f;
@@ -229,6 +233,17 @@ img.player_block_image {
     overflow: auto;
 }
 
-.meni-reg-log {
+.menu-reg-log {
     margin: auto;
+    width: 500px;
+    height: 400px;
+    background: url("/static/img/right_block.png") no-repeat;
+    background-size: 100% 100%;
+}
+
+.text-block {
+    border: 2px solid;
+    border-color: red;
+    border-radius: 30px;
+    padding: 15px;
 }
