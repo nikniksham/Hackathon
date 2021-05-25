@@ -70,16 +70,20 @@ def get_javascript_data(jsdata):
     return json.loads(jsdata)[0]
 
 
-@app.route('/a/', methods=["POST"])
+@app.route('/check_cell/', methods=["POST"])
 def get_post_javascript_data():
-    board = upload(request.form['canvas_data'])
+    data = json.loads(request.form['canvas_data'])
     # jsdata = request.form['javascript_data']
     # print(json.loads(jsdata)[0])
     # return json.loads(jsdata)[0]
     # print(*board, sep='\n')
     # test changes
     # board[0][0] = 0
-    return dump(board)
+    print(data)
+    di = {"d": 0, "m": 0, "s": [], "e": []}
+    check_contact(data["x"], data["y"], -1 if data["color"] == "white" else 1, [], di, data["map"])
+    print(di)
+    return json.dumps({"answer":  di["d"] > 0})
 
 
 @app.route('/getlogindata')
@@ -91,7 +95,7 @@ def get_python_data_2():
     return json.dumps(api.get_json())
 
 
-@app.route('/getpythondata')
+@app.route('/getpythondata/')
 def get_python_data():
     return json.dumps("СВАБОДУ ПАПУГАЯМ!!")
 

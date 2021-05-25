@@ -7,6 +7,7 @@ var outputData
 var abc = "abcdefghjklmn"
 var my_color = "black"
 var color_move = "black"
+var can_atacovat
 tips = {}
 user_data = ""
 const startY = $(canvas).offset().top
@@ -17,6 +18,20 @@ const r = size * (1 - 2 * 0.09) * (1/(13 * 2.2))
 const step = (size - 2 * offset) / 12.5
 canvas.width = size
 canvas.height = size
+
+function can_move(x, y) {
+    $.post( "/check_cell/", {
+         canvas_data: JSON.stringify({
+            map: board.board,
+            x: y,
+            y: x,
+            color: my_color
+         })}, function(err, req, resp){
+            // board.loadBoard(resp.responseText)
+            can_atacovat = $.parseJSON(resp.responseText).answer
+            console.log("ПРИНЯЛ" + can_atacovat)
+    });
+}
 
 function heat_map() {
     $.post( "/call_func/", {
@@ -252,75 +267,6 @@ class Board {
         console.log('end of update')
     }
 
-    checkCell(x, y) {
-        var myColor = 1
-        // проверяем дыхания
-        if ((x < 12) && (this.board[x + 1][y] == 0)) {
-            return true
-        }
-        if ((x > 0) && (this.board[x - 1][y] == 0)) {
-            return true
-        }
-        if ((y < 12) && (this.board[x][y + 1] == 0)) {
-            return true
-        }
-        if ((y > 0) && (this.board[x][y - 1] == 0)) {
-            return true
-        }
-
-
-
-        if ((x < 12) && (this.board[x + 1][y] == myColor) && (this.checkedMap[x + 1][y] == 0)) {
-            this.checked(x + 1, y)
-            if (this.checkCell(x + 1, y)) {
-                return true
-            }
-        }
-        if ((x > 0)  && (this.board[x - 1][y] == myColor) && (this.checkedMap[x - 1][y] == 0)) {
-            this.checked(x - 1, y)
-            if (this.checkCell(x - 1, y)) {
-                return true
-            }
-        }
-        if ((y < 12) && (this.board[x][y + 1] == myColor) && (this.checkedMap[x][y + 1] == 0)) {
-            this.checked(x, y + 1)
-            if (this.checkCell(x, y + 1)) {
-                return true
-            }
-        }
-        if ((y > 0)  && (this.board[x][y - 1] == myColor) && (this.checkedMap[x][y - 1] == 0)) {
-            this.checked(x, y - 1)
-            if (this.checkCell(x, y - 1)) {
-                return true
-            }
-        }
-        return false
-    }
-
-    check(x, y) {
-        console.log(this.board[x][y])
-        if (this.board[x][y] == 2) {
-            console.log(11)
-            return true
-        } else if (this.board[x][y] == -1) {
-            console.log(22)
-            this.checkedMap = []
-            for(var i=0; i<13; i++) {
-                this.checkedMap[i] = [];
-                for(var j=0; j<13; j++) {
-                    this.checkedMap[i][j] = 0;
-                }
-            }
-            this.checked(x, y)
-            return this.checkCell(x, y)
-        }
-        return false
-    }
-
-    checked(x, y) {
-        this.checkedMap[x][y] = 1
-    }
-
     loadBoard(board) {
         board = board.split(';')
         var res = []
@@ -380,6 +326,37 @@ class Cell {
 const board = new Board()
 board.update()
 
+function amm() {
+    console.log("ЭЭЭЭИ "+ can_atacovat)
+    if (can_atacovat) {
+        console.log("2")
+        move_color = "white"
+        board.add(x, y)
+        console.log("AT:"+abc[x] + (y + 1).toString())
+        const selection = true;
+        // $.get( "/getmethod/<javascript_data>" );
+         outputData = []
+         for (var i = 0; i < 13; i++) {
+            for (var j = 0; j < 13; j++) {
+                outputData.push(board.board[j][i]);
+            }
+         }
+         client.send(JSON.stringify([
+            7,// 7 - статус: отправка сообщения
+            "go/game", // в какой топик отправляется сообщение
+            {
+                command: "move", // команда на отправку хода
+                token: user_data.token,  // токен игрока
+                place: (abc[x] + (y + 1).toString()).toString().toLowerCase(),  // место куда сделать ход, формат: d13
+                game_id: game_id // номер игры
+            }
+          ]));
+        $.get("/getpythondata", function(data) {
+            console.log($.parseJSON(data))
+        })
+    }
+}
+
 addEventListener('click', (event) => {
     x = event.clientX - offset + r - startX
     y = event.clientY - offset + r - startY
@@ -392,33 +369,9 @@ addEventListener('click', (event) => {
             if (board.board[x][y] == 0) {
                 console.log("1")
                 board.board[x][y] = -1
-                if (board.check(x, y)) {
-                    console.log("2")
-                    move_color = "white"
-                    board.add(x, y)
-                    console.log("AT:"+abc[x] + (y + 1).toString())
-                    const selection = true;
-                    // $.get( "/getmethod/<javascript_data>" );
-                     outputData = []
-                     for (var i = 0; i < 13; i++) {
-                        for (var j = 0; j < 13; j++) {
-                            outputData.push(board.board[j][i]);
-                        }
-                     }
-                     client.send(JSON.stringify([
-                        7,// 7 - статус: отправка сообщения
-                        "go/game", // в какой топик отправляется сообщение
-                        {
-                            command: "move", // команда на отправку хода
-                            token: user_data.token,  // токен игрока
-                            place: (abc[x] + (y + 1).toString()).toString().toLowerCase(),  // место куда сделать ход, формат: d13
-                            game_id: game_id // номер игры
-                        }
-                      ]));
-                    $.get("/getpythondata", function(data) {
-                        console.log($.parseJSON(data))
-                    })
-                }
+                can_atacovat = false
+                can_move(x, y)
+                setTimeout(amm, 500)
             }
         }
     }
