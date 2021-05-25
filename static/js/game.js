@@ -98,17 +98,17 @@ button_help.onclick = function help() {
             if (tips.enemy.length > 0) {
                 if (text != " ") {text += "\n"}
                 text += "Твои камни под угрозой, обрати внимание на клетки -> "
-                for (var i = 0; i < tips.enemy.length; ++i) {text += abc[tips.enemy[i][0]] + (tips.enemy[i][1]).toString()}
+                for (var i = 0; i < tips.enemy.length; ++i) {text += abc[tips.enemy[i][0]] + (13 - tips.enemy[i][1]).toString()}
             }
             if (tips.you.length > 0) {
                 if (text != " ") {text += "\n"}
                 text += "Ты можешь захватить вражеские камни, обрати внимание на клетки -> "
-                for (var i = 0; i < tips.you.length; ++i) {text += abc[tips.you[i][0]] + (tips.you[i][1]).toString()}
+                for (var i = 0; i < tips.you.length; ++i) {text += abc[tips.you[i][0]] + (13 - tips.you[i][1]).toString()}
             }
             if (tips.stairs.length > 0) {
                 if (text != " ") {text += "\n"}
                 text += "Ты попал в ситуацию 'лестница', не стоит ходить на клетки -> "
-                for (var i = 0; i < tips.stairs.length; ++i) {text += abc[tips.stairs[i][0]] + (tips.stairs[i][1]).toString()}
+                for (var i = 0; i < tips.stairs.length; ++i) {text += abc[tips.stairs[i][0]] + (13 - tips.stairs[i][1]).toString()}
             }
         } else {
             var text = "В данный момент тебе подскзка не нужна"
@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", login_user);
 class TempMap {
     constructor(map) {
         this.map = map
-        for (var i = 13; i > -1; i--) {
+        for (var i = 0; i < 13; i++) {
             for (var j = 13; j > -1; j--) {
                 var cell = new TempCell(offset + i * step, offset + j * step, this.map[i][j])
                 cell.draw()

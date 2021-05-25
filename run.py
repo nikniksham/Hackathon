@@ -9,10 +9,11 @@ from check_field import *
 api = Api()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '84da5b8a39a6d06bf8bc7a60cedcac83'
-'''email = "nikniksham@gmail.com"
+email = "nikniksham@gmail.com"
 password = "gohackaton"
 nickname = "nikolausus"
-letters = "abcdefghjklmn"'''
+letters = "abcdefghjklmn"
+api.login_user(email, password)
 
 
 def upload(req):
@@ -117,9 +118,9 @@ def create_game_with_random():
     return redirect("/game/")
 
 
-@app.route('/joinGameViaCode/<string:game_code>/', methods=["GET", "POST"])
-def join_game_via_code(game_code):
-    print("success" if api.join_game(game_code) else "error")
+@app.route('/joinGameViaCode/', methods=["GET", "POST"])
+def join_game_via_code():
+    print("success" if api.join_game("LYXX") else "error")
     return redirect("/game/")
 
 
