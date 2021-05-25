@@ -9,10 +9,11 @@ from check_field import *
 api = Api()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '84da5b8a39a6d06bf8bc7a60cedcac83'
-'''email = "nikniksham@gmail.com"
+email = "nikniksham@gmail.com"
 password = "gohackaton"
 nickname = "nikolausus"
-letters = "abcdefghjklmn"'''
+letters = "abcdefghjklmn"
+api.login_user(email, password)
 
 
 def upload(req):
