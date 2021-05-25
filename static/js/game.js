@@ -261,7 +261,7 @@ class Board {
     }
 
     add(x, y) {
-        this.board[x][y] = my_num
+        this.board[x][y] = this.my_num
         c.clearRect(0, 0, canvas.width, canvas.height);
         this.update()
     }
@@ -360,7 +360,7 @@ addEventListener('click', (event) => {
                 board.board[x][y] = -1
                 can_atacovat = false
                 can_move(x, y)
-                setTimeout(amm, 750)
+                setTimeout(set_cell, 750)
             }
         }
     }

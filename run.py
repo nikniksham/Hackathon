@@ -9,10 +9,10 @@ from check_field import *
 api = Api()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '84da5b8a39a6d06bf8bc7a60cedcac83'
-email = "nikniksham@gmail.com"
+'''email = "nikniksham@gmail.com"
 password = "gohackaton"
 nickname = "nikolausus"
-letters = "abcdefghjklmn"
+letters = "abcdefghjklmn"'''
 
 
 def upload(req):
@@ -88,7 +88,7 @@ def get_post_javascript_data():
 @app.route('/getLoginData/')
 def get_login_data():
     if not api.check_user():
-        print("success" if api.login_user(email, password) else "error")
+        return None
     api.update_user_info()
     return json.dumps(api.get_json())
 

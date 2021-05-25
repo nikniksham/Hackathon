@@ -98,7 +98,8 @@ class Api:
             if json_login_user.status_code == 200:
                 result = True
                 self.output(json_login_user.json())
-                self.email = "email"
+                self.email = email
+                print(json_login_user.json())
                 self.token = json_login_user.json()["token"]
                 self.update_user_info()
             else:
@@ -108,6 +109,7 @@ class Api:
     def update_user_info(self):
         result = False
         if self.check_user():
+            print(self.get_token())
             json_about_user = requests.get(f"{self.link}user/profile", params={"token": self.get_token()})
             if json_about_user.status_code == 200:
                 result = True
