@@ -168,16 +168,16 @@ client.onmessage = function(event) {
   console.log("GET DATA")
   console.log(data)
   try {
+      if (data.payload.type == "userConnected") {
+            my_color = (data.payload.player=="b"?"black":"white")
+            board.my_color = (data.payload.player=="b"?"black":"white")
+            color_move = data.payload.turn
+            var img = document.querySelector('.player2_img')
+            img.src = data.payload.opponent.avatar
+            var nickname = document.querySelector('.player2_nik')
+            nickname.textContent = data.payload.opponent.nickname
+      }
       if (data.payload.type == 'currentMap' || data.payload.type == "newTurn") {
-            if (data.payload.type == 'currentMap') {
-                my_color = (data.payload.player=="b"?"black":"white")
-                board.my_color = (data.payload.player=="b"?"black":"white")
-                color_move = data.payload.turn
-                var img = document.querySelector('.player2_img')
-                img.src = data.payload.opponent.avatar
-                var nickname = document.querySelector('.player2_nik')
-                nickname.textContent = data.payload.opponent.nickname
-            }
             if (data.payload.turn == 'black') {
                 var info = document.getElementById('info').textContent = "Ход чёрного";
                 color_move = "black"
@@ -210,7 +210,7 @@ class TempMap {
     constructor(map) {
         this.map = map
         for (var i = 13; i > -1; i--) {
-            for (var j = 0; j < 13; j++) {
+            for (var j = 13; j > -1; j--) {
                 var cell = new TempCell(offset + i * step, offset + j * step, this.map[i][j])
                 cell.draw()
             }
@@ -268,7 +268,7 @@ class Board {
 
     update() {
         for (let i = 12; i > -1; i--) {
-            for (let j = 0; j < 13; j++) {
+            for (let j = 13; j > -1; j--) {
                 if (this.board[i][j] == -1) {
                     var cell = new Cell(offset + i * step, offset + j * step, -1)
                     cell.draw()
