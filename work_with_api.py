@@ -57,7 +57,6 @@ class Api:
     def check_active_game(self):
         result = False
         if self.check_user():
-            self.update_user_info()
             json_active_games = requests.get(f"{self.link}game/current", params={"token": self.get_token()})
             if json_active_games.status_code == 200 and json_active_games.json()["gameId"] is not None:
                 result = True
