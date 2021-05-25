@@ -86,12 +86,48 @@ def get_post_javascript_data():
     return json.dumps({"answer":  di["d"] > 0})
 
 
-@app.route('/getlogindata')
-def get_python_data_2():
-    print("success" if api.login_user(email, password) else "error")
+@app.route('/getLoginData')
+def get_login_data():
+    if not api.check_user():
+        print("success" if api.login_user(email, password) else "error")
+    return json.dumps(api.get_json())
+
+
+@app.route('/updateUserInfo')
+def update_user_info():
     print("success" if api.update_user_info() else "error")
+    return json.dumps(api.get_json())
+
+
+@app.route('/createGameWithBot')
+def create_game_with_bot():
     print("success" if api.create_game_with_bot() else "error")
-    print("success" if api.game_info(api.game_code) else "error")
+    return json.dumps(api.get_json())
+
+
+@app.route('/createGameByCode')
+def create_game_by_code():
+    print("success" if api.create_game_by_code() else "error")
+    return json.dumps(api.get_json())
+
+
+@app.route('/createGameWithRandom')
+def create_game_with_random():
+    print("success" if api.create_game_with_random() else "error")
+    return json.dumps(api.get_json())
+
+
+@app.route('/joinGameViaCode', methods=["POST"])
+def create_game_with_random():
+    params = json.loads(request.form['game_data'])
+    print("success" if api.join_game(params["game_code"]) else "error")
+    return json.dumps(api.get_json())
+
+
+@app.route('/getGameInfo', methods=["POST"])
+def get_game_info():
+    params = json.loads(request.form['game_data'])
+    print("success" if api.game_info(params["game_code"]) else "error")
     return json.dumps(api.get_json())
 
 
