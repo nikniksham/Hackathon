@@ -118,7 +118,7 @@ def create_game_with_random():
 
 
 @app.route('/joinGameViaCode', methods=["POST"])
-def create_game_with_random():
+def join_game_via_code():
     params = json.loads(request.form['game_data'])
     print("success" if api.join_game(params["game_code"]) else "error")
     return json.dumps(api.get_json())
