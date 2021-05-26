@@ -54,10 +54,11 @@ def call_matrix_func():
             res = api.get_heatmap()
         if params["func"] == "get_best_move":
             res = api.get_best_move()
-            res = [letters.index(res[0].lower()), 13 - int(res[1])]
+            # res = [letters.index(res[0].lower()), 13 - int(res[1])]
+            print(res)
         if params["func"] == "get_best_move_enemy":
             res = api.get_best_move_enemy()
-            res = [letters.index(res[0].lower()), 13 - int(res[1])]
+            # res = [letters.index(res[0].lower()), 13 - int(res[1])]
         if params["func"] == "get_best_move_zone":
             res = api.get_best_move_zone()
         if params["func"] == "get_superiority":

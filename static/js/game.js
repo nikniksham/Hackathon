@@ -24,6 +24,8 @@ const r = size * (1 - 2 * 0.09) * (1/(13 * 2.2))
 const step = (size - 2 * offset) / 12.5
 canvas.width = size
 canvas.height = size
+// буквы
+var abc = "abcdefghjklmn"
 
 // доска
 class Board {
@@ -255,6 +257,30 @@ function draw_temp(map) {
         }
     }
 }
+
+// лучший ход
+var button_best_move = document.getElementById('get_best_move');
+function get_best_move_b() {
+    console.log("Получение лучшего хода")
+}
+
+// лучший ход противника
+var button_best_move_enemy = document.getElementById('get_best_move_enemy');
+function get_best_move_enemy_b() {
+    console.log("Получение лучшего хода противника")
+}
+
+// лучшая зона для игры
+var button_best_move_zone = document.getElementById('get_best_move_zone');
+function get_best_move_zone_b() {
+    console.log("Лучшая зона для игры")
+}
+
+// кто побеждает
+var button_superiority = document.getElementById('get_superiority');
+function get_superiority_b() {
+    console.log("Кто побеждает")
+}
 class TempCell {
     constructor (x, y, temp) {
         this.x = x
@@ -269,6 +295,55 @@ class TempCell {
         c.fill()
     }
 }
+
+function get_best_move() {
+    $.post( "/call_func/", {
+         canvas_data: JSON.stringify({func: "get_best_move",
+                                      params: ""})
+    }, function(err, req, resp){
+        // board.loadBoard(resp.responseText)
+        ans = $.parseJSON(resp.responseText)
+        best_x = ans[0]
+        best_y = ans[1]
+        console.log(ans)
+    });
+}
+
+function get_best_move_enemy() {
+    $.post( "/call_func/", {
+         canvas_data: JSON.stringify({func: "get_best_move_enemy",
+                                      params: ""})
+    }, function(err, req, resp){
+        // board.loadBoard(resp.responseText)
+        ans = $.parseJSON(resp.responseText)
+        best_enemy_x = ans[0]
+        best_enemy_y = ans[1]
+        console.log(ans)
+    });
+}
+
+function get_best_move_zone() {
+    $.post( "/call_func/", {
+         canvas_data: JSON.stringify({func: "get_best_move_zone",
+                                      params: ""})
+    }, function(err, req, resp){
+        // board.loadBoard(resp.responseText)
+        best_move_zone = $.parseJSON(resp.responseText)
+        console.log(best_move_zone)
+    });
+}
+
+function get_superiority() {
+    $.post( "/call_func/", {
+         canvas_data: JSON.stringify({func: "get_superiority",
+                                      params: ""})
+    }, function(err, req, resp){
+        // board.loadBoard(resp.responseText)
+        superiority = $.parseJSON(resp.responseText)
+        console.log(superiority)
+    });
+}
+
 function heat_map() {
     $.post( "/call_func/", {
          canvas_data: JSON.stringify({func: "get_heatmap",
@@ -304,10 +379,40 @@ button_map.onclick = function(e) {
     update_score(3)
 }
 
+button_best_move.onclick = function() {
+    console.log("GET BEST MOVE")
+    get_best_move()
+    update_score(3)
+}
+
+button_best_move_enemy.onclick = function() {
+    console.log("GET BEST MOVE ENEMY")
+    get_best_move_enemy()
+    update_score(3)
+}
+
+button_best_move_zone.onclick = function() {
+    console.log("GET BEST ZONE FOR PLAY")
+    get_best_move_zone()
+    update_score(3)
+}
+
+button_superiority.onclick = function() {
+    console.log("WHO WIN")
+    get_superiority()
+    update_score(3)
+}
+
 // наша подсказка
 var button_help = document.getElementById('help');
 button_help.onclick = function help() {
-    console.log("USE OUR TIPS")
+     outputData = []
+     console.log("USE OUR TIPS")
+     for (var i = 0; i < 13; i++) {
+        for (var j = 0; j < 13; j++) {
+            outputData.push(board.board[i][j]);
+        }
+     }
     $.post( "/check_matrix/", {
         canvas_data: JSON.stringify(outputData)
     }, function(err, req, resp) {

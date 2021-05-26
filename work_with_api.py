@@ -7,7 +7,7 @@ class Api:
     def __init__(self):
         self.token = None  # token пользователя
         self.email = None  # email пользователя
-        self.log = False  # Логирование программы
+        self.log = True  # Логирование программы
         self.nickname = None  # Nickname пользователя
         self.game_code = None  # Код текущей игры пользователя
         self.user_info = None  # Информация о пользователе
@@ -207,6 +207,7 @@ class Api:
             }
             json_tip_best_move = requests.get(f"{self.link}hints/best-moves", params=params_best_move)
             if json_tip_best_move.status_code == 200:
+                print(json_tip_best_move.json()["hint"][0]["move"])
                 result = json_tip_best_move.json()["hint"][0]["move"]
                 self.output(json_tip_best_move.json())
             else:
