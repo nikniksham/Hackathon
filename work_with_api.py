@@ -14,6 +14,7 @@ class Api:
         self.link = "https://go-backend-denis.ambersoft.llc/"  # Ссылка на сайт
         self.img_profile = None
         self.language = "ru"
+        self.game_code_close = ""
         self.centaur_token = "Kf8darEBRsoJEiw0"
 
     def get_json(self):
@@ -145,7 +146,8 @@ class Api:
             if json_create_game_by_code.status_code == 200:
                 result = True
                 self.game_code = json_create_game_by_code.json()["gameId"]
-                self.output(json_create_game_by_code.json())
+                self.game_code_close = json_create_game_by_code.json()["code"]
+                self.output(json_create_game_by_code.json()["code"])
             else:
                 self.output(f"json_create_game_by_code выдал ошибку: {json_create_game_by_code.status_code}")
         return result
@@ -164,17 +166,17 @@ class Api:
                         f"json_create_game_with_random выдал ошибку: {json_create_game_with_random.status_code}")
         return result
 
-    def join_game(self, game_code):
+    def join_game(self, code):
         result = False
         if self.check_user():
-            if game_code is not None:
-                json_join_game = requests.get(f"{self.link}game/info/{game_code}", params={"token": self.get_token()})
-                if json_join_game.status_code == 200:
-                    self.game_code = game_code
-                    result = True
-                    self.output(json_join_game.json())
-                else:
-                    self.output(f"json_join_game выдал ошибку: {json_join_game.status_code}")
+            json_join_game = requests.get(f"{self.link}game/info/{code}", params={"token": self.get_token()})
+            if json_join_game.status_code == 200:
+                self.game_code_close = code
+                self.game_code = json_join_game.json()["id"]
+                result = True
+                self.output(json_join_game.json())
+            else:
+                self.output(f"json_join_game выдал ошибку: {json_join_game.status_code}")
         return result
 
     def game_info(self, game_code):
@@ -185,6 +187,18 @@ class Api:
                 if json_game_info.status_code == 200:
                     result = True
                     self.output(json_game_info.json())
+                else:
+                    self.output(f"json_game_info выдал ошибку: {json_game_info.status_code}")
+        return result
+
+    def get_count_moves(self, game_code):
+        result = False
+        if self.check_user():
+            if game_code is not None:
+                json_game_info = requests.get(f"{self.link}game/info/{game_code}", params={"token": self.get_token()})
+                if json_game_info.status_code == 200:
+                    result = len(json_game_info.json()["moves"].split(";")) - 1
+                    self.output(len(json_game_info.json()["moves"].split(";")) - 1)
                 else:
                     self.output(f"json_game_info выдал ошибку: {json_game_info.status_code}")
         return result
@@ -407,6 +421,8 @@ if __name__ == '__main__':
 
     # Запрос информации об игре
     print("success" if api.game_info(api.game_code) else "error")
+
+    print(api.get_count_moves(api.game_code))
 
     # Показать вревосходящего по очнам игрока
     print(api.get_superiority())
