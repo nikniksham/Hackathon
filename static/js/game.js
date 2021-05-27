@@ -41,6 +41,15 @@ canvas.height = size
 // буквы
 var abc = "abcdefghjklmn"
 
+// количество ходов
+var count_moves = 0
+
+// Количество камней
+var count_white = 0
+var count_black = 0
+var delta_white = 0
+var delta_black = 0
+
 // доска
 class Board {
     constructor (color) {
@@ -154,6 +163,16 @@ addEventListener('click', (event) => {
     }
 })
 
+function get_count_moves() {
+    console.log("START PARSE COUNT MOVES")
+    $.post( "/get_count_moves/", {
+         canvas_data: JSON.stringify({
+            game_code: game_id
+         })}, function(err, req, resp) {
+            count_moves = $.parseJSON(resp.responseText).count
+    });
+}
+
 function can_move(x, y) {
     $.post( "/check_cell/", {
          canvas_data: JSON.stringify({
@@ -215,6 +234,7 @@ function login_user() {
         // данные юзера и игры
         user_token = user_data.token
         game_id = user_data.game_code
+        get_count_moves()
     })
 }
 
@@ -263,11 +283,22 @@ client.onmessage = function(event) {
                 var info = document.getElementById('info').textContent = "Ход белого";
                 color_move = "white"
             }
+            count_white = 0
+            count_black = 0
             for (var y = 0; y < 13; y++) {
                 for (var x = 0; x < 13; x++) {
+                    if (data.payload.currentMap[y][x] == -1) {
+                        count_white++
+                    } else if (data.payload.currentMap[y][x] == 1) {
+                        count_black++
+                    }
                     board.board[12 - x][y] = data.payload.currentMap[y][x]
                 }
             }
+            count_moves++
+            delta_black = Math.floor(count_moves / 2) - count_black
+            delta_white = Math.floor(count_moves / 2) - count_white
+            console.log(count_moves + " " + count_white + " " + count_black + " " + delta_white + " " + delta_black)
             draw()
         } else if (data.payload.type == "endGame") {
             var info = document.getElementById('info').textContent = "Игра завершена";

@@ -129,7 +129,8 @@ class Api:
         result = False
         if self.check_user():
             if not self.check_active_game():
-                json_create_game_with_bot = requests.post(f"{self.link}game/create/bot", params={"token": self.get_token()})
+                json_create_game_with_bot = requests.post(f"{self.link}game/create/bot",
+                                                          params={"token": self.get_token()})
                 if json_create_game_with_bot.status_code == 200:
                     result = True
                     self.game_code = json_create_game_with_bot.json()["gameId"]
@@ -156,7 +157,8 @@ class Api:
         result = False
         if self.check_user():
             if not self.check_active_game():
-                json_create_game_with_random = requests.post(f"{self.link}game/create/random", params={"token": self.get_token()})
+                json_create_game_with_random = requests.post(f"{self.link}game/create/random",
+                                                             params={"token": self.get_token()})
                 if json_create_game_with_random.status_code == 200:
                     result = True
                     self.game_code = json_create_game_with_random.json()["gameId"]
@@ -169,7 +171,9 @@ class Api:
     def join_game(self, code):
         result = False
         if self.check_user():
-            json_join_game = requests.get(f"{self.link}game/info/{code}", params={"token": self.get_token()})
+            json_join_game = requests.post(f"{self.link}game/join/{code}",
+                                           params={"token": self.get_token(), "code": code})
+            print(code, json_join_game.json())
             if json_join_game.status_code == 200:
                 self.game_code_close = code
                 self.game_code = json_join_game.json()["id"]
@@ -359,7 +363,8 @@ class Api:
                 "token": self.token,
                 "quarters": quarters
             }
-            json_heatmap_two_quarter = requests.get(f"{self.link}hints/heatmap-two-quarters", params=params_heatmap_two_quarter)
+            json_heatmap_two_quarter = requests.get(f"{self.link}hints/heatmap-two-quarters",
+                                                    params=params_heatmap_two_quarter)
             if json_heatmap_two_quarter.status_code == 200:
                 result = self.convert_heatmap(json_heatmap_two_quarter.json()["hint"])
                 self.output(json_heatmap_two_quarter.json())
@@ -392,12 +397,14 @@ class Api:
                 "centaur_token": self.centaur_token,
                 "token": self.token,
             }
-            json_heatmap_best_enemy_move_zone = requests.get(f"{self.link}hints/heatmap-best-enemy-move-zone", params=params_heatmap_best_enemy_move_zone)
+            json_heatmap_best_enemy_move_zone = requests.get(f"{self.link}hints/heatmap-best-enemy-move-zone",
+                                                             params=params_heatmap_best_enemy_move_zone)
             if json_heatmap_best_enemy_move_zone.status_code == 200:
                 result = json_heatmap_best_enemy_move_zone.json()["hint"]
                 self.output(json_heatmap_best_enemy_move_zone.json())
             else:
-                self.output(f"json_heatmap_best_enemy_move_zone выдал ошибку: {json_heatmap_best_enemy_move_zone.status_code}")
+                self.output(
+                    f"json_heatmap_best_enemy_move_zone выдал ошибку: {json_heatmap_best_enemy_move_zone.status_code}")
         return result
 
 
@@ -429,10 +436,10 @@ if __name__ == '__main__':
 
     # Запрос лучшего возможного хода
     print(api.get_best_move())
-    
+
     # Запрос лучшего возможного хода противника
     print(api.get_best_move_enemy())
-    
+
     # Запрос лучших ходов на будущее
     print(api.get_future_moves(5))
 
