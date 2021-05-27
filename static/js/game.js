@@ -7,6 +7,20 @@ const ABC = "abcdefghjklmn"
 // игровая логика
 var color_move = "black"
 var can_atacovat
+// карты теплоты
+var temp_map = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 // допсказки
 var tips = {}
 // количество баллов потраченых на подсказки
@@ -16,12 +30,12 @@ var countTips = 0
 // даные canvas для отрисовки
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
-const startY = $(canvas).offset().top
-const startX = $(canvas).offset().left
 size = document.querySelector('.cont__cont').offsetWidth
-const offset = size * 0.095
-const r = size * (1 - 2 * 0.09) * (1/(13 * 2.2))
-const step = (size - 2 * offset) / 12.5
+var startY = $(canvas).offset().top
+var startX = $(canvas).offset().left
+var offset = size * 0.095
+var r = size * (1 - 2 * 0.09) * (1/(13 * 2.2))
+var step = (size - 2 * offset) / 12.5
 canvas.width = size
 canvas.height = size
 // буквы
@@ -54,8 +68,7 @@ class Board {
 
     add(x, y) {
         this.board[y][x] = -this.my_num
-        c.clearRect(0, 0, canvas.width, canvas.height);
-        this.update()
+        draw()
     }
 
     update() {
@@ -71,6 +84,12 @@ class Board {
             }
         }
     }
+}
+
+function draw() {
+    c.clearRect(0, 0, canvas.width, canvas.height)
+    draw_temp(temp_map)
+    board.update()
 }
 
 // немного классов и функций которые не надо редактировать
@@ -96,12 +115,27 @@ class Cell {
         c.fill()
     }
 }
+class TempCell {
+    constructor (x, y, temp) {
+        this.x = x
+        this.y = y
+        this.temp = temp
+    }
+
+    draw () {
+        c.beginPath()
+        c.arc(this.x, this.y, 1.5 * r * Math.cbrt(this.temp), 0, Math.PI * 2, false)
+        c.fillStyle = "rgba(255, 0, 0, 0.5)"
+        c.fill()
+    }
+}
+
 function toString(x, y) {
     return ABC[x] + (13 - y).toString()
 }
 
 var board = new Board("black")
-board.update()
+draw()
 
 addEventListener('click', (event) => {
     // на какую клавишу ткнули
@@ -134,6 +168,19 @@ function can_move(x, y) {
 
 function set_cell() {
     if (can_atacovat) {
+        temp_map = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
         move_color = (board.my_color=="white"?"black":"white")
         board.add(x, y)
         console.log(toString(x, y))
@@ -221,10 +268,9 @@ client.onmessage = function(event) {
                     board.board[12 - x][y] = data.payload.currentMap[y][x]
                 }
             }
-            c.clearRect(0, 0, canvas.width, canvas.height);
-            board.update()
+            draw()
         } else if (data.payload.type == "endGame") {
-            var info = document.getElementById('info').textContent = "Игра завершениа";
+            var info = document.getElementById('info').textContent = "Игра завершена";
         }
     }
   catch {console.log("ERROR ON READ MESSAGE")}
@@ -241,14 +287,56 @@ client.onerror = function(error) {
 // сколько потратил очков
 function update_score(delta) {
     score += delta
+    countTips++;
     var dragon_info = document.getElementById('dragon_info');
     dragon_info.textContent = "Удачной игры, юный последователь дракона. У тебя использовано очков: " + score + '.'
+}
+
+// ресайз окна
+document.addEventListener("DOMContentLoaded", function(event)
+{
+    window.onresize = function() {
+        resize_info();
+    };
+});
+
+function resize_info()
+{
+    console.log("RESIZE")
+    size = document.querySelector('.cont__cont').offsetWidth
+    startY = $(canvas).offset().top
+    startX = $(canvas).offset().left
+    offset = size * 0.095
+    r = size * (1 - 2 * 0.09) * (1/(13 * 2.2))
+    step = (size - 2 * offset) / 12.5
+    canvas.width = size
+    canvas.height = size
+    draw()
 }
 
 // кнопки
 
 // тепловая карта
 var button_map = document.getElementById('temp_map');
+button_map.onclick = function(e) {
+    console.log("LOAD TEMP_MAP")
+    heat_map()
+    update_score(3)
+}
+function heat_map() {
+    $.post( "/call_func/", {
+         canvas_data: JSON.stringify({func: "get_heatmap",
+                                      params: ""})
+    }, function(err, req, resp){
+        var data = $.parseJSON(resp.responseText)
+        for (var y = 0; y < 13; y++) {
+            for (var x = 0; x < 13; x++) {
+                temp_map[y][12 - x] = data[y][x]
+            }
+        }
+        draw()
+    });
+}
 function draw_temp(map) {
     for (var i = 0; i < 13; i++) {
         for (var j = 12; j > -1; j--) {
@@ -260,42 +348,11 @@ function draw_temp(map) {
 
 // лучший ход
 var button_best_move = document.getElementById('get_best_move');
-function get_best_move_b() {
-    console.log("Получение лучшего хода")
+button_best_move.onclick = function() {
+    console.log("GET BEST MOVE")
+    get_best_move()
+    update_score(3)
 }
-
-// лучший ход противника
-var button_best_move_enemy = document.getElementById('get_best_move_enemy');
-function get_best_move_enemy_b() {
-    console.log("Получение лучшего хода противника")
-}
-
-// лучшая зона для игры
-var button_best_move_zone = document.getElementById('get_best_move_zone');
-function get_best_move_zone_b() {
-    console.log("Лучшая зона для игры")
-}
-
-// кто побеждает
-var button_superiority = document.getElementById('get_superiority');
-function get_superiority_b() {
-    console.log("Кто побеждает")
-}
-class TempCell {
-    constructor (x, y, temp) {
-        this.x = x
-        this.y = y
-        this.temp = temp
-    }
-
-    draw () {
-        c.beginPath()
-        c.arc(this.x, this.y, 1.5 * r * Math.cbrt(this.temp), 0, Math.PI * 2, false)
-        c.fillStyle = "rgba(255, 0, 0, 0.5)"
-        c.fill()
-    }
-}
-
 function get_best_move() {
     $.post( "/call_func/", {
          canvas_data: JSON.stringify({func: "get_best_move",
@@ -309,6 +366,13 @@ function get_best_move() {
     });
 }
 
+// лучший ход противника
+var button_best_move_enemy = document.getElementById('get_best_move_enemy');
+button_best_move_enemy.onclick = function() {
+    console.log("GET BEST MOVE ENEMY")
+    get_best_move_enemy()
+    update_score(3)
+}
 function get_best_move_enemy() {
     $.post( "/call_func/", {
          canvas_data: JSON.stringify({func: "get_best_move_enemy",
@@ -322,6 +386,13 @@ function get_best_move_enemy() {
     });
 }
 
+// лучшая зона для игры
+var button_best_move_zone = document.getElementById('get_best_move_zone');
+button_best_move_zone.onclick = function() {
+    console.log("GET BEST ZONE FOR PLAY")
+    get_best_move_zone()
+    update_score(1)
+}
 function get_best_move_zone() {
     $.post( "/call_func/", {
          canvas_data: JSON.stringify({func: "get_best_move_zone",
@@ -333,6 +404,13 @@ function get_best_move_zone() {
     });
 }
 
+// кто побеждает
+var button_superiority = document.getElementById('get_superiority');
+button_superiority.onclick = function() {
+    console.log("WHO WIN")
+    get_superiority()
+    update_score(1)
+}
 function get_superiority() {
     $.post( "/call_func/", {
          canvas_data: JSON.stringify({func: "get_superiority",
@@ -344,78 +422,20 @@ function get_superiority() {
     });
 }
 
-function heat_map() {
-    $.post( "/call_func/", {
-         canvas_data: JSON.stringify({func: "get_heatmap",
-                                      params: ""})
-    }, function(err, req, resp){
-        var data = $.parseJSON(resp.responseText)
-        var res = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
-        for (var y = 0; y < 13; y++) {
-            for (var x = 0; x < 13; x++) {
-                res[y][12 - x] = data[y][x]
-            }
-        }
-        draw_temp(res)
-    });
-}
-button_map.onclick = function(e) {
-    console.log("LOAD TEMP_MAP")
-    c.clearRect(0, 0, canvas.width, canvas.height);
-    heat_map()
-    board.update()
-    update_score(3)
-}
-
-button_best_move.onclick = function() {
-    console.log("GET BEST MOVE")
-    get_best_move()
-    update_score(3)
-}
-
-button_best_move_enemy.onclick = function() {
-    console.log("GET BEST MOVE ENEMY")
-    get_best_move_enemy()
-    update_score(3)
-}
-
-button_best_move_zone.onclick = function() {
-    console.log("GET BEST ZONE FOR PLAY")
-    get_best_move_zone()
-    update_score(3)
-}
-
-button_superiority.onclick = function() {
-    console.log("WHO WIN")
-    get_superiority()
-    update_score(3)
-}
-
 // наша подсказка
 var button_help = document.getElementById('help');
 button_help.onclick = function help() {
-     outputData = []
-     console.log("USE OUR TIPS")
-     for (var i = 0; i < 13; i++) {
+    countTips++;
+    outputData = []
+    console.log("USE OUR TIPS")
+    for (var i = 0; i < 13; i++) {
         for (var j = 0; j < 13; j++) {
             outputData.push(board.board[i][j]);
         }
-     }
+    }
     $.post( "/check_matrix/", {
         canvas_data: JSON.stringify(outputData)
-    }, function(err, req, resp) {
+        }, function(err, req, resp) {
         tips = $.parseJSON(resp.responseText)
         var dragon_info = document.getElementById('dragon_info');
         if (tips.enemy.length > 0 || tips.you.length > 0 || tips.stairs.length > 0) {
@@ -458,7 +478,6 @@ button_pass.onclick = function send_pass() {
         }
     ]));
 }
-
 
 // сдатьсяg
 var button_resign = document.getElementById('resign');
