@@ -212,6 +212,16 @@ function get_count_moves() {
     });
 }
 
+function get_who_win() {
+    console.log("GET WHO WIN")
+    $.post( "/get_who_win/", {
+         canvas_data: JSON.stringify({
+            game_code: game_id
+         })}, function(err, req, resp) {
+            count_moves = $.parseJSON(resp.responseText).count
+    });
+}
+
 function can_move(x, y) {
     $.post( "/check_cell/", {
          canvas_data: JSON.stringify({

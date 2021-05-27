@@ -199,12 +199,24 @@ class Api:
         result = False
         if self.check_user():
             if game_code is not None:
-                json_game_info = requests.get(f"{self.link}game/info/{game_code}", params={"token": self.get_token()})
-                if json_game_info.status_code == 200:
-                    result = len(json_game_info.json()["moves"].split(";")) - 1
-                    self.output(len(json_game_info.json()["moves"].split(";")) - 1)
+                json_get_count_moves = requests.get(f"{self.link}game/info/{game_code}", params={"token": self.get_token()})
+                if json_get_count_moves.status_code == 200:
+                    result = len(json_get_count_moves.json()["moves"].split(";")) - 1
+                    self.output(len(json_get_count_moves.json()["moves"].split(";")) - 1)
                 else:
-                    self.output(f"json_game_info выдал ошибку: {json_game_info.status_code}")
+                    self.output(f"json_game_info выдал ошибку: {json_get_count_moves.status_code}")
+        return result
+
+    def get_who_win(self, game_code):
+        result = False
+        if self.check_user():
+            if game_code is not None:
+                json_get_who_win = requests.get(f"{self.link}game/info/{game_code}", params={"token": self.get_token()})
+                if json_get_who_win.status_code == 200:
+                    result = [json_get_who_win.json()["score_1"], json_get_who_win.json()["score_2"]]
+                    self.output(result)
+                else:
+                    self.output(f"json_get_who_win выдал ошибку: {json_get_who_win.status_code}")
         return result
 
     def logout(self):
@@ -430,6 +442,8 @@ if __name__ == '__main__':
     print("success" if api.game_info(api.game_code) else "error")
 
     print(api.get_count_moves(api.game_code))
+
+    print(api.get_who_win(api.game_code))
 
     # Показать вревосходящего по очнам игрока
     print(api.get_superiority())
