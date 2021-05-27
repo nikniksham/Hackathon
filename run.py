@@ -87,6 +87,20 @@ def get_post_javascript_data():
     return json.dumps({"answer": di["d"] > 0})
 
 
+@app.route('/get_count_moves/', methods=["POST"])
+def get_count_moves():
+    params = json.loads(request.form['canvas_data'])
+    print(api.get_count_moves(params["game_code"]))
+    return json.dumps({"count": api.get_count_moves(params["game_code"])})
+
+
+@app.route('/get_who_win/', methods=["POST"])
+def get_who_win():
+    params = json.loads(request.form['canvas_data'])
+    print(api.get_who_win(params["game_code"]))
+    return json.dumps({"count": api.get_who_win(params["game_code"])})
+
+
 @app.route('/getLoginData/')
 def get_login_data():
     if not api.check_user():
