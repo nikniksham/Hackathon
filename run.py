@@ -121,8 +121,13 @@ def create_game_with_random():
 
 @app.route('/joinGameViaCode/', methods=["GET", "POST"])
 def join_game_via_code():
-    print("success" if api.join_game("LYXX") else "error")
-    return redirect("/game/")
+    form = JoinForm()
+    if form.validate_on_submit():
+        if api.join_game(form.game_code.data):
+            return redirect('/game/')
+        else:
+            return redirect("/joinGameViaCode/")
+    return render_template('joinForm.html', form=form, style=url_for('static', filename='css/style.css'))
 
 
 @app.route('/getGameInfo/', methods=["POST"])
