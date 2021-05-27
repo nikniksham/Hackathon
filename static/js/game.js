@@ -7,7 +7,7 @@ const ABC = "abcdefghjklmn"
 // игровая логика
 var color_move = "black"
 var can_atacovat
-// карты теплоты
+// фишки для отрисовки
 var temp_map = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -21,6 +21,9 @@ var temp_map = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+var can_eat = []
+var you_eat = []
+var where_stairs = []
 // допсказки
 var tips = {}
 // количество баллов потраченых на подсказки
@@ -95,10 +98,44 @@ class Board {
     }
 }
 
+function clear_info() {
+    can_eat = []
+    you_eat = []
+    where_stairs = []
+    temp_map = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+}
+
 function draw() {
     c.clearRect(0, 0, canvas.width, canvas.height)
+    // тепловая карта
     draw_temp(temp_map)
+    // карта
     board.update()
+    // кастомные подсказки
+    for (var i = 0; i < can_eat.length; i++) {
+        console.log(can_eat[i])
+        new Cell(offset + can_eat[i][0] * step, offset + can_eat[i][1] * step, 'green').draw()
+    }
+    for (var i = 0; i < you_eat.length; i++) {
+        console.log(you_eat[i])
+        new Cell(offset + you_eat[i][0] * step, offset + you_eat[i][1] * step, 'red').draw()
+    }
+    for (var i = 0; i < where_stairs.length; i++) {
+        console.log(where_stairs[i])
+        new Cell(offset + where_stairs[i][0] * step, offset + where_stairs[i][1] * step, 'yellow').draw()
+    }
 }
 
 // немного классов и функций которые не надо редактировать
@@ -108,12 +145,14 @@ class Cell {
         this.y = y
         if (player == -1) {
             this.color = 'white'
-        } else {
+        } else if (player == 1) {
             this.color = 'black'
+        } else {
+            this.color = player
         }
     }
 
-    draw () {
+    draw() {
         c.beginPath()
         c.arc(this.x, this.y, r, 0, Math.PI * 2, false)
         c.fillStyle = 'black'
@@ -187,19 +226,7 @@ function can_move(x, y) {
 
 function set_cell() {
     if (can_atacovat) {
-        temp_map = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+        clear_info()
         move_color = (board.my_color=="white"?"black":"white")
         board.add(x, y)
         console.log(toString(x, y))
@@ -330,7 +357,6 @@ document.addEventListener("DOMContentLoaded", function(event)
         resize_info();
     };
 });
-
 function resize_info()
 {
     console.log("RESIZE")
@@ -471,24 +497,37 @@ button_help.onclick = function help() {
         var dragon_info = document.getElementById('dragon_info');
         if (tips.enemy.length > 0 || tips.you.length > 0 || tips.stairs.length > 0) {
             var text = ""
+            you_eat = tips.enemy
+            can_eat = tips.you
+            where_stairs = tips.stairs
             if (tips.enemy.length > 0) {
                 if (text != " ") {text += "\n"}
                 text += "Твои камни под угрозой, обрати внимание на клетки -> "
-                for (var i = 0; i < tips.enemy.length; ++i) {text += abc[tips.enemy[i][0]] + (13 - tips.enemy[i][1]).toString()}
+                for (var i = 0; i < tips.enemy.length; ++i) {
+                    text += toString(tips.enemy[i][0], tips.enemy[i][1])
+                }
             }
             if (tips.you.length > 0) {
                 if (text != " ") {text += "\n"}
                 text += "Ты можешь захватить вражеские камни, обрати внимание на клетки -> "
-                for (var i = 0; i < tips.you.length; ++i) {text += abc[tips.you[i][0]] + (13 - tips.you[i][1]).toString()}
+                for (var i = 0; i < tips.you.length; ++i) {
+                    text += toString(tips.you[i][0], tips.you[i][1])
+                }
             }
             if (tips.stairs.length > 0) {
                 if (text != " ") {text += "\n"}
                 text += "Ты попал в ситуацию 'лестница', не стоит ходить на клетки -> "
-                for (var i = 0; i < tips.stairs.length; ++i) {text += abc[tips.stairs[i][0]] + (13 - tips.stairs[i][1]).toString()}
+                for (var i = 0; i < tips.stairs.length; ++i) {
+                    text += toString(tips.stairs[i][0], tips.stairs[i][1])
+                }
             }
         } else {
+            you_eat = []
+            can_eat = []
+            where_stairs = []
             var text = "В данный момент тебе подскзка не нужна"
         }
+        draw()
         if (text != "") {
             dragon_info.textContent = text
         }
