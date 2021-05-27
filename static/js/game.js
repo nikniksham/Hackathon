@@ -7,6 +7,7 @@ const ABC = "abcdefghjklmn"
 // игровая логика
 var color_move = "black"
 var can_atacovat
+var target_date = 0
 // фишки для отрисовки
 var temp_map = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -295,6 +296,11 @@ client.onmessage = function(event) {
                     board.board[12 - x][y] = data.payload.currentMap[y][x]
                 }
             }
+            if (board.my_color == "black") {
+                target_date = data.payload.turnBlackEndedAt
+            } else {
+                target_date = data.payload.turnWhiteEndedAt
+            }
             draw()
         } else if (data.payload.type == "endGame") {
             var info = document.getElementById('info').textContent = "Игра завершена";
@@ -531,4 +537,29 @@ button_resign.onclick = function send_resign() {
             game_id: user_data.game_code
         }
     ]));
+}
+
+// время до пройгррыша
+var countdown = document.getElementById("time"); // получить элемент тега
+
+getCountdown();
+
+setInterval(function () { getCountdown(); }, 1000);
+
+function getCountdown(){
+
+    var current_date = new Date().getTime();
+    var seconds_left = (target_date - current_date) / 1000;
+    seconds_left = seconds_left % 86400;
+    seconds_left = seconds_left % 3600;
+
+    minutes = pad( parseInt( seconds_left / 60) );
+    seconds = pad( parseInt( seconds_left % 60 ) );
+
+    // строка обратного отсчета  + значение тега
+    countdown.innerHTML = "<span>" + minutes + "</span>:<span>" + seconds + "</span>";
+}
+
+function pad(n) {
+    return (n < 10 ? '0' : '') + n;
 }
