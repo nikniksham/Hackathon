@@ -16,10 +16,19 @@
     <img class="down_up_image"    src="/static/img/angle.png">
     <img class="down_right_image" src="/static/img/angle.png">
     <div class="aligner">
-        <div class="menu-reg-log">
-            <a>Код вашей игры {{user.game_code_close}}</a>
-            <a href="/game/"><button class="game_button">Присоединиться к игре</button></a>
-            <a href="/closedGame/"><button class="game_button">Назад</button></a>
+        <div class="aligning">
+            <div class="custom-game-block">
+                <div class="login-text-block">
+                    <div class="custom-game-text">
+                        <p class="text-block">Код твоей игры {{user.game_code_close}}, сообщи его своему противнику, чтобы начать бой</p>
+                        <div class="buttons-block">
+                            <div><a href="/game/"><button class="game_button">Начать игру</button></a></div>
+                            <div><a href="/closedGame/"><button class="game_button">Отмена</button></a></div>
+                        </div>
+                    </div>
+                    <img class="custom-game-img" src="/static/img/dragon.svg">
+                </div>
+            </div>
         </div>
     </div>
 </body>

@@ -39,8 +39,8 @@ def main(port=8000):
 
 @app.route('/check_matrix/', methods=["POST"])
 def check_matrix_func():
-    board = upload(request.form['canvas_data'])
-    tips = check_matrix(board)
+    boardd = upload(request.form['canvas_data'])
+    tips = check_matrix(boardd)
     print(json.dumps(tips))
     return json.dumps(tips)
 
@@ -187,7 +187,7 @@ def join_game():
 
 @app.route('/test/', methods=['post', 'get'])
 def test():
-    form = RegisterForm()
+    form = JoinForm()
     return render_template('test.html', form=form, style=url_for('static', filename='css/style.css'))
 
 

@@ -17,34 +17,28 @@
     <img class="down_right_image" src="/static/img/angle.png">
     <div class="aligner">
         <div class="aligning">
-            <div class="login-block">
+            <div class="custom-game-block">
                 <div class="login-text-block">
-                    <p class="text-block login-text">Припоминаю тебя, последователь дракона, но скажи мне пароль, чтобы войти в наш клан.</p>
-                    <img class="login-img" src="/static/img/dragon.svg">
-                </div>
-                <div class="buttons-block">
-                    {% for category, message in get_flashed_messages(with_categories=true) %}
-                    <spam class="{{ category }}">{{ message }}</spam>
-                    {% endfor %}
-                    <div>
-                        {{ form.email(class='email-input', value="Электронная почта") }}
-                        {% if form.email.errors %}
-                        {% for error in form.email.errors %}
-                        {{ error }}
-                        {% endfor %}
-                        {% endif %}
+                    <div class="custom-game-text">
+                        <p class="text-block">Скажи мне код своей игры, чтобы начать бой</p>
+                        <div class="buttons-block">
+                            <form action="" method="post">
+                                {{ form.csrf_token }}
+                                <div>
+                                    {{ form.game_code(class='code-input', value="Код") }}
+                                    {% if form.game_code.errors %}
+                                    {% for error in form.game_code.errors %}
+                                    {{ error }}
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    {{ form.submit(class_='game_button') }}
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <div>
-                        {{ form.nickname(class='email-input', value="Никнейм") }}
-                        {% if form.nickname.errors %}
-                        {% for error in form.nickname.errors %}
-                        {{ error }}
-                        {% endfor %}
-                        {% endif %}
-                    </div>
-                    <div>
-                        {{ form.submit(class_='game_button') }}
-                    </div>
+                    <img class="custom-game-img" src="/static/img/dragon.svg">
                 </div>
             </div>
         </div>

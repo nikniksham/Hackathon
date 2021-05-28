@@ -275,7 +275,7 @@ img.player_block_image {
 
 .start-text-block {
     padding: 20px 0;
-    width 100%;
+    width: 100%;
     vertical-align: middle;
     position: relative;
 }
@@ -307,7 +307,7 @@ img.player_block_image {
 
 .login-text-block {
     padding: 20px 0;
-    width 100%;
+    width: 100%;
     vertical-align: middle;
     position: relative;
 }
@@ -328,6 +328,30 @@ img.player_block_image {
     display: inline-block;
 }
 
+
+.custom-game-block {
+    width: 450px;
+    height: 350px;
+    padding: 5%;
+}
+
+.custom-game-text {
+    width: 50%;
+    line-height: normal;
+    display: inline-block;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.custom-game-img {
+    width: 48%;
+    line-height: normal;
+    display: inline-block;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+
 .password-input {
     border: 2px solid;
     border-color: red;
@@ -335,6 +359,14 @@ img.player_block_image {
 }
 
 .email-input {
+    border: 2px solid;
+    border-color: red;
+    border-radius: 2px;
+}
+
+.code-input {
+    width: 92px;
+    font-size: 30px;
     border: 2px solid;
     border-color: red;
     border-radius: 2px;
