@@ -242,6 +242,7 @@ img.player_block_image {
     transform: translate(-50%, -50%);
     background: url("/static/img/right_block.png") no-repeat;
     background-size: 100% 100%;
+    padding: 2%;
 }
 
 .buttons-block {
@@ -251,11 +252,10 @@ img.player_block_image {
     horizontal-align: middle;
     width: 100%;
     padding-bottom: 10px;
-}
-.buttons-block a {
     display: flex;
     justify-content: center;
 }
+
 
 .text-block {
     border: 2px solid;
@@ -264,20 +264,23 @@ img.player_block_image {
     padding: 15px;
 }
 
-.test-block {
+
+
+// start
+.start-block {
     width: 500px;
     height: 400px;
     padding: 5%;
 }
 
-.test-test-block {
+.start-text-block {
     padding: 20px 0;
     width 100%;
     vertical-align: middle;
     position: relative;
 }
 
-.test-text {
+.start-text {
     width: 69%;
     line-height: normal;
     display: inline-block;
@@ -285,10 +288,54 @@ img.player_block_image {
     display: inline-block;
 }
 
-.test-img {
+.start-img {
     width: 30%;
     line-height: normal;
     display: inline-block;
     vertical-align: middle;
     display: inline-block;
+}
+
+
+
+
+.login-block {
+    width: 500px;
+    height: 430px;
+    padding: 5%;
+}
+
+.login-text-block {
+    padding: 20px 0;
+    width 100%;
+    vertical-align: middle;
+    position: relative;
+}
+
+.login-text {
+    width: 69%;
+    line-height: normal;
+    display: inline-block;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.login-img {
+    width: 30%;
+    line-height: normal;
+    display: inline-block;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.password-input {
+    border: 2px solid;
+    border-color: red;
+    border-radius: 2px;
+}
+
+.email-input {
+    border: 2px solid;
+    border-color: red;
+    border-radius: 2px;
 }
