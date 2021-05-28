@@ -15,25 +15,28 @@ know_cells = []
 letters = "abcdefghjklmn"
 
 
-def warning(contacts, team_cells, tips, matrix):
+def warning(contacts, team_cells, color, tips, matrix):
     for elem in contacts["s"]:
         if elem not in contacts["e"]:
             print(f"WARNING! Обрати внимание на ---> {letters[elem[0]]}{13 - elem[1]}{elem}")
-            tips["enemy"].append(elem)
-            if contacts["m"] >= 7:
+            tips["enemy"][0].append(elem)
+            tips["enemy"][1].append(team_cells)
+            if contacts["m"] > 4:
                 cont = {"d": 0, "m": 0, "s": [], "e": []}
-                check_contact(elem[0], elem[1], -1, team_cells, cont, matrix)
+                check_contact(elem[0], elem[1], color, team_cells, cont, matrix)
                 if cont["d"] <= 2:
-                    tips["stairs"].append(elem)
+                    tips["stairs"][0].append(elem)
+                    tips["stairs"][1].append(team_cells)
                     print(
                         f'CAUTION! Не советую играть в лестницу ---> {letters[elem[0]]}{13 - elem[1]}')
             break
 
 
-def success(contacts, tips):
+def success(contacts, cells, tips):
     for elem in contacts["s"]:
         if elem not in contacts["e"]:
-            tips["you"].append(elem)
+            tips["you"][0].append(elem)
+            tips["you"][1].append(cells)
             print(f"SUCCESS! Обрати внимание на ---> {letters[elem[0]]}{13 - elem[1]}")
 
 
@@ -63,31 +66,32 @@ def check_contact(x, y, c, cells, di, matrix):
         check_cell(x, y + 1, c, cells, di, matrix)
 
 
-def check_matrix(matrix):
-    tips = {"you": [], "enemy": [], "stairs": []}
+def check_matrix(matrix, color):
+    tips = {"you": [[], []], "enemy": [[], []], "stairs": [[], []]}
+    col = -1 if color == "white" else 1
     know_cells.clear()
     for y in range(len(matrix)):
         for x in range(len(matrix[0])):
-            if matrix[y][x] == 1 and [x, y] not in know_cells:
+            if matrix[y][x] == col and [x, y] not in know_cells:
                 di = {"d": 0, "m": 0, "s": [], "e": []}
                 cells = []
-                check_cell(x, y, 1, cells, di, matrix)
+                check_cell(x, y, col, cells, di, matrix)
                 for cell in cells:
                     if cell not in know_cells:
                         know_cells.append(cell)
-                if di["d"] == 1:
-                    warning(di, cells, tips, matrix)
-            if matrix[y][x] == -1 and [x, y] not in know_cells:
+                if di["d"] == col:
+                    warning(di, cells, col, tips, matrix)
+            if matrix[y][x] == -col and [x, y] not in know_cells:
                 di = {"d": 0, "m": 0, "s": [], "e": []}
                 cells = []
-                check_cell(x, y, -1, cells, di, matrix)
+                check_cell(x, y, -col, cells, di, matrix)
                 for cell in cells:
                     if cell not in know_cells:
                         know_cells.append(cell)
-                if di["d"] == 1:
-                    success(di, tips)
+                if di["d"] == col:
+                    success(di, cells, tips)
     return tips
 
 
 if __name__ == '__main__':
-    print(check_matrix(mat))
+    print(check_matrix(mat, 1))

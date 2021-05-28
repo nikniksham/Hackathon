@@ -16,15 +16,6 @@ letters = "abcdefghjklmn"
 api.login_user(email, password)
 
 
-def upload(req):
-    board = []
-    req = json.loads(req)
-    for _ in range(13):
-        board.append(req[:13])
-        req = req[13:]
-    return board
-
-
 def dump(board):
     res = ""
     for i in range(13):
@@ -39,9 +30,9 @@ def main(port=8000):
 
 @app.route('/check_matrix/', methods=["POST"])
 def check_matrix_func():
-    boardd = upload(request.form['canvas_data'])
-    tips = check_matrix(boardd)
-    print(json.dumps(tips))
+    res = json.loads(request.form['canvas_data'])
+    tips = check_matrix(res["field"], res["color"])
+    print(tips)
     return json.dumps(tips)
 
 
@@ -98,7 +89,7 @@ def get_count_moves():
 def get_who_win():
     params = json.loads(request.form['canvas_data'])
     print(api.get_who_win(params["game_code"]))
-    return json.dumps({"count": api.get_who_win(params["game_code"])})
+    return json.dumps({"result": api.get_who_win(params["game_code"])})
 
 
 @app.route('/getLoginData/')
@@ -107,6 +98,11 @@ def get_login_data():
         return None
     api.update_user_info()
     return json.dumps(api.get_json())
+
+
+@app.route('/test_modal_window/')  # В после тестов удалить
+def test_modal_window():
+    return render_template("test_modal_window.html", style=url_for('static', filename='css/style.css'))
 
 
 @app.route('/updateUserInfo/')
@@ -185,12 +181,6 @@ def join_game():
     return render_template('joinForm.html', form=form, style=url_for('static', filename='css/style.css'))
 
 
-@app.route('/test/', methods=['post', 'get'])
-def test():
-    form = JoinForm()
-    return render_template('test.html', form=form, style=url_for('static', filename='css/style.css'))
-
-
 @app.route("/logout/")
 def logout():
     api.logout()
@@ -242,6 +232,7 @@ def game_page():
 def vote(ponimanie):
     print(ponimanie)
     if ponimanie:
+    api.create_game_with_bot()
         print("Меня поняли!")
     emit("я живой", {"result": True}, broadcast=True)
     api.create_game_with_bot()
@@ -251,5 +242,4 @@ def vote(ponimanie):
 """
 
 if __name__ == '__main__':
-    print("http://127.0.0.1:8000/start/")
     main(port=8000)
