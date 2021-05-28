@@ -185,6 +185,19 @@ def join_game():
     return render_template('joinForm.html', form=form, style=url_for('static', filename='css/style.css'))
 
 
+@app.route('/test/', methods=['post', 'get'])
+def login():
+    if not api.check_user():
+        form = LoginForm()
+        if form.validate_on_submit():
+            if api.login_user(form.email.data, form.password.data):
+                return redirect('/')
+            else:
+                return render_template('test.html', form=form, success=False,
+                                       style=url_for('static', filename='css/style.css'))
+        return render_template('test.html', form=form, style=url_for('static', filename='css/style.css'))
+    return redirect("/")
+
 @app.route("/logout/")
 def logout():
     api.logout()

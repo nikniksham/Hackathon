@@ -7,7 +7,9 @@ const ABC = "abcdefghjklmn"
 // игровая логика
 var color_move = "black"
 var can_atacovat
-var target_date = 0
+var my_lose_date = 0
+var opponent_lose_date = 0
+var seconds_left = 0
 // фишки для отрисовки
 var temp_map = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -334,9 +336,11 @@ client.onmessage = function(event) {
                 }
             }
             if (board.my_color == "black") {
-                target_date = data.payload.turnBlackEndedAt
+                my_lose_date = data.payload.turnBlackEndedAt
+                opponent_lose_date = data.payload.turnWhiteEndedAt
             } else {
-                target_date = data.payload.turnWhiteEndedAt
+                my_lose_date = data.payload.turnWhiteEndedAt
+                opponent_lose_date = data.payload.turnBlackEndedAt
             }
             count_moves++
             delta_black = Math.floor(count_moves / 2) - count_black
@@ -581,7 +585,8 @@ button_resign.onclick = function send_resign() {
 }
 
 // время до пройгррыша
-var countdown = document.getElementById("time"); // получить элемент тега
+var timer_my = document.getElementById("my_timer"); // получить элемент тега
+var timer_opponent = document.getElementById("opponent_timer"); // получить элемент тега
 
 getCountdown();
 
@@ -590,15 +595,23 @@ setInterval(function () { getCountdown(); }, 1000);
 function getCountdown(){
 
     var current_date = new Date().getTime();
-    var seconds_left = (target_date - current_date) / 1000;
-    seconds_left = seconds_left % 86400;
-    seconds_left = seconds_left % 3600;
-
-    minutes = pad( parseInt( seconds_left / 60) );
-    seconds = pad( parseInt( seconds_left % 60 ) );
-
-    // строка обратного отсчета  + значение тега
-    countdown.innerHTML = "<span>" + minutes + "</span>:<span>" + seconds + "</span>";
+    if (color_move == board.my_color) {
+        seconds_left = (my_lose_date - current_date) / 1000;
+        seconds_left = seconds_left % 86400;
+        seconds_left = seconds_left % 3600;
+        minutes = pad( parseInt( seconds_left / 60) );
+        seconds = pad( parseInt( seconds_left % 60 ) );
+        // строка обратного отсчета  + значение тега
+        timer_my.innerHTML = "<span>" + minutes + "</span>:<span>" + seconds + "</span>";
+    } else {
+        seconds_left = (opponent_lose_date - current_date) / 1000;
+        seconds_left = seconds_left % 86400;
+        seconds_left = seconds_left % 3600;
+        minutes = pad( parseInt( seconds_left / 60) );
+        seconds = pad( parseInt( seconds_left % 60 ) );
+        // строка обратного отсчета  + значение тега
+        timer_opponent.innerHTML = "<span>" + minutes + "</span>:<span>" + seconds + "</span>";
+    }
 }
 
 function pad(n) {
