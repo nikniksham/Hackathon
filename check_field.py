@@ -21,14 +21,13 @@ def warning(contacts, team_cells, color, tips, matrix):
             print(f"WARNING! Обрати внимание на ---> {letters[elem[0]]}{13 - elem[1]}{elem}")
             tips["enemy"][0].append(elem)
             tips["enemy"][1].append(team_cells)
-            if contacts["m"] > 4:
-                cont = {"d": 0, "m": 0, "s": [], "e": []}
-                check_contact(elem[0], elem[1], color, team_cells, cont, matrix)
-                if cont["d"] <= 2:
-                    tips["stairs"][0].append(elem)
-                    tips["stairs"][1].append(team_cells)
-                    print(
-                        f'CAUTION! Не советую играть в лестницу ---> {letters[elem[0]]}{13 - elem[1]}')
+            cont = {"d": 0, "m": 0, "s": [], "e": []}
+            check_contact(elem[0], elem[1], color, team_cells, cont, matrix)
+            if cont["d"] <= 2:
+                tips["stairs"][0].append(elem)
+                tips["stairs"][1].append(team_cells)
+                print(
+                    f'CAUTION! Не советую играть в лестницу ---> {letters[elem[0]]}{13 - elem[1]}')
             break
 
 
