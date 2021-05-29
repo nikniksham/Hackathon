@@ -13,7 +13,7 @@ class Api:
         self.user_info = None  # Информация о пользователе
         self.link = "https://go-backend-denis.ambersoft.llc/"  # Ссылка на сайт
         self.img_profile = None
-        self.language = "ru"
+        self.language = "en"
         self.game_code_close = ""
         self.centaur_token = "Kf8darEBRsoJEiw0"
         self.language_text = {

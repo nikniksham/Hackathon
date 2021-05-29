@@ -209,6 +209,12 @@ img.player_block_image {
     height: 10%;
 }
 
+.lang-block {
+    position: absolute;
+    right: 140px;
+    top: 10px;
+}
+
 .down_up_image {
     position: absolute;
     left: 10px;

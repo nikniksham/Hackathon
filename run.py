@@ -173,6 +173,15 @@ def get_python_data():
     return json.dumps("СВАБОДУ ПАПУГАЯМ!!")
 
 
+@app.route("/change_lang/")
+def change_lang():
+    if api.language == "ru":
+        api.change_language("en")
+    else:
+        api.change_language("ru")
+    return redirect("/")
+
+
 @app.route("/")
 def website_main():
     if api.check_user():
