@@ -281,7 +281,7 @@ class Api:
         if self.check_user():
             json_join_game = requests.post(f"{self.link}game/join/{code}",
                                            params={"token": self.get_token(), "code": code})
-            # print(code, json_join_game.json())
+            print(code, json_join_game.json())
             if json_join_game.status_code == 200:
                 self.game_code_close = code
                 self.game_code = json_join_game.json()["id"]

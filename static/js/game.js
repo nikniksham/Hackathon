@@ -275,6 +275,7 @@ addEventListener('click', (event) => {
     // на какую клавишу ткнули
     x = Math.floor((event.clientX - offset + r - startX)/step)
     y = Math.floor((event.clientY - offset + r - startY)/step)
+    console.log(board.my_color + "X" + color_move)
     if (board.my_color == color_move) {
         if ((x > -1) && (x < 13) && (y > -1) && (y < 13)) {
             if (board.board[y][x] == 0) {
@@ -323,7 +324,7 @@ function can_move(x, y) {
 function set_cell() {
     if (can_atacovat) {
         clear_info()
-        move_color = (board.my_color=="white"?"black":"white")
+        color_move = (board.my_color=="white"?"black":"white")
         updateInfo("")
         board.add(x, y)
         console.log(toString(x, y))
@@ -385,7 +386,8 @@ function auth_client() {
 
 function updateInfo(data) {
     if (data != "") {
-        move_color = data.payload.turn
+        console.log("LOAD TURN: " + data.payload.turn)
+        color_move = data.payload.turn
         console.log(color_move + " " + board.my_color)
         if (board.my_color == "black") {
             my_lose_date = data.payload.turnBlackEndedAt
@@ -396,14 +398,12 @@ function updateInfo(data) {
         }
         updateTimer()
     } else {
-        console.log("asdsada" + move_color)
+        console.log("SET COLOR MOVE: " + color_move)
     }
-    if (move_color == board.my_color) {
+    if (color_move == board.my_color) {
         var info = document.getElementById('info').textContent = "Ваш Ход";
-        color_move = "black"
     } else {
         var info = document.getElementById('info').textContent = "Ход оппонента";
-        color_move = "white"
     }
 }
 
@@ -422,9 +422,8 @@ client.onmessage = function(event) {
             if (data.payload.type == 'currentMap') {
                 map_loaded = true
                 board.set_color(data.payload.player=="b"?"black":"white")
-                console.log(board.my_color)
+                console.log(board.my_color + "ADSDASDASD" + data.payload.player)
                 if (data.payload.opponent.avatar != "") {
-                    console.log(1)
                     have_enemy = true
                     game_started = true
                 }
@@ -455,7 +454,6 @@ client.onmessage = function(event) {
             var info = document.getElementById('header').textContent = "Игра завершена. Победил " + data.payload.winnerPlayer.nickname + "."
             game_started = false
         } else if (data.payload.type == "userConnected" && !have_enemy && map_loaded) {
-            console.log(12)
             have_enemy = true
             game_started = true
             // задаём аватарку и ник апоненту
