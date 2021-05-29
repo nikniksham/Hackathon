@@ -487,3 +487,9 @@ img.player_block_image {
     width: 100%;
     margin: 0;
 }
+
+.game-header {
+    padding: 10px 15%;
+    display: flex;
+    justify-content: center;
+}

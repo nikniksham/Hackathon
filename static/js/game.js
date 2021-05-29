@@ -5,6 +5,9 @@ var user_data
 // константы
 const ABC = "abcdefghjklmn"
 // игровая логика
+var have_enemy = false
+var map_loaded = false
+var game_started = false
 var color_move = "black"
 var can_atacovat
 var my_lose_date = 0
@@ -314,6 +317,7 @@ function set_cell() {
     if (can_atacovat) {
         clear_info()
         move_color = (board.my_color=="white"?"black":"white")
+        updateInfo("")
         board.add(x, y)
         console.log(toString(x, y))
         client.send(JSON.stringify([
@@ -372,29 +376,56 @@ function auth_client() {
     ]));
 }
 
+function updateInfo(data) {
+    if (data != "") {
+        move_color = data.payload.turn
+        console.log(color_move + " " + board.my_color)
+        if (board.my_color == "black") {
+            my_lose_date = data.payload.turnBlackEndedAt
+            opponent_lose_date = data.payload.turnWhiteEndedAt
+        } else {
+            my_lose_date = data.payload.turnWhiteEndedAt
+            opponent_lose_date = data.payload.turnBlackEndedAt
+        }
+        updateTimer()
+    } else {
+        console.log("asdsada" + move_color)
+    }
+    if (move_color == board.my_color) {
+        var info = document.getElementById('info').textContent = "Ваш Ход";
+        color_move = "black"
+    } else {
+        var info = document.getElementById('info').textContent = "Ход оппонента";
+        color_move = "white"
+    }
+}
+
 // события клиента
 client.onmessage = function(event) {
     data = $.parseJSON(event.data)
     console.log("GET DATA")
     console.log(data)
     try {
+        if (data.payload.type == "currentMap" || data.payload.type == "userConnected" || data.payload.type == "newTurn" ) {
+            console.log("update")
+            updateInfo(data)
+            console.log("end of update")
+        }
         if (data.payload.type == 'currentMap' || data.payload.type == "newTurn") {
             if (data.payload.type == 'currentMap') {
+                map_loaded = true
                 board.set_color(data.payload.player=="b"?"black":"white")
                 console.log(board.my_color)
-                color_move = data.payload.turn
+                if (data.payload.opponent.avatar != "") {
+                    console.log(1)
+                    have_enemy = true
+                    game_started = true
+                }
                 // задаём аватарку и ник апоненту
                 var img = document.querySelector('.player2_img')
                 img.src = data.payload.opponent.avatar
                 var nickname = document.querySelector('.player2_nik')
                 nickname.textContent = data.payload.opponent.nickname
-            }
-            if (data.payload.turn == 'black') {
-                var info = document.getElementById('info').textContent = "Ход чёрного";
-                color_move = "black"
-            } else {
-                var info = document.getElementById('info').textContent = "Ход белого";
-                color_move = "white"
             }
             count_white = 0
             count_black = 0
@@ -408,20 +439,23 @@ client.onmessage = function(event) {
                     board.board[12 - x][y] = data.payload.currentMap[y][x]
                 }
             }
-            if (board.my_color == "black") {
-                my_lose_date = data.payload.turnBlackEndedAt
-                opponent_lose_date = data.payload.turnWhiteEndedAt
-            } else {
-                my_lose_date = data.payload.turnWhiteEndedAt
-                opponent_lose_date = data.payload.turnBlackEndedAt
-            }
             count_moves++
             delta_black = Math.floor(count_moves / 2) - count_black
             delta_white = Math.floor(count_moves / 2) - count_white
             console.log(count_moves + " " + count_white + " " + count_black + " " + delta_white + " " + delta_black)
             draw()
         } else if (data.payload.type == "endGame") {
-            var info = document.getElementById('info').textContent = "Игра завершена";
+            var info = document.getElementById('header').textContent = "Игра завершена. Победил " + data.payload.winnerPlayer.nickname + "."
+            game_started = false
+        } else if (data.payload.type == "userConnected" && !have_enemy && map_loaded) {
+            console.log(12)
+            have_enemy = true
+            game_started = true
+            // задаём аватарку и ник апоненту
+            var img = document.querySelector('.player2_img')
+            img.src = data.payload.player.avatar
+            var nickname = document.querySelector('.player2_nik')
+            nickname.textContent = data.payload.player.nickname
         }
     }
   catch {console.log("ERROR ON READ MESSAGE")}
@@ -659,25 +693,44 @@ getCountdown();
 
 setInterval(function () { getCountdown(); }, 1000);
 
-function getCountdown(){
-
+function updateTimer() {
     var current_date = new Date().getTime();
-    if (color_move == board.my_color) {
-        seconds_left = (my_lose_date - current_date) / 1000;
-        seconds_left = seconds_left % 86400;
-        seconds_left = seconds_left % 3600;
-        minutes = pad( parseInt( seconds_left / 60) );
-        seconds = pad( parseInt( seconds_left % 60 ) );
-        // строка обратного отсчета  + значение тега
-        timer_my.innerHTML = "<span>" + minutes + "</span>:<span>" + seconds + "</span>";
-    } else {
-        seconds_left = (opponent_lose_date - current_date) / 1000;
-        seconds_left = seconds_left % 86400;
-        seconds_left = seconds_left % 3600;
-        minutes = pad( parseInt( seconds_left / 60) );
-        seconds = pad( parseInt( seconds_left % 60 ) );
-        // строка обратного отсчета  + значение тега
-        timer_opponent.innerHTML = "<span>" + minutes + "</span>:<span>" + seconds + "</span>";
+    seconds_left = (my_lose_date - current_date) / 1000;
+    seconds_left = seconds_left % 86400;
+    seconds_left = seconds_left % 3600;
+    minutes = pad( parseInt( seconds_left / 60) );
+    seconds = pad( parseInt( seconds_left % 60 ) );
+    // строка обратного отсчета  + значение тега
+    timer_my.innerHTML = "<span>" + minutes + "</span>:<span>" + seconds + "</span>";
+    seconds_left = (opponent_lose_date - current_date) / 1000;
+    seconds_left = seconds_left % 86400;
+    seconds_left = seconds_left % 3600;
+    minutes = pad( parseInt( seconds_left / 60) );
+    seconds = pad( parseInt( seconds_left % 60 ) );
+    // строка обратного отсчета  + значение тега
+    timer_opponent.innerHTML = "<span>" + minutes + "</span>:<span>" + seconds + "</span>";
+}
+
+function getCountdown(){
+    if (game_started) {
+        var current_date = new Date().getTime();
+        if (color_move == board.my_color) {
+            seconds_left = (my_lose_date - current_date) / 1000;
+            seconds_left = seconds_left % 86400;
+            seconds_left = seconds_left % 3600;
+            minutes = pad( parseInt( seconds_left / 60) );
+            seconds = pad( parseInt( seconds_left % 60 ) );
+            // строка обратного отсчета  + значение тега
+            timer_my.innerHTML = "<span>" + minutes + "</span>:<span>" + seconds + "</span>";
+        } else if (have_enemy) {
+            seconds_left = (opponent_lose_date - current_date) / 1000;
+            seconds_left = seconds_left % 86400;
+            seconds_left = seconds_left % 3600;
+            minutes = pad( parseInt( seconds_left / 60) );
+            seconds = pad( parseInt( seconds_left % 60 ) );
+            // строка обратного отсчета  + значение тега
+            timer_opponent.innerHTML = "<span>" + minutes + "</span>:<span>" + seconds + "</span>";
+        }
     }
 }
 
