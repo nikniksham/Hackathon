@@ -59,10 +59,12 @@ def call_matrix_func():
 
 @app.route('/get_tip_text/', methods=["POST"])
 def get_tip_text():
-    params = json.loads(request.form['canvas_data'])
-    print(params)
-    res = api.get_text("tip", params["num"])
-    print(res)
+    res = {
+        "a": api.get_text("tip", 2),
+        "b": api.get_text("tip", 3),
+        "c": api.get_text("tip", 4),
+        "d": api.get_text("tip", 5)
+    }
     return json.dumps(res)
 
 
