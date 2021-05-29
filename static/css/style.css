@@ -477,3 +477,12 @@ img.player_block_image {
     border-color: red;
     border-radius: 2px;
 }
+
+.fw_game_button {
+    width: 100%;
+}
+
+.fw_game_button button {
+    width: 100%;
+    margin: 0;
+}
