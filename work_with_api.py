@@ -75,7 +75,7 @@ class Api:
                     7: "Closed game",
                     8: "Exit",
                     9: "Create a game",
-                    10: "Присоединиться по коду",
+                    10: "Join by code",
                     11: "Back",
                     12: "Start game",
                     13: "Tell me!",
