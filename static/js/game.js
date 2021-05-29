@@ -13,6 +13,13 @@ var can_atacovat
 var my_lose_date = 0
 var opponent_lose_date = 0
 var seconds_left = 0
+
+var text_1 = ""
+var text_2 = ""
+var text_3 = ""
+var text_4 = ""
+get_tip_text()
+
 // фишки для отрисовки
 var temp_map = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -146,14 +153,14 @@ function draw() {
     }
     for (var i = 0; i < you_eat_cells.length; i++) {
         for (var j = 0; j < you_eat_cells[i].length; j++) {
-            if (j != you_eat_cells[i].length - 1) {
+            if (j != you_eat_cells[i].length - 1 || you_eat_cells[i].length == 1) {
                 new SquareCell(offset + you_eat_cells[i][j][0] * step - step * 0.5, offset + you_eat_cells[i][j][1] * step - step * 0.5, "rgba(255, 0, 0, 0.5)").draw()
             }
         }
     }
     for (var i = 0; i < where_stairs_cells.length; i++) {
         for (var j = 0; j < where_stairs_cells[i].length; j++) {
-            if (j != where_stairs_cells[i].length - 1) {
+            if (j != where_stairs_cells[i].length - 1 || where_stairs_cells.length == 1) {
                 new SquareCell(offset + where_stairs_cells[i][j][0] * step - step * 0.5, offset + where_stairs_cells[i][j][1] * step - step * 0.5, "rgba(255, 255, 0, 0.5)").draw()
             }
         }
@@ -475,14 +482,21 @@ function update_score(delta) {
     dragon_info.textContent = "Удачной игры, юный последователь дракона. У тебя использовано очков: " + score + '.'
 }
 
-function get_tip_text(n) {
+function get_tip_text() {
+    var ans
     $.post( "/get_tip_text/", {
-         canvas_data: JSON.stringify({num: n})
+         canvas_data: JSON.stringify({params: ""})
     }, function(err, req, resp){
         ans = $.parseJSON(resp.responseText)
-        console.log(ans)
-        return ans
+        set_tip_text(ans)
     });
+}
+
+function set_tip_text(ans) {
+    text_1 = ans.a
+    text_2 = ans.b
+    text_3 = ans.c
+    text_4 = ans.d
 }
 
 // изменение размера
@@ -637,15 +651,15 @@ button_help.onclick = function help() {
             console.log(tips)
             if (you_eat.length > 0) {
                 if (text != "") {text += "\n"}
-                text += get_tip_text(2)
+                text += text_1
             }
             if (can_eat.length > 0) {
                 if (text != "") {text += "\n"}
-                text += get_tip_text(3)
+                text += text_2
             }
             if (where_stairs.length > 0) {
                 if (text != "") {text += "\n"}
-                text += get_tip_text(4)
+                text += text_3
             }
         } else {
             you_eat = []
@@ -654,7 +668,7 @@ button_help.onclick = function help() {
             you_eat_cells = []
             can_eat_cells = []
             where_stairs_cells = []
-            var text = get_tip_text(5)
+            var text = text_4
         }
         draw()
         if (text != "") {
