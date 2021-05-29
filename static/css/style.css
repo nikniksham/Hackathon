@@ -480,6 +480,7 @@ img.player_block_image {
 
 .fw_game_button {
     width: 100%;
+    margin: 0;
 }
 
 .fw_game_button button {

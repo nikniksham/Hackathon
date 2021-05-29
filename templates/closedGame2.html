@@ -20,8 +20,9 @@
             <div class="custom-game-block">
                 <div class="login-text-block">
                     <div class="custom-game-text">
-                        <p class="text-block">Код твоей игры {{user.game_code_close}}, сообщи его своему противнику, чтобы начать бой</p>
+                        <p class="text-block">Код твоей игры <b id="code">{{user.game_code_close}}</b>, сообщи его своему противнику, чтобы начать бой</p>
                         <div class="buttons-block">
+                            <div><button class="game_button fw_game_button" onclick="copyToClipboard()">Копировать код</button></div>
                             <div><a href="/game/"       class="fw_game_button"><button class="game_button">Начать игру</button></a></div>
                             <div><a href="/closedGame/" class="fw_game_button"><button class="game_button">Отмена</button></a></div>
                         </div>
@@ -31,5 +32,6 @@
             </div>
         </div>
     </div>
+    <script src="{{url_for('static', filename='js/copy_code.js')}}"></script>
 </body>
 </html>
