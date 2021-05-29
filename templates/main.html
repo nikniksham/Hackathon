@@ -16,12 +16,25 @@
     <img class="down_up_image"    src="/static/img/angle.png">
     <img class="down_right_image" src="/static/img/angle.png">
     <div class="aligner">
-        <div class="menu-reg-log">
-            <a href="/game/"><button class="game_button">Подключиться к последней игре</button></a>
-            <a href="/createGameWithBot"><button class="game_button">Создать игру с ботом</button></a>
-            <a href="/createGameWithRandom"><button class="game_button">Создать игру со случайным игроком</button></a>
-            <a href="/closedGame/"><button class="game_button">Закрытая игра</button></a>
-            <a href="/logout/"><button class="game_button">Выйти</button></a>
+        <div class="aligning">
+            <div class="menu-game-block">
+                <div class="login-text-block">
+                    <div class="menu-game-text">
+                        <p class="text-block">Выбери свой путь, но выбирай с умом</p>
+                    </div>
+                    <div class="l-menu-buttons-block">
+                        <div><a href="/createGameWithBot/"    class="fw_game_button"><button class="game_button">Игра с ИИ</button></a></div>
+                        <div><a href="/createGameWithRandom/" class="fw_game_button"><button class="game_button">Игра со случайным соперником</button></a></div>
+                        <div><a href="/closedGame/"           class="fw_game_button"><button class="game_button">Закрытая игра</button></a></div>
+                    </div>
+                    <img class="menu-img" src="/static/img/dragon.svg">
+                    <div class="r-menu-buttons-block">
+                        <div><a href="/game/"   class="fw_game_button"><button class="game_button">Продолжить игру</button></a></div>
+                        <div><a href="/logout/" class="fw_game_button"><button class="game_button">Рейтинг игроков</button></a></div>
+                        <div><a href="/logout/" class="fw_game_button"><button class="game_button">Выйти</button></a></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>

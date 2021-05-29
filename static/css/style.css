@@ -264,11 +264,9 @@ img.player_block_image {
 }
 
 
-
 .start-block {
     width: 500px;
     height: 400px;
-    padding: 5%;
 }
 
 .hystmodal__wrap {
@@ -349,7 +347,6 @@ img.player_block_image {
     line-height: normal;
     display: inline-block;
     vertical-align: middle;
-    display: inline-block;
 }
 
 .start-img {
@@ -357,7 +354,6 @@ img.player_block_image {
     line-height: normal;
     display: inline-block;
     vertical-align: middle;
-    display: inline-block;
 }
 
 
@@ -366,7 +362,6 @@ img.player_block_image {
 .login-block {
     width: 500px;
     height: 430px;
-    padding: 5%;
 }
 
 .login-text-block {
@@ -381,7 +376,6 @@ img.player_block_image {
     line-height: normal;
     display: inline-block;
     vertical-align: middle;
-    display: inline-block;
 }
 
 .login-img {
@@ -389,14 +383,12 @@ img.player_block_image {
     line-height: normal;
     display: inline-block;
     vertical-align: middle;
-    display: inline-block;
 }
 
 
 .custom-game-block {
     width: 450px;
     height: 350px;
-    padding: 5%;
 }
 
 .custom-game-text {
@@ -404,7 +396,6 @@ img.player_block_image {
     line-height: normal;
     display: inline-block;
     vertical-align: middle;
-    display: inline-block;
 }
 
 .custom-game-img {
@@ -412,7 +403,58 @@ img.player_block_image {
     line-height: normal;
     display: inline-block;
     vertical-align: middle;
+}
+
+
+.r-menu-buttons-block {
+    width: 34%;
+    line-height: normal;
     display: inline-block;
+    vertical-align: middle;
+}
+.r-menu-buttons-block div {
+    horizontal-align: middle;
+    width: 100%;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.l-menu-buttons-block {
+    width: 39%;
+    line-height: normal;
+    display: inline-block;
+    vertical-align: middle;
+}
+.l-menu-buttons-block div {
+    horizontal-align: middle;
+    width: 100%;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.menu-img {
+    width: 25%;
+    line-height: normal;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.menu-game-text {
+    width: 100%;
+    line-height: normal;
+    display: flex;
+    justify-content: center;
+}
+
+.menu-game-text p {
+    width: 35%;
+}
+
+.menu-game-block {
+    width: 550px;
+    height: 350px;
 }
 
 
@@ -434,4 +476,13 @@ img.player_block_image {
     border: 2px solid;
     border-color: red;
     border-radius: 2px;
+}
+
+.fw_game_button {
+    width: 100%;
+}
+
+.fw_game_button button {
+    width: 100%;
+    margin: 0;
 }

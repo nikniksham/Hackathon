@@ -181,6 +181,11 @@ def join_game():
     return render_template('joinForm.html', form=form, style=url_for('static', filename='css/style.css'))
 
 
+@app.route('/test/', methods=['post', 'get'])
+def test():
+    return render_template('test.html', style=url_for('static', filename='css/style.css'))
+
+
 @app.route("/logout/")
 def logout():
     api.logout()
