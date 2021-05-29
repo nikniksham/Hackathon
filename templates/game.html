@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="ru" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -17,6 +17,16 @@
     <img class="down_up_image"    src="/static/img/angle.png">
     <img class="down_right_image" src="/static/img/angle.png">
     <div id="time"></div>
+    <div class="hystmodal" id="myModal" aria-hidden="true" >
+        <div class="hystmodal__wrap">
+            <div class="hystmodal__window" role="dialog" aria-modal="true" >
+                <button data-hystclose class="hystmodal__close">Close</button>
+                <h1>Заголовок модального окна</h1>
+                <p>Текст модального окна ...</p>
+                <p>Ещё текст модального окна ...</p>
+            </div>
+        </div>
+    </div>
     <div class="game_window">
         <div class="row game_block_row">
             <div class="col-6 game_left_block justify-content-center">
@@ -36,6 +46,7 @@
                     <button class="game_button" id="get_superiority"> Кто побеждает</button>
                     <button class="game_button" id="pass">Пас</button>
                     <button class="game_button" id="resign">Сдаться!</button>
+                    <a href="#" data-hystmodal="#myModal"><button class="game_button">Открыть окно</button></a>
                     <a href="/"><button class="game_button">В главное меню</button></a>
                 </div>
             </div>
@@ -70,5 +81,6 @@
     </div>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
     <script src="{{url_for('static', filename='js/game.js')}}"></script>
+    <script src=/static/js/modal_window.js></script>
 </body>
 </html>

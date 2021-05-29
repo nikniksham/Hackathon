@@ -27,6 +27,9 @@ var temp_map = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 var can_eat = []
 var you_eat = []
 var where_stairs = []
+var can_eat_cells = []
+var you_eat_cells = []
+var where_stairs_cells = []
 // допсказки
 var tips = {}
 // количество баллов потраченых на подсказки
@@ -55,6 +58,14 @@ var count_white = 0
 var count_black = 0
 var delta_white = 0
 var delta_black = 0
+
+// спрайты
+var img_red = new Image()
+img_red.src = '/static/img/red.png'
+var img_green = new Image()
+img_green.src = '/static/img/green.png'
+var img_orange = new Image()
+img_orange.src = '/static/img/orange.png'
 
 // доска
 class Board {
@@ -105,6 +116,9 @@ function clear_info() {
     can_eat = []
     you_eat = []
     where_stairs = []
+    can_eat_cells = []
+    you_eat_cells = []
+    where_stairs_cells = []
     temp_map = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -122,26 +136,84 @@ function clear_info() {
 
 function draw() {
     c.clearRect(0, 0, canvas.width, canvas.height)
+    for (var i = 0; i < can_eat_cells.length; i++) {
+        for (var j = 0; j < can_eat_cells[i].length; j++) {
+            new SquareCell(offset + can_eat_cells[i][j][0] * step - step * 0.5, offset + can_eat_cells[i][j][1] * step - step * 0.5, "rgba(0, 255, 0, 0.5)").draw()
+        }
+    }
+    for (var i = 0; i < you_eat_cells.length; i++) {
+        for (var j = 0; j < you_eat_cells[i].length; j++) {
+            if (j != you_eat_cells[i].length - 1) {
+                new SquareCell(offset + you_eat_cells[i][j][0] * step - step * 0.5, offset + you_eat_cells[i][j][1] * step - step * 0.5, "rgba(255, 0, 0, 0.5)").draw()
+            }
+        }
+    }
+    for (var i = 0; i < where_stairs_cells.length; i++) {
+        for (var j = 0; j < where_stairs_cells[i].length; j++) {
+            if (j != where_stairs_cells[i].length - 1) {
+                new SquareCell(offset + where_stairs_cells[i][j][0] * step - step * 0.5, offset + where_stairs_cells[i][j][1] * step - step * 0.5, "rgba(255, 255, 0, 0.5)").draw()
+            }
+        }
+    }
     // тепловая карта
     draw_temp(temp_map)
     // карта
     board.update()
     // кастомные подсказки
     for (var i = 0; i < can_eat.length; i++) {
-        console.log(can_eat[i])
-        new Cell(offset + can_eat[i][0] * step, offset + can_eat[i][1] * step, 'green').draw()
+        new CustomCell(offset + can_eat[i][0] * step, offset + can_eat[i][1] * step, "rgba(0, 255, 0, 0.5)").draw()
     }
     for (var i = 0; i < you_eat.length; i++) {
-        console.log(you_eat[i])
-        new Cell(offset + you_eat[i][0] * step, offset + you_eat[i][1] * step, 'red').draw()
+        new CustomCell(offset + you_eat[i][0] * step, offset + you_eat[i][1] * step, "rgba(255, 0, 0, 0.5)").draw()
     }
     for (var i = 0; i < where_stairs.length; i++) {
-        console.log(where_stairs[i])
-        new Cell(offset + where_stairs[i][0] * step, offset + where_stairs[i][1] * step, 'yellow').draw()
+        new CustomCell(offset + where_stairs[i][0] * step, offset + where_stairs[i][1] * step, "rgba(255, 255, 0, 0.5)").draw()
     }
 }
 
 // немного классов и функций которые не надо редактировать
+class CustomCell {
+    constructor (x, y, color) {
+        this.color = color
+        this.x = x
+        this.y = y
+    }
+
+    draw() {
+        c.beginPath()
+        c.arc(this.x, this.y, r * 1.2, 0, Math.PI * 2, false)
+        c.fillStyle = this.color
+        c.fill()
+    }
+}
+
+class SquareCell {
+    constructor (x, y, color) {
+        this.color = color
+        this.x = x
+        this.y = y
+    }
+
+    draw() {
+        c.beginPath()
+        c.rect(this.x, this.y, step, step)
+        c.fillStyle = this.color
+        c.fill()
+    }
+}
+
+class PngCell {
+    constructor (x, y, image) {
+        this.image = image
+        this.x = x
+        this.y = y
+    }
+
+    draw() {
+        c.drawImage(this.image, this.x, this.y, step, step)
+    }
+}
+
 class Cell {
     constructor (x, y, player){
         this.x = x
@@ -166,6 +238,7 @@ class Cell {
         c.fill()
     }
 }
+
 class TempCell {
     constructor (x, y, temp) {
         this.x = x
@@ -221,7 +294,7 @@ function get_who_win() {
          canvas_data: JSON.stringify({
             game_code: game_id
          })}, function(err, req, resp) {
-            count_moves = $.parseJSON(resp.responseText).count
+            count_moves = $.parseJSON(resp.responseText).result
     });
 }
 
@@ -503,48 +576,42 @@ function get_superiority() {
 var button_help = document.getElementById('help');
 button_help.onclick = function help() {
     countTips++;
-    outputData = []
     console.log("USE OUR TIPS")
-    for (var i = 0; i < 13; i++) {
-        for (var j = 0; j < 13; j++) {
-            outputData.push(board.board[i][j]);
-        }
-    }
     $.post( "/check_matrix/", {
-        canvas_data: JSON.stringify(outputData)
+        canvas_data: JSON.stringify({field: board.board,
+                                      color: board.my_color})
         }, function(err, req, resp) {
         tips = $.parseJSON(resp.responseText)
+        console.log(tips)
         var dragon_info = document.getElementById('dragon_info');
         if (tips.enemy.length > 0 || tips.you.length > 0 || tips.stairs.length > 0) {
             var text = ""
-            you_eat = tips.enemy
-            can_eat = tips.you
-            where_stairs = tips.stairs
-            if (tips.enemy.length > 0) {
+            you_eat = tips.enemy[0]
+            you_eat_cells = tips.enemy[1]
+            can_eat = tips.you[0]
+            can_eat_cells = tips.you[1]
+            where_stairs = tips.stairs[0]
+            where_stairs_cells = tips.stairs[1]
+            console.log(tips)
+            if (you_eat.length > 0) {
                 if (text != " ") {text += "\n"}
-                text += "Твои камни под угрозой, обрати внимание на клетки -> "
-                for (var i = 0; i < tips.enemy.length; ++i) {
-                    text += toString(tips.enemy[i][0], tips.enemy[i][1])
-                }
+                text += "Я отметил красным цветом твои камни, у которых одно дыхание"
             }
-            if (tips.you.length > 0) {
+            if (can_eat.length > 0) {
                 if (text != " ") {text += "\n"}
-                text += "Ты можешь захватить вражеские камни, обрати внимание на клетки -> "
-                for (var i = 0; i < tips.you.length; ++i) {
-                    text += toString(tips.you[i][0], tips.you[i][1])
-                }
+                text += "Я отметил зелёный цветом вражеские камни, у которых одно дыхание"
             }
-            if (tips.stairs.length > 0) {
+            if (where_stairs.length > 0) {
                 if (text != " ") {text += "\n"}
-                text += "Ты попал в ситуацию 'лестница', не стоит ходить на клетки -> "
-                for (var i = 0; i < tips.stairs.length; ++i) {
-                    text += toString(tips.stairs[i][0], tips.stairs[i][1])
-                }
+                text += "Жёлтым цветом отмечены камни в лестнице, не советую там играть"
             }
         } else {
             you_eat = []
             can_eat = []
             where_stairs = []
+            you_eat_cells = []
+            can_eat_cells = []
+            where_stairs_cells = []
             var text = "В данный момент тебе подскзка не нужна"
         }
         draw()
