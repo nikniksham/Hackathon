@@ -389,14 +389,16 @@ function updateInfo(data) {
         console.log("LOAD TURN: " + data.payload.turn)
         color_move = data.payload.turn
         console.log(color_move + " " + board.my_color)
-        if (board.my_color == "black") {
-            my_lose_date = data.payload.turnBlackEndedAt
-            opponent_lose_date = data.payload.turnWhiteEndedAt
-        } else {
-            my_lose_date = data.payload.turnWhiteEndedAt
-            opponent_lose_date = data.payload.turnBlackEndedAt
+        if (data.payload.type != "userConnected") {
+            if (board.my_color == "black") {
+                my_lose_date = data.payload.turnBlackEndedAt
+                opponent_lose_date = data.payload.turnWhiteEndedAt
+            } else {
+                my_lose_date = data.payload.turnWhiteEndedAt
+                opponent_lose_date = data.payload.turnBlackEndedAt
+            }
+            updateTimer()
         }
-        updateTimer()
     } else {
         console.log("SET COLOR MOVE: " + color_move)
     }
