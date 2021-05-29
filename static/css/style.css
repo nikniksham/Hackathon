@@ -480,9 +480,16 @@ img.player_block_image {
 
 .fw_game_button {
     width: 100%;
+    margin: 0;
 }
 
 .fw_game_button button {
     width: 100%;
     margin: 0;
+}
+
+.game-header {
+    padding: 10px 15%;
+    display: flex;
+    justify-content: center;
 }
