@@ -24,8 +24,9 @@ class Api:
                     3: "Припоминаю тебя, последователь дракона, но скажи мне пароль, чтобы войти в наш клан",
                     4: "Выбери свой путь, но выбирай с умом",
                     5: "Как ты хочешь начать свою игру?",
-                    6: f"Код твоей игры {self.game_code_close}, сообщи его своему противнику, чтобы начать бой",
-                    7: "Скажи мне код своей игры, чтобы начать бой"
+                    6: f"Код твоей игры ",
+                    7: ", сообщи его своему противнику, чтобы начать бой",
+                    8: "Скажи мне код своей игры, чтобы начать бой"
                 },
                 "en": {
                     1: "Welcome to the site! Register, good traveler, or enter if you are already a dragon apprentice",
@@ -33,8 +34,9 @@ class Api:
                     3: "I remember you, follower of the dragon, but tell me the password to enter our clan",
                     4: "Choose your path, but choose wisely",
                     5: "How do you want to start your game?",
-                    6: f"Your game code is {self.game_code_close}, tell your opponent to start the fight",
-                    7: "Tell me your game code to start the fight"
+                    6: f"Your game code is ",
+                    7: ", tell your opponent to start the fight",
+                    8: "Tell me your game code to start the fight"
                 }
             },
             "button": {
@@ -60,7 +62,8 @@ class Api:
                     19: "Пас",
                     20: "Сдаться",
                     21: "В главное меню",
-                    22: "Подсказки"
+                    22: "Подсказки",
+                    23: "Копировать код"
                 },
                 "en": {
                     1: "Register",
@@ -84,7 +87,8 @@ class Api:
                     19: "Pass",
                     20: "Surrender",
                     21: "To the main menu",
-                    22: "Tips"
+                    22: "Tips",
+                    23: "Copy code"
                 }
             },
             "tip": {
