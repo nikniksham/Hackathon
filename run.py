@@ -187,8 +187,7 @@ def join_game():
 
 @app.route('/test/', methods=['post', 'get'])
 def test():
-    form = JoinForm()
-    return render_template('test.html', form=form, style=url_for('static', filename='css/style.css'))
+    return render_template('test.html', style=url_for('static', filename='css/style.css'))
 
 
 @app.route("/logout/")
