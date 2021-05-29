@@ -11,31 +11,43 @@
     <title>{{title}}</title>
 </head>
 <body>
-    <img class="up_left_image"    src="/static/img/angle.png">
-    <img class="up_right_image"   src="/static/img/angle.png">
-    <img class="down_up_image"    src="/static/img/angle.png">
-    <img class="down_right_image" src="/static/img/angle.png">
-    <div class="aligner">
-        <div class="aligning">
-            <div class="menu-game-block">
-                <div class="login-text-block">
-                    <div class="menu-game-text">
-                        <p class="text-block">Выбери свой путь, но выбирай с умом</p>
-                    </div>
-                    <div class="l-menu-buttons-block">
-                        <div><a href="/createGameWithBot/"    class="fw_game_button"><button class="game_button">Игра с ИИ</button></a></div>
-                        <div><a href="/createGameWithRandom/" class="fw_game_button"><button class="game_button">Игра со случайным соперником</button></a></div>
-                        <div><a href="/closedGame/"           class="fw_game_button"><button class="game_button">Закрытая игра</button></a></div>
-                    </div>
-                    <img class="menu-img" src="/static/img/dragon.svg">
-                    <div class="r-menu-buttons-block">
-                        <div><a href="/game/"   class="fw_game_button"><button class="game_button">Продолжить игру</button></a></div>
-                        <div><a href="/logout/" class="fw_game_button"><button class="game_button">Рейтинг игроков</button></a></div>
-                        <div><a href="/logout/" class="fw_game_button"><button class="game_button">Выйти</button></a></div>
-                    </div>
+<img class="up_left_image" src="/static/img/angle.png">
+<img class="up_right_image" src="/static/img/angle.png">
+<img class="down_up_image" src="/static/img/angle.png">
+<img class="down_right_image" src="/static/img/angle.png">
+<div class="aligner">
+    <div class="aligning">
+        <div class="menu-game-block">
+            <div class="login-text-block">
+                <div class="menu-game-text">
+                    <p class="text-block">{{user.get_text("page", 4)}}</p>
+                </div>
+                <div class="l-menu-buttons-block">
+                    <div><a href="/createGameWithBot/" class="fw_game_button">
+                        <button class="game_button">{{user.get_text("button", 5)}}</button>
+                    </a></div>
+                    <div><a href="/createGameWithRandom/" class="fw_game_button">
+                        <button class="game_button">{{user.get_text("button", 6)}}</button>
+                    </a></div>
+                    <div><a href="/closedGame/" class="fw_game_button">
+                        <button class="game_button">{{user.get_text("button", 7)}}</button>
+                    </a></div>
+                </div>
+                <img class="menu-img" src="/static/img/dragon.svg">
+                <div class="r-menu-buttons-block">
+                    <div><a href="/game/" class="fw_game_button">
+                        <button class="game_button">{{user.get_text("button", 4)}}</button>
+                    </a></div>
+                    <div><a href="/" class="fw_game_button">
+                        <button class="game_button">Рейтинг игроков (пока не работает)</button>
+                    </a></div>
+                    <div><a href="/logout/" class="fw_game_button">
+                        <button class="game_button">{{user.get_text("button", 8)}}</button>
+                    </a></div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </body>
 </html>

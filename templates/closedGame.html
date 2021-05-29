@@ -11,26 +11,32 @@
     <title>{{title}}</title>
 </head>
 <body>
-    <img class="up_left_image"    src="/static/img/angle.png">
-    <img class="up_right_image"   src="/static/img/angle.png">
-    <img class="down_up_image"    src="/static/img/angle.png">
-    <img class="down_right_image" src="/static/img/angle.png">
-    <div class="aligner">
-        <div class="aligning">
-            <div class="custom-game-block">
-                <div class="login-text-block">
-                    <div class="custom-game-text">
-                        <p class="text-block">Как ты хочешь начать свою игру?</p>
-                        <div class="buttons-block">
-                            <div><a href="/createGameByCode" class="fw_game_button"><button class="game_button">Создать игру</button></a></div>
-                            <div><a href="/joinGameViaCode/" class="fw_game_button"><button class="game_button">Присоединиться</button></a></div>
-                            <div><a href="/"                 class="fw_game_button"><button class="game_button">Назад</button></a></div>
-                        </div>
+<img class="up_left_image" src="/static/img/angle.png">
+<img class="up_right_image" src="/static/img/angle.png">
+<img class="down_up_image" src="/static/img/angle.png">
+<img class="down_right_image" src="/static/img/angle.png">
+<div class="aligner">
+    <div class="aligning">
+        <div class="custom-game-block">
+            <div class="login-text-block">
+                <div class="custom-game-text">
+                    <p class="text-block">{{user.get_text("page", 5)}}</p>
+                    <div class="buttons-block">
+                        <div><a href="/createGameByCode" class="fw_game_button">
+                            <button class="game_button">{{user.get_text("button", 9)}}</button>
+                        </a></div>
+                        <div><a href="/joinGameViaCode/" class="fw_game_button">
+                            <button class="game_button">{{user.get_text("button", 10)}}</button>
+                        </a></div>
+                        <div><a href="/" class="fw_game_button">
+                            <button class="game_button">{{user.get_text("button", 11)}}</button>
+                        </a></div>
                     </div>
-                    <img class="custom-game-img" src="/static/img/dragon.svg">
                 </div>
+                <img class="custom-game-img" src="/static/img/dragon.svg">
             </div>
         </div>
     </div>
+</div>
 </body>
 </html>

@@ -11,24 +11,27 @@
     <title>{{title}}</title>
 </head>
 <body>
-    <img class="up_left_image"    src="/static/img/angle.png">
-    <img class="up_right_image"   src="/static/img/angle.png">
-    <img class="down_up_image"    src="/static/img/angle.png">
-    <img class="down_right_image" src="/static/img/angle.png">
-    <div class="aligner">
-        <div class="aligning">
-            <div class="start-block">
-                <div class="start-text-block">
-                    <p class="text-block start-text">Добро пожаловать на сайт!
-Зарегистрируйся, добрый путник, или войди если ты уже ученик дракона.</p>
-                    <img class="start-img" src="/static/img/dragon.svg">
-                </div>
-                <div class="buttons-block">
-                    <div><a href="/register/">   <button class="game_button">Зарегистрироваться</button>  </a></div>
-                    <div><a href="/login/"><button class="game_button">Войти</button></a></div>
-                </div>
+<img class="up_left_image" src="/static/img/angle.png">
+<img class="up_right_image" src="/static/img/angle.png">
+<img class="down_up_image" src="/static/img/angle.png">
+<img class="down_right_image" src="/static/img/angle.png">
+<div class="aligner">
+    <div class="aligning">
+        <div class="start-block">
+            <div class="start-text-block">
+                <p class="text-block start-text">{{user.get_text("page", 1)}}</p>
+                <img class="start-img" src="/static/img/dragon.svg">
+            </div>
+            <div class="buttons-block">
+                <div><a href="/register/">
+                    <button class="game_button">{{user.get_text("button", 1)}}</button>
+                </a></div>
+                <div><a href="/login/">
+                    <button class="game_button">{{user.get_text("button", 2)}}</button>
+                </a></div>
             </div>
         </div>
     </div>
+</div>
 </body>
 </html>

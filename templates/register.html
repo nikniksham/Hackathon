@@ -19,7 +19,7 @@
         <div class="aligning">
             <div class="login-block">
                 <div class="login-text-block">
-                    <p class="text-block login-text">Припоминаю тебя, последователь дракона, но скажи мне пароль, чтобы войти в наш клан.</p>
+                    <p class="text-block login-text">{{user.get_text("page", 2)}}</p>
                     <img class="login-img" src="/static/img/dragon.svg">
                 </div>
                 <div class="buttons-block">
@@ -29,7 +29,7 @@
                         <spam class="{{ category }}">{{ message }}</spam>
                         {% endfor %}
                         <div>
-                            {{ form.email(class='email-input', value="Электронная почта") }}
+                            {{ form.email(class='email-input', value="Email") }}
                             {% if form.email.errors %}
                             {% for error in form.email.errors %}
                             {{ error }}
@@ -37,7 +37,7 @@
                             {% endif %}
                         </div>
                         <div>
-                            {{ form.nickname(class='email-input', value="Никнейм") }}
+                            {{ form.nickname(class='email-input', value="Nickname") }}
                             {% if form.nickname.errors %}
                             {% for error in form.nickname.errors %}
                             {{ error }}

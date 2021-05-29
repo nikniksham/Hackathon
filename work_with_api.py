@@ -16,6 +16,106 @@ class Api:
         self.language = "ru"
         self.game_code_close = ""
         self.centaur_token = "Kf8darEBRsoJEiw0"
+        self.language_text = {
+            "page": {
+                "ru": {
+                    1: "Добро пожаловать на сайт! Зарегистрируйся, добрый путник, или войди если ты уже ученик дракона",
+                    2: "О, ты первый раз! Скажи мне как тебя звать и твою почту, чтобы стать частью клана дракона!",
+                    3: "Припоминаю тебя, последователь дракона, но скажи мне пароль, чтобы войти в наш клан",
+                    4: "Выбери свой путь, но выбирай с умом",
+                    5: "Как ты хочешь начать свою игру?",
+                    6: f"Код твоей игры {self.game_code_close}, сообщи его своему противнику, чтобы начать бой",
+                    7: "Скажи мне код своей игры, чтобы начать бой"
+                },
+                "en": {
+                    1: "Welcome to the site! Register, good traveler, or enter if you are already a dragon apprentice",
+                    2: "Oh, you are the first time! Tell me your name and your mail to become part of the dragon clan!",
+                    3: "I remember you, follower of the dragon, but tell me the password to enter our clan",
+                    4: "Choose your path, but choose wisely",
+                    5: "How do you want to start your game?",
+                    6: f"Your game code is {self.game_code_close}, tell your opponent to start the fight",
+                    7: "Tell me your game code to start the fight"
+                }
+            },
+            "button": {
+                "ru": {
+                    1: "Зарегистрироваться",
+                    2: "Войти",
+                    3: "Далее",
+                    4: "Продолжить игру",
+                    5: "Игра с ИИ",
+                    6: "Игра со случайным соперником",
+                    7: "Закрытая игра",
+                    8: "Выйти",
+                    9: "Создать игру",
+                    10: "Присоединиться по коду",
+                    11: "Назад",
+                    12: "Начать игру",
+                    13: "Подскажи!",
+                    14: "Тепловая карта",
+                    15: "Лучший ход",
+                    16: "Лучший ход противника",
+                    17: "Лучшая зона для игры",
+                    18: "Кто побеждает?",
+                    19: "Пас",
+                    20: "Сдаться",
+                    21: "В главное меню",
+                    22: "Подсказки"
+                },
+                "en": {
+                    1: "Register",
+                    2: "Enter",
+                    3: "Next",
+                    4: "Continue the game",
+                    5: "AI game",
+                    6: "Playing with a random opponent",
+                    7: "Closed game",
+                    8: "Exit",
+                    9: "Create a game",
+                    10: "Присоединиться по коду",
+                    11: "Back",
+                    12: "Start game",
+                    13: "Tell me!",
+                    14: "Heat map",
+                    15: "Best move",
+                    16: "The opponent's best move",
+                    17: "Best play area",
+                    18: "Who wins?",
+                    19: "Pass",
+                    20: "Surrender",
+                    21: "To the main menu",
+                    22: "Tips"
+                }
+            },
+            "tip": {
+                "ru": {
+                    1: "Удачной игры, юный последователь дракона. У тебя использовано очков: ",
+                    2: "Я отметил красным цветом твои камни, у которых одно дыхание",
+                    3: "Я отметил зелёный цветом вражеские камни, у которых одно дыхание",
+                    4: "Жёлтым цветом отмечены камни в лестнице, не советую там играть",
+                    5: "В данный момент тебе подскзка не нужна"
+                },
+                "en": {
+                    1: "Happy play, dragon follower. You used points: ",
+                    2: "I marked in red your stones, which have one breath",
+                    3: "I marked green enemy stones that have one breath",
+                    4: "The stones in the stairs are marked in yellow, I do not recommend playing there",
+                    5: "You don't need a hint at the moment"
+                }
+            },
+            "forms": {
+                "ru": {
+                    1: "Почта",
+                    2: "Никнейм",
+                    3: "Код"
+                },
+                "en": {
+                    1: "Email",
+                    2: "Nickname",
+                    3: "Code"
+                }
+            }
+        }
 
     def get_json(self):
         json_user = {
@@ -28,6 +128,9 @@ class Api:
 
     def change_language(self, new_language):
         self.language = new_language
+
+    def get_text(self, type, num):
+        return self.language_text[type][self.language][num]
 
     def output(self, text):
         if self.log:
@@ -81,7 +184,7 @@ class Api:
             json_register_user = requests.post(f"{self.link}user/register", params=params_register)
             if json_register_user.status_code == 200:
                 result = True
-                print(json_register_user.json()["token"])
+                # print(json_register_user.json()["token"])
                 self.token = json_register_user.json()["token"]
                 self.email = email
                 self.output(json_register_user.json())
@@ -102,7 +205,7 @@ class Api:
                 result = True
                 self.output(json_login_user.json())
                 self.email = email
-                print(json_login_user.json())
+                # print(json_login_user.json())
                 self.token = json_login_user.json()["token"]
                 self.update_user_info()
             else:
@@ -112,11 +215,11 @@ class Api:
     def update_user_info(self):
         result = False
         if self.check_user():
-            print(self.get_token())
+            # print(self.get_token())
             json_about_user = requests.get(f"{self.link}user/profile", params={"token": self.get_token()})
             if json_about_user.status_code == 200:
                 result = True
-                print(json_about_user.json())
+                # print(json_about_user.json())
                 self.check_active_game()
                 self.img_profile = json_about_user.json()["user"]["avatar"]
                 self.user_info = json_about_user.json()
@@ -174,7 +277,7 @@ class Api:
         if self.check_user():
             json_join_game = requests.post(f"{self.link}game/join/{code}",
                                            params={"token": self.get_token(), "code": code})
-            print(code, json_join_game.json())
+            # print(code, json_join_game.json())
             if json_join_game.status_code == 200:
                 self.game_code_close = code
                 self.game_code = json_join_game.json()["id"]
@@ -249,7 +352,7 @@ class Api:
             }
             json_tip_best_move = requests.get(f"{self.link}hints/best-moves", params=params_best_move)
             if json_tip_best_move.status_code == 200:
-                print(json_tip_best_move.json()["hint"][0]["move"])
+                # print(json_tip_best_move.json()["hint"][0]["move"])
                 result = json_tip_best_move.json()["hint"][0]["move"]
                 self.output(json_tip_best_move.json())
             else:

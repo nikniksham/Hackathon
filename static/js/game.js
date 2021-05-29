@@ -443,7 +443,17 @@ function update_score(delta) {
     dragon_info.textContent = "Удачной игры, юный последователь дракона. У тебя использовано очков: " + score + '.'
 }
 
-// ресайз окна
+function get_tip_text(n) {
+    $.post( "/get_tip_text/", {
+         canvas_data: JSON.stringify({num: n})
+    }, function(err, req, resp){
+        ans = $.parseJSON(resp.responseText)
+        console.log(ans)
+        return ans
+    });
+}
+
+// изменение размера
 document.addEventListener("DOMContentLoaded", function(event)
 {
     window.onresize = function() {
@@ -594,16 +604,16 @@ button_help.onclick = function help() {
             where_stairs_cells = tips.stairs[1]
             console.log(tips)
             if (you_eat.length > 0) {
-                if (text != " ") {text += "\n"}
-                text += "Я отметил красным цветом твои камни, у которых одно дыхание"
+                if (text != "") {text += "\n"}
+                text += get_tip_text(2)
             }
             if (can_eat.length > 0) {
-                if (text != " ") {text += "\n"}
-                text += "Я отметил зелёный цветом вражеские камни, у которых одно дыхание"
+                if (text != "") {text += "\n"}
+                text += get_tip_text(3)
             }
             if (where_stairs.length > 0) {
-                if (text != " ") {text += "\n"}
-                text += "Жёлтым цветом отмечены камни в лестнице, не советую там играть"
+                if (text != "") {text += "\n"}
+                text += get_tip_text(4)
             }
         } else {
             you_eat = []
@@ -612,7 +622,7 @@ button_help.onclick = function help() {
             you_eat_cells = []
             can_eat_cells = []
             where_stairs_cells = []
-            var text = "В данный момент тебе подскзка не нужна"
+            var text = get_tip_text(5)
         }
         draw()
         if (text != "") {

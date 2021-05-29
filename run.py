@@ -57,6 +57,15 @@ def call_matrix_func():
     return json.dumps(res)
 
 
+@app.route('/get_tip_text/', methods=["POST"])
+def get_tip_text():
+    params = json.loads(request.form['canvas_data'])
+    print(params)
+    res = api.get_text("tip", params["num"])
+    print(res)
+    return json.dumps(res)
+
+
 @app.route('/getmethod/<jsdata>')
 def get_javascript_data(jsdata):
     return json.loads(jsdata)[0]
@@ -71,10 +80,10 @@ def get_post_javascript_data():
     # print(*board, sep='\n')
     # test changes
     # board[0][0] = 0
-    print(data)
+    # print(data)
     di = {"d": 0, "m": 0, "s": [], "e": []}
     check_contact(data["x"], data["y"], -1 if data["color"] == "white" else 1, [], di, data["map"])
-    print(di)
+    # print(di)
     return json.dumps({"answer": di["d"] > 0})
 
 
@@ -102,7 +111,7 @@ def get_login_data():
 
 @app.route('/test_modal_window/')  # В после тестов удалить
 def test_modal_window():
-    return render_template("test_modal_window.html", style=url_for('static', filename='css/style.css'))
+    return render_template("test_modal_window.html", user=api, style=url_for('static', filename='css/style.css'))
 
 
 @app.route('/updateUserInfo/')
@@ -137,7 +146,7 @@ def join_game_via_code():
             return redirect('/game/')
         else:
             return redirect("/joinGameViaCode/")
-    return render_template('joinForm.html', form=form, style=url_for('static', filename='css/style.css'))
+    return render_template('joinForm.html', form=form, user=api, style=url_for('static', filename='css/style.css'))
 
 
 @app.route('/getGameInfo/', methods=["POST"])
@@ -155,7 +164,8 @@ def closed_game2():
 
 @app.route('/closedGame/')
 def closed_game():
-    return render_template('closedGame.html', title='Закрытая игра', style=url_for('static', filename='css/style.css'))
+    return render_template('closedGame.html', title='Закрытая игра', user=api,
+                           style=url_for('static', filename='css/style.css'))
 
 
 @app.route('/getpythondata/')
@@ -178,12 +188,12 @@ def join_game():
     if form.validate_on_submit():
         if api.join_game(form.game_code.data):
             return redirect('/game/')
-    return render_template('joinForm.html', form=form, style=url_for('static', filename='css/style.css'))
+    return render_template('joinForm.html', form=form, user=api, style=url_for('static', filename='css/style.css'))
 
 
 @app.route('/test/', methods=['post', 'get'])
 def test():
-    return render_template('test.html', style=url_for('static', filename='css/style.css'))
+    return render_template('test.html', user=api, style=url_for('static', filename='css/style.css'))
 
 
 @app.route("/logout/")
@@ -200,9 +210,9 @@ def login():
             if api.login_user(form.email.data, form.password.data):
                 return redirect('/')
             else:
-                return render_template('login.html', form=form, success=False,
+                return render_template('login.html', form=form, success=False, user=api,
                                        style=url_for('static', filename='css/style.css'))
-        return render_template('login.html', form=form, style=url_for('static', filename='css/style.css'))
+        return render_template('login.html', user=api, form=form, style=url_for('static', filename='css/style.css'))
     return redirect("/")
 
 
@@ -212,7 +222,7 @@ def start():
     if api.token is not None:
         return redirect("/")
     """
-    return render_template('start.html', title="логин или регитсрация",
+    return render_template('start.html', title="логин или регитсрация", user=api,
                            style=url_for('static', filename='css/style.css'))
 
 
@@ -223,14 +233,15 @@ def register():
         if api.register_user(form.email.data, form.nickname.data):
             return redirect('/')
         else:
-            return render_template('register.html', form=form, success=False,
+            return render_template('register.html', form=form, success=False, user=api,
                                    style=url_for('static', filename='css/style.css'))
-    return render_template('register.html', form=form, style=url_for('static', filename='css/style.css'))
+    return render_template('register.html', user=api, form=form, style=url_for('static', filename='css/style.css'))
 
 
 @app.route("/game/")
 def game_page():
-    return render_template('game.html', title='Здесь играть', style=url_for('static', filename='css/style.css'))
+    return render_template('game.html', user=api, title='Здесь играть',
+                           style=url_for('static', filename='css/style.css'))
 
 
 """@socketio.on("i speak")

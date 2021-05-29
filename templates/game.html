@@ -39,15 +39,15 @@
                     </div>
                 </div>
                 <div class="navbar justify-content-center">
-                    <button class="game_button" id="temp_map">Тепловая карта</button>
-                    <button class="game_button" id="get_best_move">Лучший ход</button>
-                    <button class="game_button" id="get_best_move_enemy">Лучший ход противника</button>
-                    <button class="game_button" id="get_best_move_zone">Лучшая зона для игры</button>
-                    <button class="game_button" id="get_superiority"> Кто побеждает</button>
-                    <button class="game_button" id="pass">Пас</button>
-                    <button class="game_button" id="resign">Сдаться!</button>
-                    <a href="#" data-hystmodal="#myModal"><button class="game_button">Открыть окно</button></a>
-                    <a href="/"><button class="game_button">В главное меню</button></a>
+                    <button class="game_button" id="temp_map">{{user.get_text("button", 14)}}</button>
+                    <button class="game_button" id="get_best_move">{{user.get_text("button", 15)}}</button>
+                    <button class="game_button" id="get_best_move_enemy">{{user.get_text("button", 16)}}</button>
+                    <button class="game_button" id="get_best_move_zone">{{user.get_text("button", 17)}}</button>
+                    <button class="game_button" id="get_superiority"> {{user.get_text("button", 18)}}</button>
+                    <button class="game_button" id="pass">{{user.get_text("button", 19)}}</button>
+                    <button class="game_button" id="resign">{{user.get_text("button", 20)}}</button>
+                    <a href="#" data-hystmodal="#myModal"><button class="game_button">{{user.get_text("button", 22)}}</button></a>
+                    <a href="/"><button class="game_button">{{user.get_text("button", 21)}}</button></a>
                 </div>
             </div>
             <div class="col-6 game_context_block">
@@ -68,12 +68,12 @@
                     <div id="my_timer"></div>
                     <div id="opponent_timer"></div>
                     <div class="navbar justify-content-center info_block">
-                        <p id="dragon_info">Удачной игры, юный последователь дракона. У тебя использовано очков: 0.</p>
+                        <p id="dragon_info">{{user.get_text("tip", 1)}}</p>
                         <img src="/static/img/dragon.svg">
                     </div>
                     <div class="navbar justify-content-center">
-                        <button class="game_button" id="help">Подскажи!</button>
-                        <button class="game_button">Не хочу</button>
+                        <button class="game_button" id="help">{{user.get_text("button", 13)}}</button>
+                        <button class="game_button">Здесь могла бы быть ваша функция</button>
                     </div>
                 </div>
             </div>
