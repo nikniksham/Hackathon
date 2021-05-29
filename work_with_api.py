@@ -5,9 +5,9 @@ import requests
 
 class Api:
     def __init__(self):
-        self.token = None  # token пользователя
+        self.token = None  # token пользователя 4d2a6d934b1fecf4c5cf116f49b7e54174cd1dd4
         self.email = None  # email пользователя
-        self.log = True  # Логирование программы
+        self.log = False  # Логирование программы
         self.nickname = None  # Nickname пользователя
         self.game_code = None  # Код текущей игры пользователя
         self.user_info = None  # Информация о пользователе
@@ -64,7 +64,8 @@ class Api:
                 self.output(f"активны игры: {json_active_games.json()}")
                 self.game_code = json_active_games.json()["gameId"]
             else:
-                self.output(f"json_active_games выдал ошибку: {json_active_games.status_code}")
+                self.output(
+                    f"json_active_games выдал ошибку: {json_active_games.status_code} или уже есть созданная игра")
         return result
 
     def get_token(self):
@@ -199,7 +200,8 @@ class Api:
         result = False
         if self.check_user():
             if game_code is not None:
-                json_get_count_moves = requests.get(f"{self.link}game/info/{game_code}", params={"token": self.get_token()})
+                json_get_count_moves = requests.get(f"{self.link}game/info/{game_code}",
+                                                    params={"token": self.get_token()})
                 if json_get_count_moves.status_code == 200:
                     result = len(json_get_count_moves.json()["moves"].split(";")) - 1
                     self.output(len(json_get_count_moves.json()["moves"].split(";")) - 1)
@@ -217,6 +219,16 @@ class Api:
                     self.output(result)
                 else:
                     self.output(f"json_get_who_win выдал ошибку: {json_get_who_win.status_code}")
+        return result
+
+    def get_leader_board(self):
+        result = False
+        json_leaderboard = requests.get(f"{self.link}leader-board")
+        if json_leaderboard.status_code == 200:
+            result = json_leaderboard.json()
+            self.output(result)
+        else:
+            self.output(f"json_leaderboard выдал ошибку: {json_leaderboard.status_code}")
         return result
 
     def logout(self):
@@ -432,6 +444,7 @@ if __name__ == '__main__':
     # Логин пользователя
     print("success" if api.login_user(email, password) else "error")
 
+    # print(111111, api.get_leader_board())
     # Запрос информации о пользователе
     print("success" if api.update_user_info() else "error")
 
