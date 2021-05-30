@@ -18,7 +18,6 @@ var text_1 = ""
 var text_2 = ""
 var text_3 = ""
 var text_4 = ""
-var text_5 = ""
 get_tip_text()
 
 // фишки для отрисовки
@@ -154,12 +153,16 @@ function draw() {
     }
     for (var i = 0; i < you_eat_cells.length; i++) {
         for (var j = 0; j < you_eat_cells[i].length; j++) {
-            new SquareCell(offset + you_eat_cells[i][j][0] * step - step * 0.5, offset + you_eat_cells[i][j][1] * step - step * 0.5, "rgba(255, 0, 0, 0.5)").draw()
+            if (j != you_eat_cells[i].length - 1 || you_eat_cells[i].length == 1) {
+                new SquareCell(offset + you_eat_cells[i][j][0] * step - step * 0.5, offset + you_eat_cells[i][j][1] * step - step * 0.5, "rgba(255, 0, 0, 0.5)").draw()
+            }
         }
     }
     for (var i = 0; i < where_stairs_cells.length; i++) {
         for (var j = 0; j < where_stairs_cells[i].length; j++) {
-            new SquareCell(offset + where_stairs_cells[i][j][0] * step - step * 0.5, offset + where_stairs_cells[i][j][1] * step - step * 0.5, "rgba(255, 255, 0, 0.5)").draw()
+            if (j != where_stairs_cells[i].length - 1 || where_stairs_cells.length == 1) {
+                new SquareCell(offset + where_stairs_cells[i][j][0] * step - step * 0.5, offset + where_stairs_cells[i][j][1] * step - step * 0.5, "rgba(255, 255, 0, 0.5)").draw()
+            }
         }
     }
     // тепловая карта
@@ -434,7 +437,6 @@ client.onmessage = function(event) {
             }
             count_white = 0
             count_black = 0
-            where_stairs_cells = []
             for (var y = 0; y < 13; y++) {
                 for (var x = 0; x < 13; x++) {
                     if (data.payload.currentMap[y][x] == -1) {
@@ -448,9 +450,6 @@ client.onmessage = function(event) {
             count_moves++
             delta_black = Math.floor(count_moves / 2) - count_black
             delta_white = Math.floor(count_moves / 2) - count_white
-            if (count_moves % 2 == 0) {
-                delta_white--
-            }
             console.log(count_moves + " " + count_white + " " + count_black + " " + delta_white + " " + delta_black)
             draw()
         } else if (data.payload.type == "endGame") {
@@ -500,7 +499,6 @@ function set_tip_text(ans) {
     text_2 = ans.b
     text_3 = ans.c
     text_4 = ans.d
-    text_5 = ans.e
 }
 
 // изменение размера
@@ -632,24 +630,19 @@ function get_superiority() {
     });
 }
 
-// наша первая подсказка
+// наша подсказка
 var button_help = document.getElementById('help');
 button_help.onclick = function help() {
     countTips++;
-    you_eat = []
-    can_eat = []
-    where_stairs = []
-    you_eat_cells = []
-    can_eat_cells = []
-    where_stairs_cells = []
     console.log("USE OUR TIPS")
     $.post( "/check_matrix/", {
         canvas_data: JSON.stringify({field: board.board,
                                       color: board.my_color})
         }, function(err, req, resp) {
         tips = $.parseJSON(resp.responseText)
+        console.log(tips)
         var dragon_info = document.getElementById('dragon_info');
-        if (tips.enemy[0].length > 0 || tips.you[0].length > 0 || tips.stairs[0].length > 0) {
+        if (tips.enemy.length > 0 || tips.you.length > 0 || tips.stairs.length > 0) {
             var text = ""
             you_eat = tips.enemy[0]
             you_eat_cells = tips.enemy[1]
@@ -671,77 +664,12 @@ button_help.onclick = function help() {
                 text += text_3
             }
         } else {
-            var text = text_4
-        }
-        draw()
-        if (text != "") {
-            dragon_info.textContent = text
-        }
-    });
-}
-
-// наша вторая подсказка
-var button_help = document.getElementById('help2');
-button_help.onclick = function help() {
-    countTips++;
-    you_eat = []
-    can_eat = []
-    where_stairs = []
-    you_eat_cells = []
-    can_eat_cells = []
-    where_stairs_cells = []
-    console.log("USE OUR TIPS")
-    $.post( "/scan_matrix/", {
-        canvas_data: JSON.stringify({field: board.board,
-                                      color: board.my_color})
-        }, function(err, req, resp) {
-        tips = $.parseJSON(resp.responseText)
-        console.log(tips)
-        var dragon_info = document.getElementById('dragon_info');
-        if (tips.weak.length > 0 || tips.middle.length > 0 || tips.strong.length > 0) {
-            var text = ""
-            you_eat_cells = [tips.weak]
-            can_eat_cells = [tips.strong]
-            where_stairs_cells = [tips.middle]
-            console.log(tips)
-            text = text_5
-        } else {
-            var text = text_4
-        }
-        draw()
-        if (text != "") {
-            dragon_info.textContent = text
-        }
-    });
-}
-
-// наша третья подсказка
-var button_help = document.getElementById('help3');
-button_help.onclick = function help() {
-    countTips++;
-    you_eat = []
-    can_eat = []
-    where_stairs = []
-    you_eat_cells = []
-    can_eat_cells = []
-    where_stairs_cells = []
-    console.log("USE OUR TIPS")
-    o_color = "white"
-    if (board.my_color == "white") {o_color = "black"}
-    $.post( "/scan_matrix/", {
-        canvas_data: JSON.stringify({field: board.board,
-                                      color: o_color})
-        }, function(err, req, resp) {
-        tips = $.parseJSON(resp.responseText)
-        console.log(tips)
-        var dragon_info = document.getElementById('dragon_info');
-        if (tips.weak.length > 0 || tips.middle.length > 0 || tips.strong.length > 0) {
-            var text = ""
-            you_eat_cells = [tips.weak]
-            can_eat_cells = [tips.strong]
-            where_stairs_cells = [tips.middle]
-            text = text_5
-        } else {
+            you_eat = []
+            can_eat = []
+            where_stairs = []
+            you_eat_cells = []
+            can_eat_cells = []
+            where_stairs_cells = []
             var text = text_4
         }
         draw()
@@ -766,7 +694,7 @@ button_pass.onclick = function send_pass() {
     ]));
 }
 
-// сдаться
+// сдатьсяg
 var button_resign = document.getElementById('resign');
 button_resign.onclick = function send_resign() {
     console.log("RESIGN")

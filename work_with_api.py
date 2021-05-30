@@ -63,9 +63,7 @@ class Api:
                     20: "Сдаться",
                     21: "В главное меню",
                     22: "Подсказки",
-                    23: "Копировать код",
-                    24: "Оценка моих камней",
-                    25: "Оценка камней противника"
+                    23: "Копировать код"
                 },
                 "en": {
                     1: "Register",
@@ -90,9 +88,7 @@ class Api:
                     20: "Surrender",
                     21: "To the main menu",
                     22: "Tips",
-                    23: "Copy code",
-                    24: "Evaluating my stones",
-                    25: "Evaluating the opponent's stones"
+                    23: "Copy code"
                 }
             },
             "tip": {
@@ -101,17 +97,14 @@ class Api:
                     2: "Я отметил красным цветом твои камни, у которых одно дыхание",
                     3: "Я отметил зелёный цветом вражеские камни, у которых одно дыхание",
                     4: "Жёлтым цветом отмечены камни в лестнице, не советую там играть",
-                    5: "В данный момент тебе подскзка не нужна",
-                    6: "Я оценил камни и выделил красным слабые, жёлтым средние, а зелёным сильные "
+                    5: "В данный момент тебе подскзка не нужна"
                 },
                 "en": {
                     1: "Happy play, dragon follower. You used points: ",
                     2: "I marked in red your stones, which have one breath",
                     3: "I marked green enemy stones that have one breath",
                     4: "The stones in the stairs are marked in yellow, I do not recommend playing there",
-                    5: "You don't need a hint at the moment",
-                    6: "I evaluated stones and highlighted the weak ones in red, the medium ones in yellow, and "
-                       "the strong ones in green."
+                    5: "You don't need a hint at the moment"
                 }
             },
             "forms": {
