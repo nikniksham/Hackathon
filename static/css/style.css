@@ -104,8 +104,6 @@ body {
 .game_context_block {
     padding-left: 2%;
     padding-right: 7%;
-    height: 100%;
-    display: flex;
 }
 .game_block_row {
     height: 100%;
@@ -125,7 +123,8 @@ body {
     width: 100%;
     padding-top: 20px;
     padding-bottom: 70px;
-    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 11%;
     background: url("/static/img/right_block.png") no-repeat;
     background-size: 100% 100%;
 }
@@ -513,4 +512,11 @@ img.player_block_image {
 .tips-scroll {
     width: 100%;
     height: 100%;
+}
+
+.tips-scroll button {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }

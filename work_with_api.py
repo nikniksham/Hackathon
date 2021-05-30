@@ -63,7 +63,9 @@ class Api:
                     20: "Сдаться",
                     21: "В главное меню",
                     22: "Подсказки",
-                    23: "Копировать код"
+                    23: "Копировать код",
+                    24: "Оценка моих камней",
+                    25: "Оценка камней противника"
                 },
                 "en": {
                     1: "Register",
@@ -88,7 +90,9 @@ class Api:
                     20: "Surrender",
                     21: "To the main menu",
                     22: "Tips",
-                    23: "Copy code"
+                    23: "Copy code",
+                    24: "Evaluating my stones",
+                    25: "Evaluating the opponent's stones"
                 }
             },
             "tip": {
