@@ -8,6 +8,7 @@ from check_field import *
 
 api = Api()
 app = Flask(__name__)
+abc = "abcdefghjklmn"
 app.config['SECRET_KEY'] = '84da5b8a39a6d06bf8bc7a60cedcac83'
 email = "nikniksham@gmail.com"
 password = "gohackaton"
@@ -44,11 +45,14 @@ def call_matrix_func():
         if params["func"] == "get_heatmap":
             res = api.get_heatmap()
         if params["func"] == "get_best_move":
-            res = api.get_best_move()
+            res = api.get_best_move().lower()
+            res = [abc.find(res[0]), int(res[1:])]
             # res = [letters.index(res[0].lower()), 13 - int(res[1])]
             print(res)
         if params["func"] == "get_best_move_enemy":
-            res = api.get_best_move_enemy()
+            res = api.get_best_move_enemy().lower()
+            res = [abc.find(res[0]), int(res[1:])]
+            print(res)
             #  res = [letters.index(res[0].lower()), 13 - int(res[1])]
         if params["func"] == "get_best_move_zone":
             res = api.get_best_move_zone()
