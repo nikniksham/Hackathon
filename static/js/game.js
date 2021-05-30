@@ -13,7 +13,7 @@ var can_atacovat
 var my_lose_date = 0
 var opponent_lose_date = 0
 var seconds_left = 0
-
+var last_move = [-2, -2]
 var text_1 = ""
 var text_2 = ""
 var text_3 = ""
@@ -187,6 +187,11 @@ function draw() {
 }
 
 // немного классов и функций которые не надо редактировать
+function convert_pos(pos) {
+    pos = pos.toLowerCase()
+    return [abc.indexOf(pos[0]), Number(pos.substring(1))]
+}
+
 class CustomCell {
     constructor (x, y, color) {
         this.color = color
@@ -420,6 +425,10 @@ client.onmessage = function(event) {
     console.log("GET DATA")
     console.log(data)
     try {
+        if (data.payload.type == "newTurn") {
+            console.log(convert_pos(data.payload.move))
+            last_move = convert_pos(data.payload.move)
+        }
         if (data.payload.type == "currentMap" || data.payload.type == "userConnected" || data.payload.type == "newTurn" ) {
             console.log("update")
             updateInfo(data)
