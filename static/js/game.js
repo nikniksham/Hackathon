@@ -123,13 +123,17 @@ class Board {
     }
 }
 
-function clear_info() {
+function clear_list() {
     can_eat = []
     you_eat = []
     where_stairs = []
     can_eat_cells = []
     you_eat_cells = []
     where_stairs_cells = []
+}
+
+function clear_info() {
+    clear_list()
     temp_map = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -146,6 +150,7 @@ function clear_info() {
 }
 
 function draw() {
+    console.log("DRAW")
     c.clearRect(0, 0, canvas.width, canvas.height)
     for (var i = 0; i < can_eat_cells.length; i++) {
         for (var j = 0; j < can_eat_cells[i].length; j++) {
@@ -564,15 +569,16 @@ button_best_move.onclick = function() {
     update_score(3)
 }
 function get_best_move() {
+    clear_list()
     $.post( "/call_func/", {
          canvas_data: JSON.stringify({func: "get_best_move",
                                       params: ""})
     }, function(err, req, resp){
         // board.loadBoard(resp.responseText)
         ans = $.parseJSON(resp.responseText)
-        best_x = ans[0]
-        best_y = ans[1]
+        can_eat = [ans]
         console.log(ans)
+        draw()
     });
 }
 
@@ -584,6 +590,7 @@ button_best_move_enemy.onclick = function() {
     update_score(3)
 }
 function get_best_move_enemy() {
+    clear_list()
     $.post( "/call_func/", {
          canvas_data: JSON.stringify({func: "get_best_move_enemy",
                                       params: ""})
@@ -592,7 +599,9 @@ function get_best_move_enemy() {
         ans = $.parseJSON(resp.responseText)
         best_enemy_x = ans[0]
         best_enemy_y = ans[1]
+        you_eat = [ans]
         console.log(ans)
+        draw()
     });
 }
 
@@ -636,12 +645,7 @@ function get_superiority() {
 var button_help = document.getElementById('help');
 button_help.onclick = function help() {
     countTips++;
-    you_eat = []
-    can_eat = []
-    where_stairs = []
-    you_eat_cells = []
-    can_eat_cells = []
-    where_stairs_cells = []
+    clear_list()
     console.log("USE OUR TIPS")
     $.post( "/check_matrix/", {
         canvas_data: JSON.stringify({field: board.board,
@@ -684,12 +688,7 @@ button_help.onclick = function help() {
 var button_help = document.getElementById('help2');
 button_help.onclick = function help() {
     countTips++;
-    you_eat = []
-    can_eat = []
-    where_stairs = []
-    you_eat_cells = []
-    can_eat_cells = []
-    where_stairs_cells = []
+    clear_list()
     console.log("USE OUR TIPS")
     $.post( "/scan_matrix/", {
         canvas_data: JSON.stringify({field: board.board,
@@ -719,12 +718,7 @@ button_help.onclick = function help() {
 var button_help = document.getElementById('help3');
 button_help.onclick = function help() {
     countTips++;
-    you_eat = []
-    can_eat = []
-    where_stairs = []
-    you_eat_cells = []
-    can_eat_cells = []
-    where_stairs_cells = []
+    clear_list()
     console.log("USE OUR TIPS")
     o_color = "white"
     if (board.my_color == "white") {o_color = "black"}
