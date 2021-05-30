@@ -525,9 +525,12 @@ img.player_block_image {
     width: 100%;
     height: 100%;
     padding: 9vh 0;
+    display: flex;
+    justify-content: center;
 }
 
 .board {
+    width: 80vh;
     margin-bottom: -4vh;
 }
 
@@ -540,6 +543,14 @@ img.player_block_image {
     text-align: center;
 }
 
-.good_buttons {
+.good_tip {
     background: #ff7518;
+}
+
+.game-space {
+    display: flex;
+}
+
+.right-game-block {
+
 }
