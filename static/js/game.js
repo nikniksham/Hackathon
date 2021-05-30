@@ -237,6 +237,31 @@ function open_window(num) {
     }
 }
 
+function set_active_tips(num) {
+    button_best_move_enemy.className = "game_button fw_game_button"
+    button_best_move.className = "game_button fw_game_button"
+    button_help3.className = "game_button fw_game_button"
+    button_help2.className = "game_button fw_game_button"
+    button_help.className = "game_button fw_game_button"
+    button_map.className = "game_button fw_game_button"
+    if (num == 1) {
+        button_best_move_enemy.className = "game_button good_tip fw_game_button"
+        button_map.className = "game_button good_tip fw_game_button"
+    }
+    if (num == 2) {
+        button_best_move_enemy.className = "game_button good_tip fw_game_button"
+        button_best_move.className = "game_button good_tip fw_game_button"
+        help2.className = "game_button good_tip fw_game_button"
+        help3.className = "game_button good_tip fw_game_button"
+    }
+    if (num == 3) {
+        button_best_move.className = "game_button good_tip fw_game_button"
+        button_help.className = "game_button good_tip fw_game_button"
+        button_help2.className = "game_button good_tip fw_game_button"
+        button_help3.className = "game_button good_tip fw_game_button"
+    }
+}
+
 class CustomCell {
     constructor (x, y, color) {
         this.color = color
@@ -507,6 +532,15 @@ client.onmessage = function(event) {
                 }
             }
             count_moves++
+            var n = 0
+            if (count_moves < 26) {
+                n = 1
+            } else if (count_moves > 25 && count_moves < 60) {
+                n = 2
+            } else {
+                n = 3
+            }
+            set_active_tips(n)
             delta_black = Math.floor(count_moves / 2) - count_black
             delta_white = Math.floor(count_moves / 2) - count_white
             if (count_moves % 2 == 0) {
@@ -737,8 +771,8 @@ function get_future_moves(n) {
 }
 
 // лучшие ходы из заданных
-var button_best_move = document.getElementById('show_best_move');
-button_best_move.onclick = function() {
+var button_show_best_move = document.getElementById('show_best_move');
+button_show_best_move.onclick = function() {
     console.log("SHOW BEST MOVES")
     show_best_move()
     update_score(2)
@@ -819,8 +853,8 @@ button_help.onclick = function help() {
 }
 
 // наша вторая подсказка
-var button_help = document.getElementById('help2');
-button_help.onclick = function help() {
+var button_help2 = document.getElementById('help2');
+button_help2.onclick = function help() {
     countTips++;
     clear_list()
     console.log("USE OUR TIPS")
@@ -851,8 +885,8 @@ button_help.onclick = function help() {
 }
 
 // наша третья подсказка
-var button_help = document.getElementById('help3');
-button_help.onclick = function help() {
+var button_help3 = document.getElementById('help3');
+button_help3.onclick = function help() {
     countTips++;
     clear_list()
     console.log("USE OUR TIPS")
