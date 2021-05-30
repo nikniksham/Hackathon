@@ -118,7 +118,7 @@ body {
     padding-left: 90px;
     flex-direction: column;
     padding-bottom: 40px;
-    padding-top: 90px;
+    padding-top: 0px;
 }
 
 .game_right_menu {
@@ -498,4 +498,19 @@ img.player_block_image {
     padding: 10px 15%;
     display: flex;
     justify-content: center;
+}
+
+.hidden-block {
+    visibility: hidden;
+    position: absolute;
+}
+
+.visible-block {
+    visibility: visible;
+    position: relative;
+}
+
+.tips-scroll {
+    width: 100%;
+    height: 100%;
 }
