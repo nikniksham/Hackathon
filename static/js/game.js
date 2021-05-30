@@ -649,7 +649,7 @@ function get_best_move() {
          canvas_data: JSON.stringify({func: "get_best_move",
                                       params: ""})
     }, function(err, req, resp){
-        ans = $.parseJSON(resp.responseText)
+        ans = convert_pos($.parseJSON(resp.responseText))
         can_eat = [ans]
         console.log(ans)
         draw()
@@ -669,7 +669,7 @@ function get_best_move_enemy() {
          canvas_data: JSON.stringify({func: "get_best_move_enemy",
                                       params: ""})
     }, function(err, req, resp){
-        ans = $.parseJSON(resp.responseText)
+        ans = convert_pos($.parseJSON(resp.responseText))
         best_enemy_x = ans[0]
         best_enemy_y = ans[1]
         you_eat = [ans]
@@ -725,7 +725,13 @@ function get_future_moves(n) {
          canvas_data: JSON.stringify({func: "get_future_moves",
                                       count: n})
     }, function(err, req, resp){
+        clear_list()
         future_moves = $.parseJSON(resp.responseText)
+        for (var i = 0; i < future_moves.length; i++) {
+            can_eat.push(convert_pos(future_moves[i]))
+        }
+        console.log(future_moves)
+        draw()
         console.log(future_moves)
     });
 }
