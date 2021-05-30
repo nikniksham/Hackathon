@@ -4,10 +4,10 @@ mat = [[1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1],
        [0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0],
        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0],
        [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
-       [0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0],
-       [0, 0, 0, 0, 0, 0, 1, 1, -1, 1, 0, 0, 0],
+       [0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0],
+       [0, 0, 1, 1, 0, 0, 1, 1, -1, 1, 0, 0, 0],
        [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
        [-1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1],
        [1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1]]
@@ -21,7 +21,7 @@ def warning(contacts, team_cells, color, tips, matrix):
             print(f"WARNING! Обрати внимание на ---> {letters[elem[0]]}{13 - elem[1]}{elem}")
             tips["enemy"][0].append(elem)
             tips["enemy"][1].append(team_cells)
-            cont = {"d": 0, "m": 0, "s": [], "e": []}
+            cont = {"d": 0, "m": 0, "s": [], "e": [], "kd": []}
             check_contact(elem[0], elem[1], color, team_cells, cont, matrix)
             if cont["d"] <= 2:
                 tips["stairs"][0].append(elem)
@@ -45,8 +45,9 @@ def check_cell(x, y, c, cells, di, matrix):
     if [x, y] not in di["s"] and [x, y] not in cells:
         di["s"].append([x, y])
         di["m"] += 1
-    if matrix[y][x] == 0:
+    if matrix[y][x] == 0 and [x, y] not in di["kd"]:
         di["d"] += 1
+        di["kd"].append([x, y])
     if matrix[y][x] == -c:
         if [x, y] not in di["e"]:
             di["e"].append([x, y])
@@ -72,16 +73,17 @@ def check_matrix(matrix, color):
     for y in range(len(matrix)):
         for x in range(len(matrix[0])):
             if matrix[y][x] == col and [x, y] not in know_cells:
-                di = {"d": 0, "m": 0, "s": [], "e": []}
+                di = {"d": 0, "m": 0, "s": [], "e": [], "kd": []}
                 cells = []
                 check_cell(x, y, col, cells, di, matrix)
                 for cell in cells:
                     if cell not in know_cells:
                         know_cells.append(cell)
                 if di["d"] == col:
+                    print(di)
                     warning(di, cells, col, tips, matrix)
             if matrix[y][x] == -col and [x, y] not in know_cells:
-                di = {"d": 0, "m": 0, "s": [], "e": []}
+                di = {"d": 0, "m": 0, "s": [], "e": [], "kd": []}
                 cells = []
                 check_cell(x, y, -col, cells, di, matrix)
                 for cell in cells:
@@ -92,5 +94,27 @@ def check_matrix(matrix, color):
     return tips
 
 
+def scan_matrix(matrix, color):
+    result = {"weak": [], "middle": [], "strong": []}
+    col = -1 if color == "white" else 1
+    know_cells.clear()
+    for y in range(len(matrix)):
+        for x in range(len(matrix[y])):
+            if [x, y] not in know_cells and matrix[y][x] == col:
+                di = {"d": 0, "m": 0, "s": [], "e": [], "kd": []}
+                cells = []
+                check_cell(x, y, col, cells, di, matrix)
+                if di["d"] < 3:
+                    key = "weak"
+                elif di["d"] == 3:
+                    key = "middle"
+                else:
+                    key = "strong"
+                for cell in cells:
+                    result[key].append(cell)
+                    know_cells.append(cell)
+    return result
+
+
 if __name__ == '__main__':
-    print(check_matrix(mat, 1))
+    print(scan_matrix(mat, "black"))

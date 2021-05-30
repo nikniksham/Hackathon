@@ -53,7 +53,7 @@ class Api:
                     10: "Присоединиться по коду",
                     11: "Назад",
                     12: "Начать игру",
-                    13: "Подскажи!",
+                    13: "Оценка ситуации",
                     14: "Тепловая карта",
                     15: "Лучший ход",
                     16: "Лучший ход противника",
@@ -80,7 +80,7 @@ class Api:
                     10: "Join by code",
                     11: "Back",
                     12: "Start game",
-                    13: "Tell me!",
+                    13: "Assessment of the situation",
                     14: "Heat map",
                     15: "Best move",
                     16: "The opponent's best move",
@@ -101,14 +101,27 @@ class Api:
                     2: "Я отметил красным цветом твои камни, у которых одно дыхание",
                     3: "Я отметил зелёный цветом вражеские камни, у которых одно дыхание",
                     4: "Жёлтым цветом отмечены камни в лестнице, не советую там играть",
-                    5: "В данный момент тебе подскзка не нужна"
+                    5: "В данный момент тебе подскзка не нужна",
+                    6: "Я оценил камни и выделил красным слабые, жёлтым средние, а зелёным сильные ",
+                    7: "Поздравляю! Возвращайся и следующий раз приведи соперника еще сильнее, ведь мы становимся "
+                       "лучше играя только с соперниками, которые сильнее нас!",
+                    8: "Ты проиграл, сейчас начнется самое сложное - проанализируй игру, найди свои ошибки, продумай "
+                       "как их избежать и стай сильнее своего соперника!",
+                    9: "Выбери свою подсказку, но выбирай с умом, ведь каждая подсказка будет стоить тебе очков!"
                 },
                 "en": {
                     1: "Happy play, dragon follower. You used points: ",
                     2: "I marked in red your stones, which have one breath",
                     3: "I marked green enemy stones that have one breath",
                     4: "The stones in the stairs are marked in yellow, I do not recommend playing there",
-                    5: "You don't need a hint at the moment"
+                    5: "You don't need a hint at the moment",
+                    6: "I evaluated stones and highlighted the weak ones in red, the medium ones in yellow, and "
+                       "the strong ones in green.",
+                    7: "Congratulations! Come back and next time bring your opponent even stronger, because we get "
+                       "better playing only with opponents who are stronger than us!",
+                    8: "You lost, now the most difficult thing will begin - analyze the game, find your mistakes, "
+                       "think over how to avoid them and the pack is stronger than your opponent!",
+                    9: "Choose your hint, but choose wisely, because every hint will cost you points!"
                 }
             },
             "forms": {

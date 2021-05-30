@@ -25,7 +25,7 @@
                         <form action="" method="post">
                             {{ form.csrf_token }}
                             <div>
-                                {{ form.game_code(class='code-input', value="Code") }}
+                                {{ form.game_code(class='code-input', value="") }}
                                 {% if form.game_code.errors %}
                                 {% for error in form.game_code.errors %}
                                 {{ error }}

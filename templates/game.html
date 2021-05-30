@@ -50,20 +50,19 @@
                         </div>
                     </div>
                     <div class="navbar justify-content-center info_block">
-                        <div id="block-1" class="hidden-block">
+                        <div id="block-1" class="visible-block">
                             <div class="navbar justify-content-center info_block">
                                 <p id="dragon_info">{{user.get_text("tip", 1)}}</p>
                                 <img src="/static/img/dragon.svg">
                             </div>
                             <div class="navbar justify-content-center justify-content-center info_block">
-                                <a href="#" data-hystmodal="#myModal"><button class="game_button">{{user.get_text("button", 22)}}</button></a>
-                                <button class="game_button" id="help">{{user.get_text("button", 13)}}</button>
+                                <button class="game_button" id="tip">{{user.get_text("button", 22)}}</button>
                                 <button class="game_button">Здесь могла бы быть ваша функция</button>
                             </div>
                         </div>
                         <div id="block-2" class="hidden-block">
                             <div class="navbar justify-content-center info_block">
-                                <p>Выбери свою подсказку, но выбирай с умом, ведь каждая подсказка будет стоить тебе очков!</p>
+                                <p>{{user.get_text("tip", 9)}}</p>
                                 <img src="/static/img/dragon.svg">
                             </div>
                             <div class="navbar justify-content-center justify-content-center info_block">
@@ -75,21 +74,23 @@
                                     <button class="game_button fw_game_button" id="get_superiority">{{user.get_text("button", 18)}}</button>
                                     <button class="game_button fw_game_button" id="help2">{{user.get_text("button", 24)}}</button>
                                     <button class="game_button fw_game_button" id="help3">{{user.get_text("button", 25)}}</button>
+                                    <button class="game_button fw_game_button" id="help">{{user.get_text("button", 13)}}</button>
+                                    <button class="game_button fw_game_button" id="back">{{user.get_text("button", 11)}}</button>
                                 </div>
                             </div>
                         </div>
                         <div id="block-3" class="hidden-block">
                             <div class="navbar justify-content-center info_block">
-                                <p>Поздравляю! Возвращайся и следующий раз приведи соперника еще сильнее, ведь мы становимся лучше играя только с соперниками, которые сильнее нас!</p>
+                                <p>{{user.get_text("tip", 7)}}</p>
                                 <img src="/static/img/dragon.svg">
                             </div>
                             <div class="navbar justify-content-center justify-content-center info_block">
                                 <a href="/"><button class="game_button">{{user.get_text("button", 21)}}</button></a>
                             </div>
                         </div>
-                        <div id="block-4" class="visible-block">
+                        <div id="block-4" class="hidden-block">
                             <div class="navbar justify-content-center info_block">
-                                <p>Ты проиграл, сейчас начнется самое сложное - проанализируй игру, найди свои ошибки, продумай как их избежать и стай сильнее своего соперника!</p>
+                                <p>{{user.get_text("tip", 8)}}</p>
                                 <img src="/static/img/dragon.svg">
                             </div>
                             <div class="navbar justify-content-center justify-content-center info_block">

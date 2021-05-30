@@ -37,6 +37,14 @@ def check_matrix_func():
     return json.dumps(tips)
 
 
+@app.route('/scan_matrix/', methods=["POST"])
+def scan_matrix_func():
+    res = json.loads(request.form['canvas_data'])
+    tips = scan_matrix(res["field"], res["color"])
+    print(tips)
+    return json.dumps(tips)
+
+
 @app.route('/call_func/', methods=["POST"])
 def call_matrix_func():
     params = json.loads(request.form['canvas_data'])
@@ -45,15 +53,13 @@ def call_matrix_func():
         if params["func"] == "get_heatmap":
             res = api.get_heatmap()
         if params["func"] == "get_best_move":
-            res = api.get_best_move().lower()
-            res = [abc.find(res[0]), int(res[1:])]
-            # res = [letters.index(res[0].lower()), 13 - int(res[1])]
-            print(res)
+            res = api.get_best_move()
+            if res is not None:
+                res = [abc.find(res[0].lower()), int(res[1:])]
         if params["func"] == "get_best_move_enemy":
-            res = api.get_best_move_enemy().lower()
-            res = [abc.find(res[0]), int(res[1:])]
-            print(res)
-            #  res = [letters.index(res[0].lower()), 13 - int(res[1])]
+            res = api.get_best_move_enemy()
+            if res is not None:
+                res = [abc.find(res[0].lower()), int(res[1:])]
         if params["func"] == "get_best_move_zone":
             res = api.get_best_move_zone()
         if params["func"] == "get_superiority":
@@ -67,7 +73,8 @@ def get_tip_text():
         "a": api.get_text("tip", 2),
         "b": api.get_text("tip", 3),
         "c": api.get_text("tip", 4),
-        "d": api.get_text("tip", 5)
+        "d": api.get_text("tip", 5),
+        "e": api.get_text("tip", 6)
     }
     return json.dumps(res)
 
@@ -87,7 +94,7 @@ def get_post_javascript_data():
     # test changes
     # board[0][0] = 0
     # print(data)
-    di = {"d": 0, "m": 0, "s": [], "e": []}
+    di = {"d": 0, "m": 0, "s": [], "e": [], "kd": []}
     check_contact(data["x"], data["y"], -1 if data["color"] == "white" else 1, [], di, data["map"])
     # print(di)
     return json.dumps({"answer": di["d"] > 0})
