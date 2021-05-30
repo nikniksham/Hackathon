@@ -65,7 +65,10 @@ class Api:
                     22: "Подсказки",
                     23: "Копировать код",
                     24: "Оценка моих камней",
-                    25: "Оценка камней противника"
+                    25: "Оценка камней противника",
+                    26: "3 лучших будущих хода",
+                    27: "Лучший ход из заданных",
+                    28: "Лучший ход противника из заданных"
                 },
                 "en": {
                     1: "Register",
@@ -92,7 +95,10 @@ class Api:
                     22: "Tips",
                     23: "Copy code",
                     24: "Evaluating my stones",
-                    25: "Evaluating the opponent's stones"
+                    25: "Evaluating the opponent's stones",
+                    26: "3 best future moves",
+                    27: "The best move of the given",
+                    28: "The opponent's best move of the given"
                 }
             },
             "tip": {
