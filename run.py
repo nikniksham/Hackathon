@@ -54,16 +54,18 @@ def call_matrix_func():
             res = api.get_heatmap()
         if params["func"] == "get_best_move":
             res = api.get_best_move()
-            if res is not None:
-                res = [abc.find(res[0].lower()), int(res[1:])]
         if params["func"] == "get_best_move_enemy":
             res = api.get_best_move_enemy()
-            if res is not None:
-                res = [abc.find(res[0].lower()), int(res[1:])]
         if params["func"] == "get_best_move_zone":
             res = api.get_best_move_zone()
         if params["func"] == "get_superiority":
             res = api.get_superiority()
+        if params["func"] == "get_future_moves":
+            res = api.get_future_moves(params["count"])
+        if params["func"] == "show_best_move":
+            res = api.show_best_move(params["moves"])
+        if params["func"] == "show_best_move_enemy":
+            res = api.show_best_move_enemy(params["move"], params["moves"])
     return json.dumps(res)
 
 

@@ -123,6 +123,11 @@ class Board {
     }
 }
 
+function convert_pos(pos) {
+    pos = pos.toLowerCase()
+    return [pos.substring(0, 1), Number(pos.substring(1))]
+}
+
 function clear_list() {
     can_eat = []
     you_eat = []
@@ -644,7 +649,6 @@ function get_best_move() {
          canvas_data: JSON.stringify({func: "get_best_move",
                                       params: ""})
     }, function(err, req, resp){
-        // board.loadBoard(resp.responseText)
         ans = $.parseJSON(resp.responseText)
         can_eat = [ans]
         console.log(ans)
@@ -665,7 +669,6 @@ function get_best_move_enemy() {
          canvas_data: JSON.stringify({func: "get_best_move_enemy",
                                       params: ""})
     }, function(err, req, resp){
-        // board.loadBoard(resp.responseText)
         ans = $.parseJSON(resp.responseText)
         best_enemy_x = ans[0]
         best_enemy_y = ans[1]
@@ -687,7 +690,6 @@ function get_best_move_zone() {
          canvas_data: JSON.stringify({func: "get_best_move_zone",
                                       params: ""})
     }, function(err, req, resp){
-        // board.loadBoard(resp.responseText)
         best_move_zone = $.parseJSON(resp.responseText)
         console.log(best_move_zone)
     });
@@ -705,9 +707,64 @@ function get_superiority() {
          canvas_data: JSON.stringify({func: "get_superiority",
                                       params: ""})
     }, function(err, req, resp){
-        // board.loadBoard(resp.responseText)
         superiority = $.parseJSON(resp.responseText)
         console.log(superiority)
+    });
+}
+
+// лучшие n ходов на будущее
+var button_future_moves = document.getElementById('get_future_moves');
+button_future_moves.onclick = function() {
+    console.log("GET FUTURE MOVES")
+    get_future_moves(3)
+    console.log("щвыыщвавыаьвыалвыьждуац")
+    update_score(2)
+}
+function get_future_moves(n) {
+    $.post( "/call_func/", {
+         canvas_data: JSON.stringify({func: "get_future_moves",
+                                      count: n})
+    }, function(err, req, resp){
+        future_moves = $.parseJSON(resp.responseText)
+        console.log(future_moves)
+    });
+}
+
+// лучшие ходы из заданных
+var button_best_move = document.getElementById('show_best_move');
+button_best_move.onclick = function() {
+    console.log("SHOW BEST MOVES")
+    show_best_move()
+    update_score(2)
+}
+function show_best_move() {
+    m = []
+    $.post( "/call_func/", {
+         canvas_data: JSON.stringify({func: "show_best_move",
+                                      moves: m})
+    }, function(err, req, resp){
+        best_move = $.parseJSON(resp.responseText)
+        console.log(best_move)
+    });
+}
+
+// лучший ход противника из заданных
+var button_superiority = document.getElementById('show_best_move_enemy');
+button_superiority.onclick = function() {
+    console.log("SHOW BEST MOVE ENEMY")
+    show_best_move_enemy()
+    update_score(1)
+}
+function show_best_move_enemy() {
+    m = []
+    my_m = []
+    $.post( "/call_func/", {
+         canvas_data: JSON.stringify({func: "show_best_move_enemy",
+                                      moves: m,
+                                      move: my_m})
+    }, function(err, req, resp){
+        best_move_enemy = $.parseJSON(resp.responseText)
+        console.log(best_move_enemy)
     });
 }
 
