@@ -13,7 +13,7 @@ var can_atacovat
 var my_lose_date = 0
 var opponent_lose_date = 0
 var seconds_left = 0
-
+var last_move = [-100, -1000]
 var text_1 = ""
 var text_2 = ""
 var text_3 = ""
@@ -186,9 +186,33 @@ function draw() {
     for (var i = 0; i < where_stairs.length; i++) {
         new CustomCell(offset + where_stairs[i][0] * step, offset + where_stairs[i][1] * step, "rgba(255, 255, 0, 0.5)").draw()
     }
+    if (color_move == "black") {
+        c.beginPath()
+        c.arc(last_move[0] * step + offset, last_move[1] * step + offset, r*0.5, 0, Math.PI * 2, false)
+        c.fillStyle = 'black'
+        c.fill()
+        c.beginPath()
+        c.arc(last_move[0] * step + offset, last_move[1] * step + offset, r*0.3, 0, Math.PI * 2, false)
+        c.fillStyle = 'white'
+        c.fill()
+    } else {
+        c.beginPath()
+        c.arc(last_move[0] * step + offset, last_move[1] * step + offset, r*0.5, 0, Math.PI * 2, false)
+        c.fillStyle = 'white'
+        c.fill()
+        c.beginPath()
+        c.arc(last_move[0] * step + offset, last_move[1] * step + offset, r*0.3, 0, Math.PI * 2, false)
+        c.fillStyle = 'black'
+        c.fill()
+    }
 }
 
 // немного классов и функций которые не надо редактировать
+function convert_pos(pos) {
+    pos = pos.toLowerCase()
+    //console.log(pos.substring(1))
+    return [abc.indexOf(pos[0]), 13 - Number(pos.substring(1))]
+}
 
 function open_window(num) {
     if (num == 1) {
@@ -446,6 +470,10 @@ client.onmessage = function(event) {
     console.log("GET DATA")
     console.log(data)
     try {
+        if (data.payload.type == "newTurn") {
+            // console.log(convert_pos(data.payload.place) + " " + data.payload.place)
+            last_move = convert_pos(data.payload.place)
+        }
         if (data.payload.type == "currentMap" || data.payload.type == "userConnected" || data.payload.type == "newTurn" ) {
             console.log("update")
             updateInfo(data)
@@ -931,3 +959,4 @@ function getCountdown(){
 function pad(n) {
     return (n < 10 ? '0' : '') + n;
 }
+// end of input!
