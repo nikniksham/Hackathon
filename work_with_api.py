@@ -159,7 +159,11 @@ class Api:
                     3: "У вас осталось: ",
                     4: "У противника осталось: ",
                     5: "Загрузка игры",
-                    6: "Игра завершена. Победил "
+                    6: "Игра завершена. Победил ",
+                    7: "Ты съел камней: ",
+                    8: "У тебя съедено камней: ",
+                    9: "Потрачено очков на подсказки: ",
+                    10: "Ход: "
                 },
                 "en": {
                     1: "You turn",
@@ -167,7 +171,11 @@ class Api:
                     3: "You still have: ",
                     4: "The opponent still has: ",
                     5: "Load game",
-                    6: "The game is over. Won "
+                    6: "The game is over. Won ",
+                    7: "You ate stones: ",
+                    8: "They ate your rocks: ",
+                    9: "Points spent on hints: ",
+                    10: "Move: "
                 }
             }
         }
