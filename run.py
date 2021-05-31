@@ -15,6 +15,19 @@ password = "gohackaton"
 nickname = "nikolausus"
 letters = "abcdefghjklmn"
 api.login_user(email, password)
+old_matrix = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
 
 def return_redirect():
@@ -102,18 +115,13 @@ def get_javascript_data(jsdata):
 
 @app.route('/check_cell/', methods=["POST"])
 def get_post_javascript_data():
+    global old_matrix
     data = json.loads(request.form['canvas_data'])
-    # jsdata = request.form['javascript_data']
-    # print(json.loads(jsdata)[0])
-    # return json.loads(jsdata)[0]
-    # print(*board, sep='\n')
-    # test changes
-    # board[0][0] = 0
-    # print(data)
-    di = {"d": 0, "m": 0, "s": [], "e": [], "kd": []}
-    check_contact(data["x"], data["y"], -1 if data["color"] == "white" else 1, [], di, data["map"])
-    # print(di)
-    return json.dumps({"answer": di["d"] > 0})
+    res = check_co(old_matrix, data["map"], data["x"], data["y"], data["color"])
+    if res:
+        old_matrix = data["map"]
+    print(check_co(old_matrix, data["map"], data["x"], data["y"], data["color"]))
+    return json.dumps({"answer": res})
 
 
 @app.route('/get_count_moves/', methods=["POST"])

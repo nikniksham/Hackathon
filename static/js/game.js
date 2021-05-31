@@ -362,7 +362,7 @@ addEventListener('click', (event) => {
             if (board.board[y][x] == 0) {
                 console.log("TAB AT:"+toString(x, y))
                 if (!(tip_one || tip_two)) {
-                    board.board[y][x] = -1
+                    board.board[y][x] = board.my_color=="white"?-1:1
                 }
                 can_atacovat = false
                 can_move(x, y)
@@ -910,9 +910,7 @@ button_help.onclick = function help() {
             console.log(tips)
         }
         draw()
-        if (text != "") {
-            dragon_info_2.textContent = text_dragon_info.tip1
-        }
+        dragon_info_2.textContent = text_dragon_info.tip1
     });
 }
 
@@ -938,9 +936,7 @@ button_help2.onclick = function help() {
             }
         }
         draw()
-        if (text != "") {
-            dragon_info_2.textContent = text_dragon_info.tip2
-        }
+        dragon_info_2.textContent = text_dragon_info.tip2
     });
 }
 
@@ -967,9 +963,7 @@ button_help3.onclick = function help() {
             }
         }
         draw()
-        if (text != "") {
-            dragon_info_2.textContent = text_dragon_info.tip2
-        }
+        dragon_info_2.textContent = text_dragon_info.tip2
     });
 }
 
