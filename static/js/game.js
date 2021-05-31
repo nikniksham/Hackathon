@@ -800,8 +800,10 @@ function get_superiority() {
     $.post( "/call_func/", {
          canvas_data: JSON.stringify({func: "get_superiority",
                                       params: ""})
-    }, function(err, req, resp){
+    }, function(err, req, resp) {
         superiority = $.parseJSON(resp.responseText)
+        //asd
+        dragon_info_2.textContent = (superiority.winner=="b"?:)+superiority.score
         console.log(superiority)
     });
 }
