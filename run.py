@@ -17,6 +17,10 @@ letters = "abcdefghjklmn"
 api.login_user(email, password)
 
 
+def return_redirect():
+    return not api.check_user()
+
+
 def dump(board):
     res = ""
     for i in range(13):
@@ -207,15 +211,16 @@ def change_lang():
 
 @app.route("/")
 def website_main():
-    if api.check_user():
-        return render_template('main.html', title='Главная страница', style=url_for('static', filename='css/style.css'),
-                               user=api)
-    else:
-        return redirect("/start/")
+    if return_redirect():
+        return redirect('/start/')
+    return render_template('main.html', title='Главная страница', style=url_for('static', filename='css/style.css'),
+                           user=api)
 
 
 @app.route('/joinGame/', methods=['post', 'get'])
 def join_game():
+    if return_redirect():
+        return redirect('/start/')
     form = JoinForm()
     if form.validate_on_submit():
         if api.join_game(form.game_code.data):
@@ -225,18 +230,24 @@ def join_game():
 
 @app.route('/test/', methods=['post', 'get'])
 def test():
+    if return_redirect():
+        return redirect('/start/')
     return render_template('test.html', user=api, title='Здесь играть',
                            style=url_for('static', filename='css/style.css'))
 
 
 @app.route("/logout/")
 def logout():
+    if return_redirect():
+        return redirect('/start/')
     api.logout()
     return redirect("/")
 
 
 @app.route('/login/', methods=['post', 'get'])
 def login():
+    if not return_redirect():
+        return redirect('/')
     if not api.check_user():
         form = LoginForm()
         if form.validate_on_submit():
@@ -251,16 +262,14 @@ def login():
 
 @app.route('/start/', methods=['post', 'get'])
 def start():
-    """
-    if api.token is not None:
-        return redirect("/")
-    """
     return render_template('start.html', title="логин или регитсрация", user=api,
                            style=url_for('static', filename='css/style.css'))
 
 
 @app.route('/register/', methods=['post', 'get'])
 def register():
+    if not return_redirect():
+        return redirect('/')
     form = RegisterForm()
     if form.validate_on_submit():
         if api.register_user(form.email.data, form.nickname.data):
@@ -273,6 +282,10 @@ def register():
 
 @app.route("/game/")
 def game_page():
+    if return_redirect():
+        return redirect('/start/')
+    if not api.check_active_game():
+        return redirect('/')
     return render_template('game.html', user=api, title='Здесь играть',
                            style=url_for('static', filename='css/style.css'))
 
