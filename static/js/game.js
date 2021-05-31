@@ -155,7 +155,6 @@ function clear_info() {
 }
 
 function draw() {
-    console.log("DRAW")
     c.clearRect(0, 0, canvas.width, canvas.height)
     for (var i = 0; i < can_eat_cells.length; i++) {
         for (var j = 0; j < can_eat_cells[i].length; j++) {
@@ -432,10 +431,14 @@ function login_user() {
     $.get("/getLoginData", function(data) {
         user_data = $.parseJSON(data)
         // устонавливаем ник и аватарку
-        var img = document.querySelector('.player1_img')
-        img.src = user_data.img_profile
-        var nickname = document.querySelector('.player1_nik')
-        nickname.textContent = user_data.nickname
+        var img = document.querySelectorAll('.player1_img'), i
+        for (i in img) {
+            img[i].src = user_data.img_profile
+        }
+        var nickname = document.querySelectorAll('.player1_nik'), i
+        for (i in nickname) {
+            nickname[i].textContent = user_data.nickname
+        }
         // данные юзера и игры
         user_token = user_data.token
         game_id = user_data.game_code
@@ -514,10 +517,14 @@ client.onmessage = function(event) {
                     game_started = true
                 }
                 // задаём аватарку и ник апоненту
-                var img = document.querySelector('.player2_img')
-                img.src = data.payload.opponent.avatar
-                var nickname = document.querySelector('.player2_nik')
-                nickname.textContent = data.payload.opponent.nickname
+                var img = document.querySelectorAll('.player2_img'), i
+                for (i in img) {
+                    img[i].src = data.payload.opponent.avatar
+                }
+                var nickname = document.querySelectorAll('.player2_nik')
+                for (i in nickname) {
+                    nickname[i].textContent = data.payload.opponent.nickname
+                }
             }
             count_white = 0
             count_black = 0
@@ -541,6 +548,7 @@ client.onmessage = function(event) {
                 n = 3
             }
             set_active_tips(n)
+            // fpnt
             delta_black = Math.floor(count_moves / 2) - count_black
             delta_white = Math.floor(count_moves / 2) - count_white
             if (count_moves % 2 == 0) {
@@ -560,10 +568,14 @@ client.onmessage = function(event) {
             have_enemy = true
             game_started = true
             // задаём аватарку и ник апоненту
-            var img = document.querySelector('.player2_img')
-            img.src = data.payload.player.avatar
-            var nickname = document.querySelector('.player2_nik')
-            nickname.textContent = data.payload.player.nickname
+            var img = document.querySelectorAll('.player2_img'), i
+            for (i in img) {
+                img[i].src = data.payload.opponent.avatar
+            }
+            var nickname = document.querySelectorAll('.player2_nik')
+            for (i in nickname) {
+                nickname[i].textContent = data.payload.opponent.nickname
+            }
         }
     }
   catch {console.log("ERROR ON READ MESSAGE")}
@@ -612,7 +624,6 @@ document.addEventListener("DOMContentLoaded", function(event)
 });
 function resize_info()
 {
-    console.log("RESIZE")
     size = document.querySelector('.cont__cont').offsetWidth
     startY = $(canvas).offset().top
     startX = $(canvas).offset().left
