@@ -284,8 +284,6 @@ def register():
 def game_page():
     if return_redirect():
         return redirect('/start/')
-    if not api.check_active_game():
-        return redirect('/')
     return render_template('game.html', user=api, title='Здесь играть',
                            style=url_for('static', filename='css/style.css'))
 
