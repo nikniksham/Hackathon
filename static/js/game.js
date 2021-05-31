@@ -519,6 +519,7 @@ function updateInfo(data) {
         console.log("SET COLOR MOVE: " + color_move)
     }
 
+    console.log("TURN: " + data.payload.turn + "COLOR: " + board.my_color)
     if (color_move == board.my_color) {
         var info = document.getElementById('info').textContent = text_dragon_info.you_turn;
     } else {
@@ -540,9 +541,6 @@ client.onmessage = function(event) {
                 last_move = [-100, -1000]
             }
             console.log("SAJDFALFHAB<LDFAK")
-        }
-        if (data.payload.type == "currentMap" || data.payload.type == "userConnected" || data.payload.type == "newTurn" ) {
-            updateInfo(data)
         }
         if (data.payload.type == 'currentMap' || data.payload.type == "newTurn") {
             if (data.payload.type == 'currentMap') {
@@ -613,6 +611,9 @@ client.onmessage = function(event) {
             for (i in nickname) {
                 nickname[i].textContent = data.payload.player.nickname
             }
+        }
+        if (data.payload.type == "currentMap" || data.payload.type == "userConnected" || data.payload.type == "newTurn" ) {
+            updateInfo(data)
         }
     }
   catch {console.log("ERROR ON READ MESSAGE")}
