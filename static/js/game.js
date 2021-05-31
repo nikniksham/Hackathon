@@ -500,9 +500,9 @@ function updateInfo(data) {
             // fpnt
             console.log("SET TEXT")
             dragon_info.innerHTML  = text_dragon_info.you_s + (board.my_color == "black"?delta_white:delta_black)+"<br/>"
-            dragon_info.innerHTML  += text_dragon_info.enemy_s + (board.my_color == "black"?delta_black:delta_white)+"<br/>"
-            dragon_info.innerHTML  += text_dragon_info.spend_points + score+"<br/>"
-            dragon_info.innerHTML  += text_dragon_info.move + count_moves
+            dragon_info.innerHTML += text_dragon_info.enemy_s + (board.my_color == "black"?delta_black:delta_white)+"<br/>"
+            dragon_info.innerHTML += text_dragon_info.spend_points + score+"<br/>"
+            dragon_info.innerHTML += text_dragon_info.move + count_moves
             console.log("END TEXT")
         }
         if (data.payload.type != "userConnected") {
@@ -529,9 +529,9 @@ function updateInfo(data) {
 // события клиента
 client.onmessage = function(event) {
     data = $.parseJSON(event.data)
-    console.log("GET DATA")
     console.log(data)
     try {
+        console.log("DED INS" + data.payload.type == "userConnected" && !have_enemy && map_loaded)
         if (data.payload.type == "newTurn") {
             // console.log(convert_pos(data.payload.place) + " " + data.payload.place)
             if (data.payload.moveType != "pass") {
@@ -542,9 +542,7 @@ client.onmessage = function(event) {
             console.log("SAJDFALFHAB<LDFAK")
         }
         if (data.payload.type == "currentMap" || data.payload.type == "userConnected" || data.payload.type == "newTurn" ) {
-            console.log("update")
             updateInfo(data)
-            console.log("end of update")
         }
         if (data.payload.type == 'currentMap' || data.payload.type == "newTurn") {
             if (data.payload.type == 'currentMap') {
@@ -560,7 +558,7 @@ client.onmessage = function(event) {
                 for (i in img) {
                     img[i].src = data.payload.opponent.avatar
                 }
-                var nickname = document.querySelectorAll('.player2_nik')
+                var nickname = document.querySelectorAll('.player2_nik'), i
                 for (i in nickname) {
                     nickname[i].textContent = data.payload.opponent.nickname
                 }
@@ -609,11 +607,11 @@ client.onmessage = function(event) {
             // задаём аватарку и ник апоненту
             var img = document.querySelectorAll('.player2_img'), i
             for (i in img) {
-                img[i].src = data.payload.opponent.avatar
+                img[i].src = data.payload.player.avatar
             }
             var nickname = document.querySelectorAll('.player2_nik')
             for (i in nickname) {
-                nickname[i].textContent = data.payload.opponent.nickname
+                nickname[i].textContent = data.payload.player.nickname
             }
         }
     }
