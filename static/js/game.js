@@ -918,7 +918,20 @@ button_help3.onclick = function help() {
 }
 
 // пропуск хода
-var button_pass = document.getElementById('pass');
+var button_pass = document.getElementById('pass1');
+button_pass.onclick = function send_pass() {
+    console.log("PASS")
+    client.send(JSON.stringify([
+        7,
+        "go/game",
+        {
+            command: "pass",
+            token: user_data.token,
+            game_id: user_data.game_code
+        }
+    ]));
+}
+var button_pass = document.getElementById('pass2');
 button_pass.onclick = function send_pass() {
     console.log("PASS")
     client.send(JSON.stringify([
@@ -933,7 +946,20 @@ button_pass.onclick = function send_pass() {
 }
 
 // сдаться
-var button_resign = document.getElementById('resign');
+var button_resign = document.getElementById('resign1');
+button_resign.onclick = function send_resign() {
+    console.log("RESIGN")
+    client.send(JSON.stringify([
+        7,
+        "go/game",
+        {
+            command: "resign",
+            token: user_data.token,
+            game_id: user_data.game_code
+        }
+    ]));
+}
+var button_resign = document.getElementById('resign2');
 button_resign.onclick = function send_resign() {
     console.log("RESIGN")
     client.send(JSON.stringify([

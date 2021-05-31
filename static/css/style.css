@@ -4,6 +4,7 @@ html {
 }
 
 body {
+    font-size: 24px;
     width: 100vw;
     height: 100vh;
     font-family: 'Roboto', sans-serif;
@@ -24,16 +25,6 @@ body {
     width: 100%;
     background: url("/static/img/header-bg.png") no-repeat;
     background-size: 100% 100%;
-}
-
-.site-name {
-    padding: 10px;
-    font-size: 30px;
-    color: white;
-    text-shadow: 3px 0 3px #000,
-    0 3px 3px #000,
-    -3px 0 1px #000,
-    0 -3px 3px #000;
 }
 
 .main-block {
@@ -122,9 +113,7 @@ body {
 .game_right_menu {
     width: 100%;
     padding-top: 20px;
-    padding-bottom: 70px;
-    margin-top: 20px;
-    margin-bottom: 11%;
+    padding-bottom: 40px;
     background: url("/static/img/right_block.png") no-repeat;
     background-size: 100% 100%;
 }
@@ -142,7 +131,7 @@ body {
 
 .player_block p {
     display: inline-block;
-    font-size: 24px;
+    font-size: 28px;
     margin: 0px;
 }
 
@@ -348,7 +337,7 @@ img.player_block_image {
 }
 
 .start-text {
-    width: 69%;
+    width: 68%;
     line-height: normal;
     display: inline-block;
     vertical-align: middle;
@@ -377,7 +366,7 @@ img.player_block_image {
 }
 
 .login-text {
-    width: 69%;
+    width: 68%;
     line-height: normal;
     display: inline-block;
     vertical-align: middle;
@@ -412,7 +401,7 @@ img.player_block_image {
 
 
 .r-menu-buttons-block {
-    width: 34%;
+    width: 33%;
     line-height: normal;
     display: inline-block;
     vertical-align: middle;
@@ -454,7 +443,7 @@ img.player_block_image {
 }
 
 .menu-game-text p {
-    width: 35%;
+    width: 45%;
 }
 
 .menu-game-block {
@@ -511,7 +500,29 @@ img.player_block_image {
 
 .tips-scroll {
     width: 100%;
-    height: 100%;
+    height: 33vh;
+    overflow-y: scroll;
+    padding-right: 5%;
+    margin-bottom: 20px;
+}
+
+.tips-scroll::-webkit-scrollbar {
+    background: white;
+    width: 18px;
+ }
+
+.tips-scroll::-webkit-scrollbar-track {
+    background: red;
+    border: 10px double white;
+    border-radius: 13px;
+}
+
+.tips-scroll::-webkit-scrollbar-thumb {
+    background: red;
+    border: 2px solid red;
+    border-radius: 8px;
+    width: 18px;
+
 }
 
 .tips-scroll button {
@@ -530,7 +541,7 @@ img.player_block_image {
 }
 
 .board {
-    width: 80vh;
+    width: 90vh;
     margin-bottom: -4vh;
 }
 
@@ -551,6 +562,58 @@ img.player_block_image {
     display: flex;
 }
 
-.right-game-block {
+.game-menu {
+    width: 65vh;
+    padding: 4%;
+    background: url("/static/img/right_block.png") no-repeat;
+    background-size: 100% 100%;
+}
 
+.game-text-block {
+    display: table;
+    padding: 20px 0;
+    width: 100%;
+    vertical-align: middle;
+    position: relative;
+}
+
+.control-block {
+    position: absolute;
+    bottom: -15vh;
+    left: 27%;
+}
+
+.control-block-tips {
+    position: absolute;
+    bottom: -10vh;
+    left: 27%;
+}
+
+.game-tips {
+    width: 65vh;
+    height: 75vh;
+    padding: 5%;
+    background: url("/static/img/tips_block.png") no-repeat;
+    background-size: 100% 100%;
+}
+
+.tips-text-block {
+    padding: 20px 0;
+    width: 100%;
+    vertical-align: middle;
+    position: relative;
+}
+
+.tips-text {
+    width: 77%;
+    line-height: normal;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.tips-img {
+    width: 20%;
+    line-height: normal;
+    display: inline-block;
+    vertical-align: middle;
 }

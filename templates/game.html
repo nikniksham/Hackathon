@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang={{user.language}} xmlns="http://www.w3.org/1999/html">
+<html lang="ru">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -9,19 +9,18 @@
           crossorigin="anonymous">
     <link rel="stylesheet" href={{style}}>
     <title>{{title}}</title>
-    <script src=/static/js/jquery.min.js></script>
 </head>
 <body>
     <img class="up_left_image"    src="/static/img/angle.png">
     <img class="up_right_image"   src="/static/img/angle.png">
     <img class="down_up_image"    src="/static/img/angle.png">
     <img class="down_right_image" src="/static/img/angle.png">
-    <div class="game-header">
+    <div class="game-header-info">
         <p class="text-block" id="header"><span id="info">Загрузка игры</span>. У вас осталось: <span id="my_timer"><span>10</span>:<span>00</span></span>. У врага осталось: <span id="opponent_timer"><span>10</span>:<span>00</span></span>.</p>
     </div>
-    <div class="game_window">
-        <div class="row game_block_row">
-            <div class="col-6 game_left_block">
+    <div class="game-page">
+        <div class="game-space">
+            <div class="board">
                 <div class="cont">
                     <div class="cont__wrap">
                         <div class="cont__cont">
@@ -29,75 +28,113 @@
                         </div>
                     </div>
                 </div>
-                <div class="navbar justify-content-center">
-                    <button class="game_button" id="pass">{{user.get_text("button", 19)}}</button>
-                    <button class="game_button" id="resign">{{user.get_text("button", 20)}}</button>
-                </div>
             </div>
-            <div class="col-6 game_context_block">
-                <div class="game_right_menu">
-                    <div class="navbar navbar-light justify-content-center">
-                        <div class="player_block">
-                            <p class="player1_nik">player 1</p>
-                            <img class="player_block_image player1_img" src="/static/img/NonePlayer.png">
+            <div class="navbar justify-content-center">
+                <div id="block-1" class="visible-block">
+                    <div class="game-menu">
+                        <div class="navbar navbar-light justify-content-center">
+                            <div class="player_block">
+                                <p class="player1_nik">player 1</p>
+                                <img class="player_block_image player1_img" src="/static/img/NonePlayer.png">
+                            </div>
+                            <div class="player_block">
+                                <img src="/static/img/vs.svg">
+                            </div>
+                            <div class="player_block">
+                                <img class="player_block_image player2_img" src="/static/img/NonePlayer.png">
+                                <p class="player2_nik">player 2</p>
+                            </div>
                         </div>
-                        <div class="player_block">
-                            <img src="/static/img/vs.svg">
+                        <div class="game-text-block">
+                            <p class="text-block login-text">{{user.get_text("page", 3)}}</p>
+                            <img class="login-img" src="/static/img/dragon.svg">
                         </div>
-                        <div class="player_block">
-                            <img class="player_block_image player2_img" src="/static/img/NonePlayer.png">
-                            <p class="player2_nik">player 2</p>
+                        <div class="navbar justify-content-center justify-content-center">
+                            <button class="game_button" id="tip">{{user.get_text("button", 22)}}</button>
+                            <button class="game_button">{{user.get_text("button", 22)}}</button>
                         </div>
                     </div>
-                    <div class="navbar justify-content-center info_block">
-                        <div id="block-1" class="visible-block">
-                            <div class="navbar justify-content-center info_block">
-                                <p id="dragon_info">{{user.get_text("tip", 1)}}</p>
-                                <img src="/static/img/dragon.svg">
+                    <div class="control-block">
+                        <div class="navbar justify-content-center">
+                            <button class="game_button" id="pass1">{{user.get_text("button", 19)}}</button>
+                            <button class="game_button" id="resign1">{{user.get_text("button", 20)}}</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="block-3" class="hidden-block">
+                    <div class="game-menu">
+                        <div class="navbar navbar-light justify-content-center">
+                            <div class="player_block">
+                                <p class="player1_nik">player 1</p>
+                                <img class="player_block_image player1_img" src="/static/img/NonePlayer.png">
                             </div>
-                            <div class="navbar justify-content-center justify-content-center info_block">
-                                <button class="game_button" id="tip">{{user.get_text("button", 22)}}</button>
-                                <button class="game_button">Здесь могла бы быть ваша функция</button>
+                            <div class="player_block">
+                                <img src="/static/img/vs.svg">
+                            </div>
+                            <div class="player_block">
+                                <img class="player_block_image player2_img" src="/static/img/NonePlayer.png">
+                                <p class="player2_nik">player 2</p>
                             </div>
                         </div>
-                        <div id="block-2" class="hidden-block">
-                            <div class="navbar justify-content-center info_block">
-                                <p>{{user.get_text("tip", 9)}}</p>
-                                <img src="/static/img/dragon.svg">
+                        <div class="game-text-block">
+                            <p class="text-block login-text">{{user.get_text("tip", 7)}}</p>
+                            <img class="login-img" src="/static/img/dragon.svg">
+                        </div>
+                        <div class="navbar justify-content-center justify-content-center">
+                            <a href="/"><button class="game_button">{{user.get_text("button", 21)}}</button></a>
+                        </div>
+                    </div>
+                </div>
+                <div id="block-4" class="hidden-block">
+                    <div class="game-menu">
+                        <div class="navbar navbar-light justify-content-center">
+                            <div class="player_block">
+                                <p class="player1_nik">player 1</p>
+                                <img class="player_block_image player1_img" src="/static/img/NonePlayer.png">
                             </div>
-                            <div class="navbar justify-content-center justify-content-center info_block">
-                                <div id="tips" class="tips-scroll">
-                                    <button class="game_button fw_game_button" id="temp_map">{{user.get_text("button", 14)}}</button>
-                                    <button class="game_button fw_game_button" id="get_best_move">{{user.get_text("button", 15)}}</button>
-                                    <button class="game_button fw_game_button" id="get_best_move_enemy">{{user.get_text("button", 16)}}</button>
-                                    <button class="game_button fw_game_button" id="get_best_move_zone">{{user.get_text("button", 17)}}</button>
-                                    <button class="game_button fw_game_button" id="get_superiority">{{user.get_text("button", 18)}}</button>
-                                    <button class="game_button fw_game_button" id="help2">{{user.get_text("button", 24)}}</button>
-                                    <button class="game_button fw_game_button" id="help3">{{user.get_text("button", 25)}}</button>
-                                    <button class="game_button fw_game_button" id="help">{{user.get_text("button", 13)}}</button>
-                                    <button class="game_button fw_game_button" id="get_future_moves">{{user.get_text("button", 26)}}</button>
-                                    <button class="game_button fw_game_button" id="show_best_move">{{user.get_text("button", 27)}}</button>
-                                    <button class="game_button fw_game_button" id="show_best_move_enemy">{{user.get_text("button", 28)}}</button>
-                                    <button class="game_button fw_game_button" id="back">{{user.get_text("button", 11)}}</button>
-                                </div>
+                            <div class="player_block">
+                                <img src="/static/img/vs.svg">
+                            </div>
+                            <div class="player_block">
+                                <img class="player_block_image player2_img" src="/static/img/NonePlayer.png">
+                                <p class="player2_nik">player 2</p>
                             </div>
                         </div>
-                        <div id="block-3" class="hidden-block">
-                            <div class="navbar justify-content-center info_block">
-                                <p>{{user.get_text("tip", 7)}}</p>
-                                <img src="/static/img/dragon.svg">
-                            </div>
-                            <div class="navbar justify-content-center justify-content-center info_block">
-                                <a href="/"><button class="game_button">{{user.get_text("button", 21)}}</button></a>
-                            </div>
+                        <div class="game-text-block">
+                            <p class="text-block login-text">{{user.get_text("tip", 8)}}</p>
+                            <img class="login-img" src="/static/img/dragon.svg">
                         </div>
-                        <div id="block-4" class="hidden-block">
-                            <div class="navbar justify-content-center info_block">
-                                <p>{{user.get_text("tip", 8)}}</p>
-                                <img src="/static/img/dragon.svg">
+                        <div class="navbar justify-content-center justify-content-center">
+                            <a href="/"><button class="game_button">{{user.get_text("button", 21)}}</button></a>
+                        </div>
+                    </div>
+                </div>
+                <div id="block-2" class="hidden-block">
+                    <div class="game-tips">
+                        <div class="tips-text-block">
+                            <p class="text-block tips-text">{{user.get_text("tip", 9)}}</p>
+                            <img class="tips-img" src="/static/img/dragon.svg">
+                        </div>
+                        <div class="navbar justify-content-center justify-content-center info_block">
+                            <div id="tips" class="tips-scroll">
+                                <button class="game_button fw_game_button" id="temp_map">{{user.get_text("button", 14)}}</button>
+                                <button class="game_button fw_game_button" id="get_best_move">{{user.get_text("button", 15)}}</button>
+                                <button class="game_button fw_game_button" id="get_best_move_enemy">{{user.get_text("button", 16)}}</button>
+                                <button class="game_button fw_game_button" id="get_best_move_zone">{{user.get_text("button", 17)}}</button>
+                                <button class="game_button fw_game_button" id="get_superiority">{{user.get_text("button", 18)}}</button>
+                                <button class="game_button fw_game_button" id="help2">{{user.get_text("button", 24)}}</button>
+                                <button class="game_button fw_game_button" id="help3">{{user.get_text("button", 25)}}</button>
+                                <button class="game_button fw_game_button" id="help">{{user.get_text("button", 13)}}</button>
+                                <button class="game_button fw_game_button" id="get_future_moves">{{user.get_text("button", 26)}}</button>
+                                <button class="game_button fw_game_button" id="show_best_move">{{user.get_text("button", 27)}}</button>
+                                <button class="game_button fw_game_button" id="show_best_move_enemy">{{user.get_text("button", 28)}}</button>
                             </div>
-                            <div class="navbar justify-content-center justify-content-center info_block">
-                                <a href="/"><button class="game_button">{{user.get_text("button", 21)}}</button></a>
+                            <button class="game_button fw_game_button" id="back">{{user.get_text("button", 11)}}</button>
+                        </div>
+                        <div class="control-block-tips">
+                            <div class="navbar justify-content-center">
+                                <button class="game_button" id="pass2">{{user.get_text("button", 19)}}</button>
+                                <button class="game_button" id="resign2">{{user.get_text("button", 20)}}</button>
                             </div>
                         </div>
                     </div>
@@ -105,8 +142,8 @@
             </div>
         </div>
     </div>
+    <script src=/static/js/jquery.min.js></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
     <script src="{{url_for('static', filename='js/game.js')}}"></script>
-    <script src=/static/js/modal_window.js></script>
 </body>
 </html>
