@@ -158,14 +158,16 @@ class Api:
                     2: "Ход противника",
                     3: "У вас осталось: ",
                     4: "У противника осталось: ",
-                    5: "Загрузка игры"
+                    5: "Загрузка игры",
+                    6: "Игра завершена. Победил "
                 },
                 "en": {
                     1: "You turn",
                     2: "Opponent's move",
                     3: "You still have: ",
                     4: "The opponent still has: ",
-                    5: "Load game"
+                    5: "Load game",
+                    6: "The game is over. Won "
                 }
             }
         }

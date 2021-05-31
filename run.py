@@ -80,6 +80,7 @@ def get_tip_text():
         "tip4": api.get_text("tip", 4),
         "you_turn": api.get_text("info", 1),
         "enemy_turn": api.get_text("info", 2),
+        "end_game": api.get_text("info", 6)
     }
     return json.dumps(res)
 

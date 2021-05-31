@@ -214,8 +214,10 @@ function draw() {
 // немного классов и функций которые не надо редактировать
 function convert_pos(pos) {
     pos = pos.toLowerCase()
-    //console.log(pos.substring(1))
-    return [abc.indexOf(pos[0]), 13 - Number(pos.substring(1))]
+    if (pos == "pass") {
+        return [-100, -1000]
+    }
+    return [pos.substring(0, 1), Number(pos.substring(1))]
 }
 
 function open_window(num) {
@@ -590,7 +592,7 @@ client.onmessage = function(event) {
             } else {
                 open_window(4)
             }
-            var info = document.getElementById('header').textContent = "Игра завершена. Победил " + data.payload.winnerPlayer.nickname + "."
+            var info = document.getElementById('header').textContent = text_dragon_info.end_game + data.payload.winnerPlayer.nickname + "."
             game_started = false
         } else if (data.payload.type == "userConnected" && !have_enemy && map_loaded) {
             have_enemy = true
