@@ -128,11 +128,6 @@ class Board {
     }
 }
 
-function convert_pos(pos) {
-    pos = pos.toLowerCase()
-    return [pos.substring(0, 1), Number(pos.substring(1))]
-}
-
 function clear_list() {
     can_eat = []
     you_eat = []
@@ -214,9 +209,7 @@ function draw() {
 // немного классов и функций которые не надо редактировать
 function convert_pos(pos) {
     pos = pos.toLowerCase()
-    if (pos == "pass") {
-        return [-100, -1000]
-    }
+    console.log("SHA EBNET", pos)
     return [pos.substring(0, 1), Number(pos.substring(1))]
 }
 
@@ -502,6 +495,10 @@ function updateInfo(data) {
         console.log("LOAD TURN: " + data.payload.turn)
         color_move = data.payload.turn
         console.log(color_move + " " + board.my_color)
+        if (data.payload.type == "newTurn") {
+            var inf = document.getElementById('dragon_info')
+            inf.textContent = ""
+        }
         if (data.payload.type != "userConnected") {
             if (board.my_color == "black") {
                 my_lose_date = data.payload.turnBlackEndedAt
@@ -515,6 +512,7 @@ function updateInfo(data) {
     } else {
         console.log("SET COLOR MOVE: " + color_move)
     }
+
     if (color_move == board.my_color) {
         var info = document.getElementById('info').textContent = text_dragon_info.you_turn;
     } else {
@@ -530,7 +528,12 @@ client.onmessage = function(event) {
     try {
         if (data.payload.type == "newTurn") {
             // console.log(convert_pos(data.payload.place) + " " + data.payload.place)
-            last_move = convert_pos(data.payload.place)
+            if (data.payload.moveType != "pass") {
+                last_move = convert_pos(data.payload.place)
+            } else {
+                last_move = [-100, -1000]
+            }
+            console.log("SAJDFALFHAB<LDFAK")
         }
         if (data.payload.type == "currentMap" || data.payload.type == "userConnected" || data.payload.type == "newTurn" ) {
             console.log("update")
