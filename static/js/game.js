@@ -14,11 +14,11 @@ var my_lose_date = 0
 var opponent_lose_date = 0
 var seconds_left = 0
 var last_move = [-100, -1000]
-var text_1 = ""
-var text_2 = ""
-var text_3 = ""
-var text_4 = ""
-var text_5 = ""
+var text_dragon_info = ""
+
+var dragon_info = document.getElementById('dragon_info');
+var dragon_info_2 = document.getElementById('dragon_info_2');
+
 get_tip_text()
 
 // фишки для отрисовки
@@ -58,6 +58,11 @@ var r = size * (1 - 2 * 0.09) * (1/(13 * 2.2))
 var step = (size - 2 * offset) / 12.5
 canvas.width = size
 canvas.height = size
+
+// подсказки
+var tip_one = false
+var tip_two = false
+
 // буквы
 var abc = "abcdefghjklmn"
 
@@ -359,7 +364,9 @@ addEventListener('click', (event) => {
         if ((x > -1) && (x < 13) && (y > -1) && (y < 13)) {
             if (board.board[y][x] == 0) {
                 console.log("TAB AT:"+toString(x, y))
-                board.board[y][x] = -1
+                if (!(tip_one || tip_two)) {
+                    board.board[y][x] = -1
+                }
                 can_atacovat = false
                 can_move(x, y)
                 setTimeout(set_cell, 850)
@@ -402,25 +409,46 @@ function can_move(x, y) {
 
 function set_cell() {
     if (can_atacovat) {
-        clear_info()
-        color_move = (board.my_color=="white"?"black":"white")
-        updateInfo("")
-        board.add(x, y)
-        console.log(toString(x, y))
-        client.send(JSON.stringify([
-            7,// 7 - статус: отправка сообщения
-            "go/game", // в какой топик отправляется сообщение
-            {
-                command: "move", // команда на отправку хода
-                token: user_data.token,  // токен игрока
-                place: toString(x, y),  // место куда сделать ход, формат: d13
-                game_id: game_id // номер игры
+        if (tip_one) {
+            can_eat.push([x, y])
+            if (can_eat.length > 2) {
+                console.log(can_eat)
+                tip_one = false
+                show_best_move()
             }
-        ]));
+        } else if (tip_two) {
+            if (can_eat.length < 1) {
+                can_eat.push([x, y])
+            } else {
+                you_eat.push([x, y])
+            }
+            console.log(you_eat)
+            if (you_eat.length > 2) {
+                show_best_move_enemy()
+                tip_two = false
+            }
+        } else {
+            clear_info()
+            color_move = (board.my_color=="white"?"black":"white")
+            updateInfo("")
+            board.add(x, y)
+            console.log(toString(x, y))
+            client.send(JSON.stringify([
+                7,// 7 - статус: отправка сообщения
+                "go/game", // в какой топик отправляется сообщение
+                {
+                    command: "move", // команда на отправку хода
+                    token: user_data.token,  // токен игрока
+                    place: toString(x, y),  // место куда сделать ход, формат: d13
+                    game_id: game_id // номер игры
+                }
+            ]));
+        }
     } else {
         console.log("ILLEGAL MOVE")
         board.board[y][x] = 0
     }
+    draw()
 }
 
 // авторизация по очереди
@@ -486,9 +514,9 @@ function updateInfo(data) {
         console.log("SET COLOR MOVE: " + color_move)
     }
     if (color_move == board.my_color) {
-        var info = document.getElementById('info').textContent = "Ваш Ход";
+        var info = document.getElementById('info').textContent = text_dragon_info.you_turn;
     } else {
-        var info = document.getElementById('info').textContent = "Ход оппонента";
+        var info = document.getElementById('info').textContent = text_dragon_info.enemy_turn;
     }
 }
 
@@ -608,11 +636,7 @@ function get_tip_text() {
 }
 
 function set_tip_text(ans) {
-    text_1 = ans.a
-    text_2 = ans.b
-    text_3 = ans.c
-    text_4 = ans.d
-    text_5 = ans.e
+    text_dragon_info = ans
 }
 
 // изменение размера
@@ -731,12 +755,26 @@ button_best_move_zone.onclick = function() {
     update_score(1)
 }
 function get_best_move_zone() {
+    clear_list()
     $.post( "/call_func/", {
          canvas_data: JSON.stringify({func: "get_best_move_zone",
                                       params: ""})
-    }, function(err, req, resp){
+    }, function(err, req, resp) {
         best_move_zone = $.parseJSON(resp.responseText)
-        console.log(best_move_zone)
+        sx = 0
+        sy = 0
+        if (best_move_zone > 2) {
+            sy = 6
+        } if (best_move_zone % 2 == 1) {
+            sx = 6
+        }
+        for (var i = sy; i < sy + 7; i++) {
+            for (var j = sx; j < sx + 7; j++) {
+                can_eat_cells.push([[j, i]])
+            }
+        }
+        draw()
+        console.log(can_eat_cells)
     });
 }
 
@@ -762,8 +800,8 @@ var button_future_moves = document.getElementById('get_future_moves');
 button_future_moves.onclick = function() {
     console.log("GET FUTURE MOVES")
     get_future_moves(3)
-    console.log("щвыыщвавыаьвыалвыьждуац")
     update_score(2)
+    console.log("щвыыщвавыаьвыалвыьждуац")
 }
 function get_future_moves(n) {
     $.post( "/call_func/", {
@@ -784,38 +822,57 @@ function get_future_moves(n) {
 // лучшие ходы из заданных
 var button_show_best_move = document.getElementById('show_best_move');
 button_show_best_move.onclick = function() {
+    clear_list()
+    dragon_info_2.textContent = text_dragon_info.tip3
     console.log("SHOW BEST MOVES")
-    show_best_move()
-    update_score(2)
+    tip_one = true
 }
 function show_best_move() {
-    m = []
+    update_score(2)
+    var may_moves = []
+    for (var i = 0; i < can_eat.length; ++i) {
+        may_moves.push(toString(can_eat[i][0], can_eat[i][1]))
+    }
+    console.log(may_moves)
     $.post( "/call_func/", {
          canvas_data: JSON.stringify({func: "show_best_move",
-                                      moves: m})
+                                      moves: may_moves})
     }, function(err, req, resp){
         best_move = $.parseJSON(resp.responseText)
         console.log(best_move)
+        clear_list()
+        can_eat = [convert_pos(best_move)]
+        draw()
     });
 }
 
-// лучший ход противника из заданных
+// лучший ход противника из заданных, с учётом собственного
 var button_superiority = document.getElementById('show_best_move_enemy');
 button_superiority.onclick = function() {
+    clear_list()
+    dragon_info_2.textContent = text_dragon_info.tip4
     console.log("SHOW BEST MOVE ENEMY")
-    show_best_move_enemy()
-    update_score(1)
+    tip_two = true
 }
 function show_best_move_enemy() {
+    update_score(2)
     m = []
     my_m = []
+    for (var i = 0; i < can_eat.length; i++) {
+        my_m.push(toString(can_eat[i][0], can_eat[i][1]))
+    }
+    for (var i = 0; i < you_eat.length; i++) {
+        m.push(toString(you_eat[i][0], you_eat[i][1]))
+    }
     $.post( "/call_func/", {
          canvas_data: JSON.stringify({func: "show_best_move_enemy",
                                       moves: m,
                                       move: my_m})
     }, function(err, req, resp){
+        clear_list()
         best_move_enemy = $.parseJSON(resp.responseText)
-        console.log(best_move_enemy)
+        you_eat = [convert_pos(best_move_enemy)]
+        draw()
     });
 }
 
@@ -833,7 +890,6 @@ button_help.onclick = function help() {
         console.log(tips)
         var dragon_info = document.getElementById('dragon_info');
         if (tips.enemy[0].length > 0 || tips.you[0].length > 0 || tips.stairs[0].length > 0) {
-            var text = ""
             you_eat = tips.enemy[0]
             you_eat_cells = tips.enemy[1]
             can_eat = tips.you[0]
@@ -841,24 +897,10 @@ button_help.onclick = function help() {
             where_stairs = tips.stairs[0]
             where_stairs_cells = tips.stairs[1]
             console.log(tips)
-            if (you_eat.length > 0) {
-                if (text != "") {text += "\n"}
-                text += text_1
-            }
-            if (can_eat.length > 0) {
-                if (text != "") {text += "\n"}
-                text += text_2
-            }
-            if (where_stairs.length > 0) {
-                if (text != "") {text += "\n"}
-                text += text_3
-            }
-        } else {
-            var text = text_4
         }
         draw()
         if (text != "") {
-            dragon_info.textContent = text
+            dragon_info_2.textContent = text_dragon_info.tip1
         }
     });
 }
@@ -878,19 +920,15 @@ button_help2.onclick = function help() {
         if (tips != null) {
             if (tips.weak.length > 0 || tips.middle.length > 0 || tips.strong.length > 0) {
                 console.log(tips)
-                var text = ""
                 you_eat_cells = [tips.weak]
                 can_eat_cells = [tips.strong]
                 where_stairs_cells = [tips.middle]
                 console.log(tips)
-                text = text_5
             }
-        } else {
-            var text = text_4
         }
         draw()
         if (text != "") {
-            dragon_info.textContent = text
+            dragon_info_2.textContent = text_dragon_info.tip2
         }
     });
 }
@@ -912,18 +950,14 @@ button_help3.onclick = function help() {
         var dragon_info = document.getElementById('dragon_info');
         if (tips != null) {
             if (tips.weak.length > 0 || tips.middle.length > 0 || tips.strong.length > 0) {
-                var text = ""
                 you_eat_cells = [tips.weak]
                 can_eat_cells = [tips.strong]
                 where_stairs_cells = [tips.middle]
-                text = text_5
             }
-        } else {
-            var text = text_4
         }
         draw()
         if (text != "") {
-            dragon_info.textContent = text
+            dragon_info_2.textContent = text_dragon_info.tip2
         }
     });
 }

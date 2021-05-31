@@ -103,23 +103,30 @@ class Api:
             },
             "tip": {
                 "ru": {
-                    1: "Удачной игры, юный последователь дракона. У тебя использовано очков: ",
-                    2: "Я отметил красным цветом твои камни, у которых одно дыхание",
-                    3: "Я отметил зелёный цветом вражеские камни, у которых одно дыхание",
-                    4: "Жёлтым цветом отмечены камни в лестнице, не советую там играть",
+                    1: "Удачной игры, юный последователь дракона.",
+                    2: "Я отметил красным цветом твои камни, у которых одно дыхание, зелёный цветом вражеские камни,"
+                       " которые ты можешь съесть, а жёлтым цветом отмечены камни в лестнице, не советую там играть",
+                    3: "Отметь 3 позиции на доске, и я скажу, какая из них лучше",
+                    4: "Отметь свой будущий ход, а потом 3 позиции для хода врага, и я скажу, который из них самый "
+                       "вероятный",
                     5: "В данный момент тебе подскзка не нужна",
                     6: "Я оценил камни и выделил красным слабые, жёлтым средние, а зелёным сильные ",
                     7: "Поздравляю! Возвращайся и следующий раз приведи соперника еще сильнее, ведь мы становимся "
                        "лучше играя только с соперниками, которые сильнее нас!",
                     8: "Ты проиграл, сейчас начнется самое сложное - проанализируй игру, найди свои ошибки, продумай "
                        "как их избежать и стай сильнее своего соперника!",
-                    9: "Выбери свою подсказку, но выбирай с умом, ведь каждая подсказка будет стоить тебе очков!"
+                    9: "Выбери свою подсказку, но выбирай с умом, ведь каждая подсказка будет стоить тебе очков!",
+                    10: "",
+                    11: "",
+                    12: ""
                 },
                 "en": {
-                    1: "Happy play, dragon follower. You used points: ",
-                    2: "I marked in red your stones, which have one breath",
-                    3: "I marked green enemy stones that have one breath",
-                    4: "The stones in the stairs are marked in yellow, I do not recommend playing there",
+                    1: "Happy play, dragon follower.",
+                    2: "I marked in red your stones, which have one breath, in green are enemy stones that you can eat,"
+                       " and stones in the stairs are marked in yellow, I do not advise playing there",
+                    3: "Mark 3 positions on the board and I will tell you which one is better.",
+                    4: "Mark your future move, and then 3 positions for the enemy's move, and I will tell you "
+                       "which one is the most probable.",
                     5: "You don't need a hint at the moment",
                     6: "I evaluated stones and highlighted the weak ones in red, the medium ones in yellow, and "
                        "the strong ones in green.",
@@ -127,7 +134,10 @@ class Api:
                        "better playing only with opponents who are stronger than us!",
                     8: "You lost, now the most difficult thing will begin - analyze the game, find your mistakes, "
                        "think over how to avoid them and the pack is stronger than your opponent!",
-                    9: "Choose your hint, but choose wisely, because every hint will cost you points!"
+                    9: "Choose your hint, but choose wisely, because every hint will cost you points!",
+                    10: "",
+                    11: "",
+                    12: ""
                 }
             },
             "forms": {
@@ -140,6 +150,22 @@ class Api:
                     1: "Email",
                     2: "Nickname",
                     3: "Code"
+                }
+            },
+            "info": {
+                "ru": {
+                    1: "Твой ход",
+                    2: "Ход противника",
+                    3: "У вас осталось: ",
+                    4: "У противника осталось: ",
+                    5: "Загрузка игры"
+                },
+                "en": {
+                    1: "You turn",
+                    2: "Opponent's move",
+                    3: "You still have: ",
+                    4: "The opponent still has: ",
+                    5: "Load game"
                 }
             }
         }

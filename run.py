@@ -66,17 +66,20 @@ def call_matrix_func():
             res = api.show_best_move(params["moves"])
         if params["func"] == "show_best_move_enemy":
             res = api.show_best_move_enemy(params["move"], params["moves"])
+    print(res)
     return json.dumps(res)
 
 
 @app.route('/get_tip_text/', methods=["POST"])
 def get_tip_text():
     res = {
-        "a": api.get_text("tip", 2),
-        "b": api.get_text("tip", 3),
-        "c": api.get_text("tip", 4),
-        "d": api.get_text("tip", 5),
-        "e": api.get_text("tip", 6)
+        "standard": api.get_text("tip", 1),
+        "tip1": api.get_text("tip", 2),
+        "tip2": api.get_text("tip", 6),
+        "tip3": api.get_text("tip", 3),
+        "tip4": api.get_text("tip", 4),
+        "you_turn": api.get_text("info", 1),
+        "enemy_turn": api.get_text("info", 2),
     }
     return json.dumps(res)
 
