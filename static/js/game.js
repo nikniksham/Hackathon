@@ -770,7 +770,7 @@ function get_best_move_zone() {
          canvas_data: JSON.stringify({func: "get_best_move_zone",
                                       params: ""})
     }, function(err, req, resp) {
-        best_move_zone = $.parseJSON(resp.responseText)
+        best_move_zone = Number($.parseJSON(resp.responseText))
         sx = 0
         sy = 0
         if (best_move_zone > 2) {
