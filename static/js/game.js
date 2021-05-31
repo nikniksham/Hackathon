@@ -547,7 +547,6 @@ client.onmessage = function(event) {
             if (data.payload.type == 'currentMap') {
                 map_loaded = true
                 board.set_color(data.payload.player=="b"?"black":"white")
-                console.log(board.my_color + "ADSDASDASD" + data.payload.player)
                 if (data.payload.opponent.avatar != "") {
                     have_enemy = true
                     game_started = true
@@ -764,9 +763,9 @@ button_best_move_zone.onclick = function() {
     console.log("GET BEST ZONE FOR PLAY")
     get_best_move_zone()
     update_score(1)
+    clear_list()
 }
 function get_best_move_zone() {
-    clear_list()
     $.post( "/call_func/", {
          canvas_data: JSON.stringify({func: "get_best_move_zone",
                                       params: ""})
@@ -803,7 +802,7 @@ function get_superiority() {
     }, function(err, req, resp) {
         superiority = $.parseJSON(resp.responseText)
         //asd
-        dragon_info_2.textContent = (superiority.winner=="b"?:)+superiority.score
+        dragon_info_2.textContent = (superiority.winner=="b"?text_dragon_info.black_win:text_dragon_info.white_win)+superiority.score
         console.log(superiority)
     });
 }
@@ -813,15 +812,14 @@ var button_future_moves = document.getElementById('get_future_moves');
 button_future_moves.onclick = function() {
     console.log("GET FUTURE MOVES")
     get_future_moves(3)
+    clear_list()
     update_score(2)
-    console.log("щвыыщвавыаьвыалвыьждуац")
 }
 function get_future_moves(n) {
     $.post( "/call_func/", {
          canvas_data: JSON.stringify({func: "get_future_moves",
                                       count: n})
     }, function(err, req, resp){
-        clear_list()
         future_moves = $.parseJSON(resp.responseText)
         for (var i = 0; i < future_moves.length; i++) {
             can_eat.push(convert_pos(future_moves[i]))

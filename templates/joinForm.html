@@ -33,7 +33,7 @@
                                 {% endif %}
                             </div>
                             <div>
-                                {{ form.submit(class_='game_button fw_game_button') }}
+                                {{ form.submit(class_='game_button fw_game_button', value=user.get_text("button", 3)) }}
                             </div>
                         </form>
                         <div><a href="/closedGame/" class="fw_game_button">

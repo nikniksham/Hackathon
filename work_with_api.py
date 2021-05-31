@@ -163,7 +163,9 @@ class Api:
                     7: "Ты съел камней: ",
                     8: "У тебя съедено камней: ",
                     9: "Потрачено очков на подсказки: ",
-                    10: "Ход: "
+                    10: "Ход: ",
+                    11: "Побеждает чёрный, у него очков: ",
+                    12: "Побеждает белый, у него очков: "
                 },
                 "en": {
                     1: "You turn",
@@ -175,7 +177,9 @@ class Api:
                     7: "You ate stones: ",
                     8: "They ate your rocks: ",
                     9: "Points spent on hints: ",
-                    10: "Move: "
+                    10: "Move: ",
+                    11: "Black wins, he has points: ",
+                    12: "White wins, he has points: "
                 }
             }
         }

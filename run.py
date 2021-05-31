@@ -88,7 +88,9 @@ def get_tip_text():
         "you_s": api.get_text("info", 7),
         "enemy_s": api.get_text("info", 8),
         "spend_points": api.get_text("info", 9),
-        "move": api.get_text("info", 10)
+        "move": api.get_text("info", 10),
+        "white_win": api.get_text("info", 12),
+        "black_win": api.get_text("info", 11)
     }
     return json.dumps(res)
 
