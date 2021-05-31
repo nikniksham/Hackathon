@@ -209,8 +209,10 @@ function draw() {
 // немного классов и функций которые не надо редактировать
 function convert_pos(pos) {
     pos = pos.toLowerCase()
-    console.log("SHA EBNET", pos)
-    return [pos.substring(0, 1), Number(pos.substring(1))]
+    if (pos == "pass") {
+        return [-100, -1000]
+    }
+     return [abc.indexOf(pos[0]), 13 - Number(pos.substring(1))]
 }
 
 function open_window(num) {
@@ -519,7 +521,6 @@ function updateInfo(data) {
         console.log("SET COLOR MOVE: " + color_move)
     }
 
-    console.log("TURN: " + data.payload.turn + "COLOR: " + board.my_color)
     if (color_move == board.my_color) {
         var info = document.getElementById('info').textContent = text_dragon_info.you_turn;
     } else {
