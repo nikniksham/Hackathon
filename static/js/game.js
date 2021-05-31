@@ -495,9 +495,15 @@ function updateInfo(data) {
         console.log("LOAD TURN: " + data.payload.turn)
         color_move = data.payload.turn
         console.log(color_move + " " + board.my_color)
+        console.log("TYPE: " + (data.payload.type == "newTurn"))
         if (data.payload.type == "newTurn") {
-            var inf = document.getElementById('dragon_info')
-            inf.textContent = ""
+            // fpnt
+            console.log("SET TEXT")
+            dragon_info.innerHTML  = text_dragon_info.you_s + (board.my_color == "black"?delta_white:delta_black)+"<br/>"
+            dragon_info.innerHTML  += text_dragon_info.enemy_s + (board.my_color == "black"?delta_black:delta_white)+"<br/>"
+            dragon_info.innerHTML  += text_dragon_info.spend_points + score+"<br/>"
+            dragon_info.innerHTML  += text_dragon_info.move + count_moves
+            console.log("END TEXT")
         }
         if (data.payload.type != "userConnected") {
             if (board.my_color == "black") {
