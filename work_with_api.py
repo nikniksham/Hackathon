@@ -11,7 +11,7 @@ class Api:
         self.nickname = None  # Nickname пользователя
         self.game_code = None  # Код текущей игры пользователя
         self.user_info = None  # Информация о пользователе
-        self.link = "https://go-backend-denis.ambersoft.llc/"  # Ссылка на сайт
+        self.link = "http://server.mindgamehack.ru/"  # Ссылка на сайт
         self.img_profile = None
         self.language = "en"
         self.game_code_close = ""
@@ -66,7 +66,7 @@ class Api:
                     23: "Копировать код",
                     24: "Оценка моих камней",
                     25: "Оценка камней противника",
-                    26: "3 лучших будущих хода",
+                    26: "Развитие игры на 3 хода",
                     27: "Лучший ход из заданных",
                     28: "Лучший ход противника из заданных"
                 },
@@ -96,7 +96,7 @@ class Api:
                     23: "Copy code",
                     24: "Evaluating my stones",
                     25: "Evaluating the opponent's stones",
-                    26: "3 best future moves",
+                    26: "Development of the game for 3 moves",
                     27: "The best move of the given",
                     28: "The opponent's best move of the given"
                 }
@@ -165,7 +165,9 @@ class Api:
                     9: "Потрачено очков на подсказки: ",
                     10: "Ход: ",
                     11: "Побеждает чёрный, у него очков: ",
-                    12: "Побеждает белый, у него очков: "
+                    12: "Побеждает белый, у него очков: ",
+                    13: "Со счётом: ",
+                    14: "На подсказки потрачено: "
                 },
                 "en": {
                     1: "You turn",
@@ -179,7 +181,9 @@ class Api:
                     9: "Points spent on hints: ",
                     10: "Move: ",
                     11: "Black wins, he has points: ",
-                    12: "White wins, he has points: "
+                    12: "White wins, he has points: ",
+                    13: "With the account: ",
+                    14: "Spent on tips: "
                 }
             }
         }

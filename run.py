@@ -14,7 +14,6 @@ email = "nikniksham@gmail.com"
 password = "gohackaton"
 nickname = "nikolausus"
 letters = "abcdefghjklmn"
-api.login_user(email, password)
 old_matrix = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

@@ -135,10 +135,6 @@ function clear_list() {
     can_eat_cells = []
     you_eat_cells = []
     where_stairs_cells = []
-}
-
-function clear_info() {
-    clear_list()
     temp_map = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -152,6 +148,10 @@ function clear_info() {
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+}
+
+function clear_info() {
+    clear_list()
 }
 
 function draw() {
@@ -471,7 +471,7 @@ function login_user() {
     })
 }
 
-let client = new WebSocket("ws://172.104.137.176:41239");
+let client = new WebSocket("ws://185.22.62.66:41239");
 
 client.onopen = function(e) {
   client.send(JSON.stringify([5, 'go/game']))
@@ -718,12 +718,12 @@ function draw_temp(map) {
 // лучший ход
 var button_best_move = document.getElementById('get_best_move');
 button_best_move.onclick = function() {
+    clear_list()
     console.log("GET BEST MOVE")
     get_best_move()
     update_score(3)
 }
 function get_best_move() {
-    clear_list()
     $.post( "/call_func/", {
          canvas_data: JSON.stringify({func: "get_best_move",
                                       params: ""})
@@ -738,12 +738,12 @@ function get_best_move() {
 // лучший ход противника
 var button_best_move_enemy = document.getElementById('get_best_move_enemy');
 button_best_move_enemy.onclick = function() {
+    clear_list()
     console.log("GET BEST MOVE ENEMY")
     get_best_move_enemy()
     update_score(3)
 }
 function get_best_move_enemy() {
-    clear_list()
     $.post( "/call_func/", {
          canvas_data: JSON.stringify({func: "get_best_move_enemy",
                                       params: ""})
@@ -760,10 +760,10 @@ function get_best_move_enemy() {
 // лучшая зона для игры
 var button_best_move_zone = document.getElementById('get_best_move_zone');
 button_best_move_zone.onclick = function() {
+    clear_list()
     console.log("GET BEST ZONE FOR PLAY")
     get_best_move_zone()
     update_score(1)
-    clear_list()
 }
 function get_best_move_zone() {
     $.post( "/call_func/", {
