@@ -594,8 +594,10 @@ client.onmessage = function(event) {
         } else if (data.payload.type == "endGame") {
             if (data.payload.winnerPlayer.nickname == user_data.nickname) {
                 open_window(3)
+                document.getElementById("win-text").innerHTML += "<br/>" + text_dragon_info.score + score + ".<br/>" + text_dragon_info.count_tips + countTips +"."
             } else {
                 open_window(4)
+                document.getElementById("lose-text").innerHTML += "<br/>" + text_dragon_info.score + score + ".<br/>" + text_dragon_info.count_tips + countTips +"."
             }
             var info = document.getElementById('header').textContent = text_dragon_info.end_game + data.payload.winnerPlayer.nickname + "."
             game_started = false
