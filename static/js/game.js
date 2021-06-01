@@ -892,6 +892,7 @@ function show_best_move_enemy() {
 // наша первая подсказка
 var button_help = document.getElementById('help');
 button_help.onclick = function help() {
+    update_score(2)
     countTips++;
     clear_list()
     console.log("USE OUR TIPS")
@@ -919,6 +920,7 @@ button_help.onclick = function help() {
 // наша вторая подсказка
 var button_help2 = document.getElementById('help2');
 button_help2.onclick = function help() {
+    update_score(2)
     countTips++;
     clear_list()
     console.log("USE OUR TIPS")
@@ -945,6 +947,7 @@ button_help2.onclick = function help() {
 // наша третья подсказка
 var button_help3 = document.getElementById('help3');
 button_help3.onclick = function help() {
+    update_score(2)
     countTips++;
     clear_list()
     console.log("USE OUR TIPS")
