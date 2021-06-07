@@ -90,9 +90,9 @@ class Api:
                     17: "Best play area (1)",
                     18: "Who wins? (1)",
                     19: "Pass",
-                    20: "Surrender",
+                    20: "Resign",
                     21: "To the main menu",
-                    22: "Tips",
+                    22: "Hints",
                     23: "Copy code",
                     24: "Evaluating my stones (2)",
                     25: "Evaluating the opponent's stones (2)",
@@ -183,7 +183,7 @@ class Api:
                     11: "Black wins, he has points: ",
                     12: "White wins, he has points: ",
                     13: "With the account: ",
-                    14: "Spent on tips: "
+                    14: "Spent on hints: "
                 }
             }
         }
