@@ -96,7 +96,7 @@ class Api:
                     23: "Copy code",
                     24: "Evaluating my stones (2)",
                     25: "Evaluating the opponent's stones (2)",
-                    26: "Development of the game for 3 moves (3)",
+                    26: "Advancement of the game for 3 moves (3)",
                     27: "The best move of the given (2)",
                     28: "The opponent's best move of the given (2)"
                 }
