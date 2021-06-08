@@ -475,7 +475,7 @@ let client = new WebSocket("ws://185.22.62.66:41239");
 
 client.onopen = function(e) {
   client.send(JSON.stringify([5, 'go/game']))
-  setTimeout(auth_client, 10000);
+  setTimeout(auth_client, 7000);
 };
 
 function auth_client() {
@@ -1058,13 +1058,19 @@ function getCountdown(){
     if (game_started) {
         var current_date = new Date().getTime();
         if (color_move == board.my_color) {
-            seconds_left = (my_lose_date - current_date) / 1000
-            if (seconds_left < 0) {seconds_left += 3600}
+            seconds_left = (my_lose_date - current_date) / 1000;
+            seconds_left = seconds_left % 86400;
+            seconds_left = seconds_left % 3600;
+            minutes = pad( parseInt( seconds_left / 60) );
+            seconds = pad( parseInt( seconds_left % 60 ) );
             // строка обратного отсчета  + значение тега
             timer_my.innerHTML = "<span>" + minutes + "</span>:<span>" + seconds + "</span>";
         } else if (have_enemy) {
-            seconds_left = (opponent_lose_date - current_date) / 1000
-            if (seconds_left < 0) {seconds_left += 3600}
+            seconds_left = (opponent_lose_date - current_date) / 1000;
+            seconds_left = seconds_left % 86400;
+            seconds_left = seconds_left % 3600;
+            minutes = pad( parseInt( seconds_left / 60) );
+            seconds = pad( parseInt( seconds_left % 60 ) );
             // строка обратного отсчета  + значение тега
             timer_opponent.innerHTML = "<span>" + minutes + "</span>:<span>" + seconds + "</span>";
         }
