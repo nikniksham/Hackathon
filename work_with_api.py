@@ -177,7 +177,7 @@ class Api:
                     5: "Load game",
                     6: "The game is over. Won ",
                     7: "You ate stones: ",
-                    8: "They ate your rocks: ",
+                    8: "They ate your stones: ",
                     9: "Points spent on hints: ",
                     10: "Move: ",
                     11: "Black wins, he has points: ",

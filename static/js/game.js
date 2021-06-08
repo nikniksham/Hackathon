@@ -475,7 +475,7 @@ let client = new WebSocket("ws://185.22.62.66:41239");
 
 client.onopen = function(e) {
   client.send(JSON.stringify([5, 'go/game']))
-  setTimeout(auth_client, 3000);
+  setTimeout(auth_client, 6000);
 };
 
 function auth_client() {
