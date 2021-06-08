@@ -30,7 +30,7 @@ class Api:
                 },
                 "en": {
                     1: "Welcome to the site! Register, kind traveler, or enter if you are already a dragon apprentice",
-                    2: "Oh, you are the first time! Tell me your name and your mail to become part of the dragon clan!",
+                    2: "Oh, you are the first time! Tell me your name and your email to become part of the dragon clan!",
                     3: "I remember you, follower of the dragon, but tell me the password to enter our clan",
                     4: "Choose your path, but choose wisely",
                     5: "How do you want to start your game?",
@@ -75,7 +75,7 @@ class Api:
                     2: "Enter",
                     3: "Next",
                     4: "Continue the game",
-                    5: "AI game",
+                    5: "Game with AI",
                     6: "Play with a random opponent",
                     7: "Private game",
                     8: "Exit",
